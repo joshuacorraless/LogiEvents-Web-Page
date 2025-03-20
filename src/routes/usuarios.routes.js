@@ -7,12 +7,8 @@ import { getUsuarios, createUsuarios, deleteUsuarios, updateUsuarios } from "../
 const router = Router();
 
 router.get('/usuarios',getUsuarios); 
-
 router.post('/usuarios', createUsuarios);
-
 router.put('/usuarios/:id_usuario', updateUsuarios);
-
-
 router.delete('/usuarios', deleteUsuarios );
 
 

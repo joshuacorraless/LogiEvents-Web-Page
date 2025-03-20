@@ -101,8 +101,6 @@ export const createUsuarios = async (req, res) => {
 };
 
 
-
-
 //* Función para actualizar los datos de un usuario
 
 export const updateUsuarios = async (req, res) => {
@@ -164,8 +162,6 @@ export const updateUsuarios = async (req, res) => {
         res.status(500).send('Error al actualizar el usuario');
     }
 };
-
-
 
 
 
