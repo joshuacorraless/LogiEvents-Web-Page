@@ -1,4 +1,5 @@
 import { pool } from "../db.js";
+import nodemailer from 'nodemailer';
 
 //?Todo lo relacionado a los eventos:
 
@@ -110,5 +111,92 @@ export const updateEventos = async (req, res) => {
 };
 
 
-// ! Eliminar un evento existente
-export const deleteEventos = async (req, res) => {};
+
+//* Objeto en memoria para almacenar los códigos de verificación de eliminación
+// *(en producción podrías guardarlos en una tabla de la DB)
+const deletionCodes = {};
+
+// *Configuramos nodemailer para usar la cuenta de Gmail "logieventsreal@gmail.com"
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'logieventsreal@gmail.com',
+    pass: 'foyl slnv ktmq qpsp'       // *En .env guardas tu contraseña o clave de aplicación
+  }
+});
+
+
+/**
+* *POST /events/:id/request-delete
+* *Envía un código de verificación por correo para eliminar un evento
+*/
+export const requestDeleteEvent = async (req, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const { email } = req.body; // Correo al que se enviará el código
+  
+      // Verifica que el evento exista
+      const [rows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [eventId]);
+      if (rows.length === 0) {
+        return res.status(404).json({ message: 'Evento no encontrado' });
+      }
+  
+      const event = rows[0];
+  
+      // Validar que el evento NO esté agotado (usamos la columna "estado")
+      if (event.estado === 'Agotado') {
+        return res.status(400).json({ message: 'No se puede eliminar un evento agotado' });
+      }
+  
+      // Generar un código aleatorio de 6 dígitos
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      deletionCodes[eventId] = code;
+  
+      // Configurar y enviar el correo con el código
+      const mailOptions = {
+        from: 'logieventsreal@gmail.com',
+        to: email,
+        subject: 'Código de confirmación para eliminar evento',
+        text: `El código de confirmación para eliminar el evento "${event.nombre_evento}" es: ${code}`
+      };
+  
+      await transporter.sendMail(mailOptions);
+      res.json({ message: 'Código de confirmación enviado a tu correo electrónico' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error solicitando eliminación', error });
+    }
+  };
+
+/**
+* *POST /events/:id/confirm-delete
+* Valida el código y, si es correcto, elimina el evento
+*/
+export const confirmDeleteEvent = async (req, res) => {
+    try {
+      const eventId = parseInt(req.params.id);
+      const { code } = req.body;
+  
+      // Verifica que el evento exista
+      const [rows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [eventId]);
+      if (rows.length === 0) {
+        return res.status(404).json({ message: 'Evento no encontrado' });
+      }
+  
+      // Compara el código almacenado
+      if (!deletionCodes[eventId] || deletionCodes[eventId] !== code) {
+        return res.status(400).json({ message: 'Código de confirmación inválido' });
+      }
+  
+      // Elimina el evento
+      await pool.query('DELETE FROM Evento WHERE id_evento = ?', [eventId]);
+  
+      // Limpia el código en memoria
+      delete deletionCodes[eventId];
+  
+      res.json({ message: 'Evento eliminado exitosamente' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error confirmando eliminación', error });
+    }
+  };
