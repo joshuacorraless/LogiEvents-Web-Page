@@ -1,0 +1,86 @@
+.columnaDerecha{
+
+    background-image: url('ICONOS/USUARIO/fondoMenu.svg');
+    background-size: cover; /* Asegura que la imagen cubra toda el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    height: 100vh; /* Asegurar que la columna cubra toda la pantalla */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.container-fluid {
+    height: 100vh;
+}
+
+.main {
+    height: 100vh; /* Asegura que el contenedor principal cubra toda la pantalla */
+}
+
+.row {
+    height: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* Evita cualquier desplazamiento inesperado */
+}
+
+.main {
+    height: 100vh; /* Ocupa toda la pantalla */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Elimina cualquier espacio extra */
+}
+
+.row {
+    height: 100%;
+    margin: 0; /* Elimina márgenes extra */
+}
+
+.columnaDerecha {
+    
+    height: 100vh; /* Ocupar toda la pantalla */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/*BOTONES*/
+#btnAtrasRegistroEvento {
+    background-color: #700000; /* Naranja personalizado */
+    color: white;
+    border: none;
+    padding-left: 10%;
+    padding-right: 10%;
+
+}
+
+#btnAtrasRegistroEvento:hover {
+    background-color: #571010 !important; /* Naranja personalizado */
+    color: white !important;
+    border: none !important;
+}
+
+#btnRegistrarEvento {
+    background-color: #b99725; /* Naranja personalizado */
+    color: white;
+    border: none;
+}
+
+#btnRegistrarEvento:hover {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #80c235 !important; /* Texto verde */
+    border: 2px solid #80c235 !important; /* Borde verde */
+}

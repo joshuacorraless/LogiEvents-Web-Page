@@ -1,0 +1,36 @@
+
+
+/*BOTONES*/
+#btnCancelarReserva {
+    background-color: #8a8a8a; /* Naranja personalizado */
+    color: white;
+    border: none;
+}
+
+#btnCancelarReserva:hover {
+    background-color: #571010 !important; /* Naranja personalizado */
+    color: white !important;
+    border: none !important;
+}
+
+#btnConfirmarReserva {
+    background-color: #80c235; /* Naranja personalizado */
+    color: white;
+    border: none;
+}
+
+#btnConfirmarReserva:hover {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #80c235 !important; /* Texto verde */
+    border: 2px solid #80c235 !important; /* Borde verde */
+}
+.bodyReservar {
+    background-color: #e5e5f0da; /* Usando el valor hexadecimal de $gray-300 */
+    border-radius: 15px;
+}
+
+#btnCancelarReserva{
+
+    padding-left: 20%;
+    padding-right: 20%;
+}

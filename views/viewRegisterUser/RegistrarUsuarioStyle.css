@@ -1,0 +1,44 @@
+.encabezado {
+    background-image: url('/ICONOS/USUARIO/EncabezadoRegistrarse.svg');
+    background-size: cover; /* Asegura que la imagen cubra toda el área */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    height:30vh;
+}
+
+.bodyRegister {
+
+
+    background-color: #e5e5f0da; /* Usando el valor hexadecimal de $gray-300 */
+    border-radius: 15px;
+}
+
+/*BOTONES*/
+#btnAtrasRegistro {
+    background-color: #700000; /* Naranja personalizado */
+    color: white;
+    border: none;
+    padding-left: 10%;
+    padding-right: 10%;
+
+}
+
+#btnAtrasRegistro:hover {
+    background-color: #571010 !important; /* Naranja personalizado */
+    color: white !important;
+    border: none !important;
+}
+
+#btnConfirmarRegistro {
+    background-color: #b99725; /* Naranja personalizado */
+    color: white;
+    border: none;
+    padding-left: 40%;
+    padding-right: 40%;
+}
+
+#btnConfirmarRegistro:hover {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #80c235 !important; /* Texto verde */
+    border: 2px solid #80c235 !important; /* Borde verde */
+}

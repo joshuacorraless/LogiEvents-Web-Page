@@ -48,4 +48,4 @@ CREATE TABLE ChatBot (
 
 
 INSERT INTO Usuario (nombre_completo, identificacion, correo, telefono, username, password, tipo_usuario, rol_organizacion, id_empleado) VALUES
-('Joshua Corrales Retana', '2024073529', 'corralesjosh39@gmail.com', '84311955', 'joshuacorraless', 'charlie', 'administrador', 'Administrador Rey', '202407'),
+('Joshua Corrales Retana', '2024073529', 'corralesjosh39@gmail.com', '84311955', 'joshuacorraless', 'charlie', 'administrador', 'Administrador Rey', '202407');
