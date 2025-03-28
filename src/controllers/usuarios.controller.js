@@ -22,10 +22,10 @@ export const getUsuarios = async (req, res) => {
         }
 
         //* Si el tipo de usuario no es válido, respondemos con un error
-        return res.status(400).send('Tipo de usuario inválido. Debe ser "administrador" o "usuario".');
+        return res.status(400).json( {message : 'Tipo de usuario inválido. Debe ser "administrador" o "usuario".'});
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error al obtener los usuarios');
+        res.status(500).json({ message: 'Error al obtener los usuarios'});
     }
 };
 
@@ -55,27 +55,27 @@ export const createUsuarios = async (req, res) => {
 
         // *Validar cédula
         if (!identificacion.match(identificacionRegex)) {
-            return res.status(400).send('La cédula debe contener 9 dígitos.');
+            return res.status(400).json({ message: 'La cédula debe contener 9 dígitos.'});
         }
 
         // *Validar ID de empleado (solo si es administrador)
         if (tipo_usuario === 'administrador' && !id_empleado.match(empleadoRegex)) {
-            return res.status(400).send('El ID de empleado debe ser una combinación de 2 letras y 4 números.');
+            return res.status(400).json({ message: 'El ID de empleado debe ser una combinación de 2 letras y 4 números.'});
         }
 
         // *Validar correo electrónico
         if (!correo.match(correoRegex)) {
-            return res.status(400).send('El correo electrónico no tiene un formato válido.');
+            return res.status(400).json({ message :'El correo electrónico no tiene un formato válido.'});
         }
 
         //* Validar teléfono
         if (!telefono.match(telefonoRegex)) {
-            return res.status(400).send('El número de teléfono debe tener 8 dígitos.');
+            return res.status(400).json({ message: 'El número de teléfono debe tener 8 dígitos.'});
         }
 
         // *Validar contraseña
         if (!password.match(passwordRegex)) {
-            return res.status(400).send('La contraseña debe tener 4 letras seguidas de 4 números.');
+            return res.status(400).json({message: 'La contraseña debe tener 4 letras seguidas de 4 números.'});
         }
 
         // *Si es administrador, insertamos con rol y id_empleado
@@ -84,7 +84,7 @@ export const createUsuarios = async (req, res) => {
                 'INSERT INTO Usuario (nombre_completo, identificacion, correo, telefono, username, password, tipo_usuario, rol_organizacion, id_empleado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', 
                 [nombre_completo, identificacion, correo, telefono, username, password, tipo_usuario, rol_organizacion, id_empleado]
             );
-            return res.status(201).send({ message: 'Administrador registrado correctamente', rows });
+            return res.status(201).json({ message: 'Administrador registrado correctamente', rows });
         }
 
         // *Si es usuario común, insertamos sin rol_organizacion ni id_empleado
@@ -93,10 +93,10 @@ export const createUsuarios = async (req, res) => {
             [nombre_completo, identificacion, correo, telefono, username, password, tipo_usuario]
         );
         
-        res.status(201).send({ message: 'Usuario registrado correctamente', rows });
+        res.status(201).json({ message: 'Usuario registrado correctamente', rows });
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error al registrar el usuario');
+        res.status(500).json({ message: 'Error al registrar el usuario'});
     }
 };
 
@@ -114,17 +114,17 @@ export const updateUsuarios = async (req, res) => {
 
         // Si no se proporciona ningún campo para actualizar
         if (!correo && !telefono) {
-            return res.status(400).send('Debes proporcionar al menos el correo electrónico o el teléfono para actualizar.');
+            return res.status(400).json({message: 'Debes proporcionar al menos el correo electrónico o el teléfono para actualizar.'});
         }
 
         // Validar el correo electrónico si está presente
         if (correo && !correo.match(correoRegex)) {
-            return res.status(400).send('El correo electrónico no tiene un formato válido.');
+            return res.status(400).json({ message: 'El correo electrónico no tiene un formato válido.'});
         }
 
         // Validar el teléfono si está presente
         if (telefono && !telefono.match(telefonoRegex)) {
-            return res.status(400).send('El número de teléfono debe tener 8 dígitos.');
+            return res.status(400).json({message: 'El número de teléfono debe tener 8 dígitos.'});
         }
 
         // Construir la consulta dinámica para actualizar los datos
@@ -152,17 +152,17 @@ export const updateUsuarios = async (req, res) => {
 
         // Si no se ha encontrado el usuario
         if (result.affectedRows === 0) {
-            return res.status(404).send('Usuario no encontrado.');
+            return res.status(404).json({message: 'Usuario no encontrado.'});
         }
 
         // Responder con éxito
-        res.status(200).send('Datos de usuario actualizados correctamente.');
+        res.status(200).json({message: 'Datos de usuario actualizados correctamente.'});
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error al actualizar el usuario');
+        res.status(500).json({message: 'Error al actualizar el usuario'});
     }
 };
 
 
-
+//* no se usa
 export const deleteUsuarios = (req, res) => res.send('eliminando usuarios');
