@@ -6,6 +6,7 @@ import path from 'path';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import eventosRoutes from './routes/eventos.routes.js';
+import reservationsRoutes from './routes/reservations.routes.js';
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use('/api', eventosRoutes)
 app.use('/api',usuariosRoutes)
 app.use('/api',indexRoutes)
+app.use('/api', reservationsRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

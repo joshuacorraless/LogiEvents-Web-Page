@@ -123,7 +123,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'logieventsreal@gmail.com',
-    pass: 'foyl slnv ktmq qpsp'       // *En .env guardas tu contraseña o clave de aplicación
+    pass: 'foyl slnv ktmq qpsp'       
   }
 });
 
