@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import eventosRoutes from './routes/eventos.routes.js';
+import reservationsRoutes from './routes/reservations.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use('/api', eventosRoutes)
 app.use('/api',usuariosRoutes)
 app.use('/api',indexRoutes)
+app.use('/api', reservationsRoutes);
 
 //Servir archivos estáticos desde 'views'
 app.use(express.static(path.join(__dirname, '..', 'views')));
