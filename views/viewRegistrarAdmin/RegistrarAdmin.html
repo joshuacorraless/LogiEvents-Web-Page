@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Evento</title>
+    <title>Registrar Administradores</title>
 
         <!--ALERTAS-->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,8 +17,7 @@
     
         <!---Hoja de estilos-->
         <link rel="stylesheet" href="../styleMenuAdmin.css">
-        <link rel="stylesheet" href="./styleVisualizarEventoAdmin.css">
-        <script src="../scriptVisualizarEventoAdmin.js"></script>
+
     
         <!---FAVICON-->
         <link rel="icon" type="image/png" href="../ICONOS/USUARIO/FAVICON/favicon-96x96.png" sizes="96x96" />
@@ -50,7 +49,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link itemSelected">
+                            <a href="#" class="sidebar-link ">
                                 <i class="bi bi-calendar3"></i>
                                 <span>Eventos</span>
                             </a>
@@ -62,7 +61,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
+                            <a href="#" class="sidebar-link itemSelected">
                                 <i class="bi bi-people"></i>
                                 <span>Administradores</span>
                             </a>
@@ -76,57 +75,18 @@
                         </a>
                     </div>
                 </aside>
-                <!-- Header con botón flotante -->
-                <div class="container mt-5">
+                 <!-- Header -->
+                 <div class="container mt-5">
                     <div class="d-flex justify-content-between align-items-start mb-4 header-container">
                         <div>
-                            <h1 class="titulo-principal">Eventos</h1>
+                            <h1 class="display-4 " >Registrar Administradores</h1>
                             <h8 class="subtitulo">LogiEvents</h8>
+                            
                         </div>
-                        <button class="btn btn-primary btn-agregar" style="background-color:#001163;border-color: #000d49;">
-                            <i class="bi bi-plus-circle"></i> Agregar Evento
-                        </button>
-                    </div>     
-            <!-- tablas para eventos-->
-            <div class="d-flex justify-content-center">  <!-- Flex para centrar -->
-                <div class="w-100">  <!-- Ocupa todo el ancho disponible -->
-                    <div class="card shadow-sm">
-                        <div class="card-body p-0">  <!-- Sin padding interno -->
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0" id="tablaEventos">
-                                    <thead class="cabecera-tabla">
-                                    <tr>
-                                        <th class="col-id">ID</th>
-                                        <th class="col-evento">Evento</th>
-                                        <th class="col-fecha">Fecha</th>
-                                        <th class="col-asistencia">Asistencia</th>
-                                        <th class="col-estado">Estado</th>
-                                        <th class="col-accion">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   <!-- se llena automaticamente-->
-                                </tbody>
-                                </table>
-                            </div>
+                        <div class="col-1">
+                            <img src="../ICONOS/USUARIO/LogoLogiEvents.svg" alt="LOGO">
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-   
-            
-            
-<!---CDN DE BOOTSTRAP-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<!--ARCHIVO JS-->
-<!-- Cargar jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Cargar Bootstrap JS (después de jQuery) -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
-<script src="../scriptMenuAdmin.js"></script>
-<script src="../scriptVisualizarEventoAdmin.js"></script>
-
-</body>
-</html>
+               
+                <hr class="border border-2" style="--bs-border-color: #ac9607;">
+                

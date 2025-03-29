@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizar Evento</title>
+    <title>Visualizar Administradores</title>
 
         <!--ALERTAS-->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,8 +17,7 @@
     
         <!---Hoja de estilos-->
         <link rel="stylesheet" href="../styleMenuAdmin.css">
-        <link rel="stylesheet" href="./styleVisualizarEventoAdmin.css">
-        <script src="../scriptVisualizarEventoAdmin.js"></script>
+        <link rel="stylesheet" href="./styleVisualizarUsuarios.css">
     
         <!---FAVICON-->
         <link rel="icon" type="image/png" href="../ICONOS/USUARIO/FAVICON/favicon-96x96.png" sizes="96x96" />
@@ -50,7 +49,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link itemSelected">
+                            <a href="#" class="sidebar-link ">
                                 <i class="bi bi-calendar3"></i>
                                 <span>Eventos</span>
                             </a>
@@ -62,7 +61,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
+                            <a href="#" class="sidebar-link itemSelected">
                                 <i class="bi bi-people"></i>
                                 <span>Administradores</span>
                             </a>
@@ -80,13 +79,13 @@
                 <div class="container mt-5">
                     <div class="d-flex justify-content-between align-items-start mb-4 header-container">
                         <div>
-                            <h1 class="titulo-principal">Eventos</h1>
+                            <h1 class="titulo-principal">Administradores </h1>
                             <h8 class="subtitulo">LogiEvents</h8>
                         </div>
                         <button class="btn btn-primary btn-agregar" style="background-color:#001163;border-color: #000d49;">
-                            <i class="bi bi-plus-circle"></i> Agregar Evento
+                            <i class="bi bi-plus-circle"></i> Agregar Administrador
                         </button>
-                    </div>     
+                    </div>
             <!-- tablas para eventos-->
             <div class="d-flex justify-content-center">  <!-- Flex para centrar -->
                 <div class="w-100">  <!-- Ocupa todo el ancho disponible -->
@@ -97,15 +96,25 @@
                                     <thead class="cabecera-tabla">
                                     <tr>
                                         <th class="col-id">ID</th>
-                                        <th class="col-evento">Evento</th>
-                                        <th class="col-fecha">Fecha</th>
-                                        <th class="col-asistencia">Asistencia</th>
-                                        <th class="col-estado">Estado</th>
+                                        <th class="col-evento">Nombre</th>
+                                        <th class="col-fecha">Email</th>
+                                        <th class="col-asistencia">Telefono</th>
+                                        <th class="col-estado">Cédula</th>
                                         <th class="col-accion">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <!-- se llena automaticamente-->
+                                    <tr>
+                                        <td>010</td>
+                                        <td>Carlos Abarca</td>
+                                        <td>charlie@gmail.com</td>
+                                        <td>88888888</td>
+                                        <td><span>305610469</span></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Eliminar</button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                                 </table>
                             </div>
@@ -114,7 +123,6 @@
                 </div>
             </div>
         </div>
-   
             
             
 <!---CDN DE BOOTSTRAP-->
@@ -126,7 +134,6 @@
 <!-- Cargar Bootstrap JS (después de jQuery) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 <script src="../scriptMenuAdmin.js"></script>
-<script src="../scriptVisualizarEventoAdmin.js"></script>
 
 </body>
 </html>
