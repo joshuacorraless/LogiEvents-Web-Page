@@ -136,17 +136,75 @@ body {
     color: #212529;
 }
 
-/* Eliminar márgenes no deseados */
+
 .card {
     border: none;
     border-radius: 8px;
     overflow: hidden;
 }
 
-/* Ajustes para imágenes */
-.img-thumbnail {
+.confirm-modal .modal-content {
+    border-radius: 10px;
     border: none;
-    border-radius: 4px;
-    max-width: 50px;
-    height: auto;
+}
+
+/* Estilos para el modal de confirmación */
+.confirm-modal .modal-header {
+    background-color: #000d49;
+    border-bottom: none;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 1rem 0 1rem;
+}
+
+.confirm-modal .modal-title {
+    font-weight: bold;
+    color: #ffffff;
+    font-size: 1.5rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.confirm-modal .btn-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    margin: 0;
+    background-color: #eaeaea;
+}
+
+.confirm-modal .modal-body {
+    padding: 20px 30px;
+    text-align: center;
+}
+
+.confirm-modal .modal-footer {
+    border-top: none;
+    justify-content: center;
+    padding-top: 0;
+}
+
+.confirm-modal .btn-cancel {
+    background-color: #a39800;
+    color: white;
+}
+
+.confirm-modal .btn-confirm {
+    background-color: #dc3545;
+    color: white;
+}
+
+.confirm-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.confirm-checkbox .form-check-input {
+    margin-right: 10px;
 }

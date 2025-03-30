@@ -1,0 +1,69 @@
+/* Estilos personalizados para el formulario */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.upload-area {
+    border-style: dashed !important;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    border-color: #6c757d !important;
+    background-color: #f0f0f0;
+}
+
+/* Mejoras para los inputs */
+.form-control {
+    padding: 10px 15px;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+.btn-primary {
+    background-color: #04066b;
+    border-color: #160362;
+    border-radius: 25px;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+}
+
+.btn-secondary {
+    background-color: #910000;
+    border-color: #540101;
+    border-radius: 25px;
+}
+
+.btn-secondary:hover {
+    background-color: #5c636a;
+    border-color: #565e64;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .d-flex {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
