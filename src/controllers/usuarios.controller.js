@@ -166,3 +166,82 @@ export const updateUsuarios = async (req, res) => {
 
 //* no se usa
 export const deleteUsuarios = (req, res) => res.send('eliminando usuarios');
+
+
+
+
+//* Daniela type shi
+
+/**
+ ** FUNCION 1: Login
+ * *Ruta: POST /api/Login
+ * *Data recibida: { username, password }
+ * *Función:
+ * * - Busca el usuario por username.
+ * *- Si no existe o la contraseña no coincide, retorna error.
+ * * - Si coincide, retorna el id y el tipo de usuario.
+ */
+export const login = async (req, res) => {
+    try {
+      const { username, password } = req.body;
+  
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username y password son requeridos." });
+      }
+  
+      //* Busca el usuario por username
+      const [rows] = await pool.query("SELECT * FROM Usuario WHERE username = ?", [username]);
+      if (rows.length === 0) {
+        return res.status(401).json({ error: "El usuario y la contraseña no coinciden." });
+      }
+  
+      const user = rows[0];
+      //* Aquí se compara directamente; en producción usa hash y bcrypt.compare
+      if (user.password !== password) {
+        return res.status(401).json({ error: "El usuario y la contraseña no coinciden." });
+      }
+  
+      // *Retorna id y tipo de usuario (ajusta los nombres de columnas según tu BD)
+      return res.json({ id: user.id_usuario, tipo: user.tipo_usuario });
+    } catch (error) {
+      console.error("Error en login:", error);
+      return res.status(500).json({ error: "Error en el servidor." });
+    }
+  };
+  
+  /**
+   ** FUNCION 2: Validar datos de Usuario
+   ** Ruta: POST /api/Usuario/ValidateData
+   * *Data recibida: { username, correo }
+   ** Función:
+   * * - Verifica si ya existe un usuario con el mismo username.
+   * * - Verifica si ya existe un usuario con el mismo correo.
+   *  *- Retorna error en caso de que alguno ya exista.
+   *  *- Si no existen, indica que los datos se pueden usar.
+   */
+  export const validateUserData = async (req, res) => {
+    try {
+      const { username, correo } = req.body;
+  
+      if (!username || !correo) {
+        return res.status(400).json({ error: "Username y correo son requeridos." });
+      }
+  
+      // *Verifica si ya existe un usuario con ese username
+      const [userRows] = await pool.query("SELECT * FROM Usuario WHERE username = ?", [username]);
+      if (userRows.length > 0) {
+        return res.status(400).json({ error: "El usuario ya existe." });
+      }
+  
+      //* Verifica si ya existe un usuario con ese correo
+      const [emailRows] = await pool.query("SELECT * FROM Usuario WHERE correo = ?", [correo]);
+      if (emailRows.length > 0) {
+        return res.status(400).json({ error: "El correo ya existe." });
+      }
+  
+      return res.json({ message: "Los datos se pueden usar." });
+    } catch (error) {
+      console.error("Error en validateUserData:", error);
+      return res.status(500).json({ error: "Error en el servidor." });
+    }
+  };
