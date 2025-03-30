@@ -71,6 +71,18 @@ app.get('/VerEvento', (req, res) => {
   });
 });
 
+//URL DASHBOARD
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewDashBoard')));
+app.get('/DashBoard', (req, res) => {
+  const filePath = path.join(__dirname, '..', 'views', 'viewDashBoard', 'DashBoard.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
 //URL REGISTRAR EVENTO
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
 app.get('/RegistarEvento', (req, res) => {

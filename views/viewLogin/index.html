@@ -54,6 +54,7 @@
                                 <div class="mb-3">
                                     <label for="username" class="form-label fw-bold">Usuario</label>
                                     <input type="text" name="username" class="form-control" id="username" placeholder="Nombre de usuario" required>
+                                    <div id="usernameError" class="text-danger" style="display: none;">El campo de usuario no puede estar vacío.</div>
                                 </div>
                                 
                                 <div class="mb-4">
@@ -64,6 +65,7 @@
                                             <i class="bi bi-eye"></i>
                                         </span>
                                     </div>
+                                    <div id="passwordError" class="text-danger" style="display: none;">El campo de contraseña no puede estar vacío.</div>
                                 </div>
                                 
                                 <div class="d-grid gap-2">

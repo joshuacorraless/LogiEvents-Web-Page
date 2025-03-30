@@ -22,7 +22,36 @@ document.getElementById('togglePassword').addEventListener('click', function() {
 
 document.getElementById('btnAcceder').addEventListener('click', function(event) {
     event.preventDefault();  // Previene la acción por defecto del enlace
-    validarLogin();
+
+    //valida los campos del username y la contrasena
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
+
+    let valid = true;
+
+        // Limpiar los mensajes de error previos
+        usernameError.style.display = "none";
+        passwordError.style.display = "none";
+
+        // Validar el campo de usuario
+        if (!usernameInput.value.trim()) {
+            usernameError.style.display = "block";  // Mostrar mensaje de error
+            valid = false;
+        }
+
+        // Validar el campo de contraseña
+        if (!passwordInput.value.trim()) {
+            passwordError.style.display = "block";  // Mostrar mensaje de error
+            valid = false;
+        }
+
+        if (valid) { //si no hay errores, validad las credenciales
+            validarLogin();
+        }
+    
 });
 
 
