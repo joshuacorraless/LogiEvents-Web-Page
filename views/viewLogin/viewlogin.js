@@ -74,12 +74,12 @@ function validarLogin(){
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
                     return response.json().then(errorData => {
                         throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
                     });
                 }
-        return response.json(); // Si la respuesta es ok, continuamos
+        return response.json(); // Si la respuesta es ok, continua
     })
     .then(data => {
         console.log(data);

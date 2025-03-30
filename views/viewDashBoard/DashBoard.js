@@ -49,7 +49,7 @@ fetch('http://localhost:3000/api/DistribucionEvento')
 
     // Crear el gráfico
     new Chart(ctx, {
-      type: 'bar', // Puedes cambiarlo a 'pie', 'line', etc.
+      type: 'bar',
       data: chartData,
       options: {
         scales: {
