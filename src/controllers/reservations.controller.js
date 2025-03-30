@@ -80,13 +80,13 @@ export const startReservation = async (req, res) => {
     // >>>>> CAMBIOS PRINCIPALES: Envío SMS con Infobip <<<<<
     // Ajusta con tus credenciales y URL base
     const infobipApiKey = '17961e1d190891c0d55c5cfabfeb0d0e-4d70d28a-3190-46f8-ac63-1a60dd18c0f5'; // Reemplaza con tu clave real
-    const infobipBaseUrl = 'https://8k39k3.api.infobip.com'; // Ajusta según tu subdominio
+    const infobipBaseUrl = 'https://api.infobip.com'; // Ajusta según tu subdominio
 
     // Si deseas usar el número ingresado por el usuario, ajusta:
     // const phoneNumber = telefono.startsWith('+') ? telefono : `+${telefono}`;
-    const phoneNumber = '50684311955'; // fijo para prueba
-
+    const phoneNumber = '50661963811'; // fijo para prueba
     const messageText = `La palabra para confirmar tu reserva en "${event.nombre_evento}" es: ${smsWord}`;
+
 
     // Llamada a Infobip
     const response = await axios.post(
@@ -94,10 +94,10 @@ export const startReservation = async (req, res) => {
       {
         messages: [
           {
-            from: "447491163443", // Ajusta el remitente si tu cuenta demo lo permite
             destinations: [
               { to: phoneNumber }
             ],
+            from: "447491163443", // Ajusta el remitente si tu cuenta demo lo permite
             text: messageText
           }
         ]
@@ -105,16 +105,17 @@ export const startReservation = async (req, res) => {
       {
         headers: {
           Authorization: `App ${infobipApiKey}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       }
     );
 
-    console.log('Infobip response:', response.data);
+    console.log('Infobip response:', response);
 
     // 5. Responder
     return res.json({
-      message: 'Se envió la palabra al celular. Use /verifyReservation para confirmarla.',
+      message: 'Se envió la palabra al celular. Ingrese la palabra para confirmarla',
       tempReservationId
     });
   } catch (error) {

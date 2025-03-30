@@ -39,13 +39,13 @@
                 </div>
                 <ul class="sidebar-nav ">
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link">
+                        <a href="#" class="sidebar-link" id="perfilLink">
                             <i class="bi bi-person-fill fs-4"></i>
                             <span>Perfil</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a href="#" class="sidebar-link itemSelected">
+                        <a href="#" class="sidebar-link itemSelected" id="eventosLink">
                             <i class="bi bi-people-fill fs-4"></i>
                             <span>Eventos</span>
                         </a>
@@ -67,38 +67,27 @@
     
             <!--FIN MENU VERTICAL-->
 
-            <div class="main justify-content-center align-items-center vh-100 p-5">
-                <div class="row justify-content-center p-5">
-
+            <div class="main justify-content-center align-items-center vh-100">
+                
+                <div class="row justify-content-between align-items-center headerNombre px-5">
+                    <div class="col-auto">
+                        <h1 class="display-3 fw-bold text-white" id="nameEventos">MELENDI</h1>
+                    </div>
+                    <div class="col-auto">
+                        <img src="ICONOS/USUARIO/LogoLogiEventsWhite.svg" alt="LOGO" style="height: 80px;">
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center py-5">
                     <div class="col-11">
                         
-                        <div class="row align-items-center">
+                        <div class="row p-5">
                             <div class="col-6">
 
-                                <div class="row">
-                                    <div class="col">
-                                        <h1 class="display-3 fw-bold" id="nameEventos">MELENDI</h1>
-                                    </div>
-                                </div>
-                                <div class="row">
+                                <div class="row justify-content-center">
                                     <div class="col-auto justify-content-center align-items-center">
                                         <img src="/ICONOS/USUARIO/melendiPrueba.png" alt="Imagen del evento" class="img-fluid" id="imagenEvento">
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-auto justify-content-center align-items-center">
-                                       <p id="descriptionEvent">
-                                        ¡Prepárate para vivir una experiencia única con Melendi en vivo! El reconocido cantautor español llega con su energía inigualable, su voz inconfundible y un repertorio lleno de emociones.
-                                       </p>
-                                    </div>
-                                </div>
-                               <div class="row">
-                                <div class="col-3">
-                                    <a href="RegistrarUsuario.html">
-                                        <button type="button" class="btn btn-primary rounded-pill btn-lg" id="btnAtrasVerEvento">Atrás</button>
-                                    </a>
-                                </div>
-                               </div>
 
                             </div>
                             <div class="col-6 ">
@@ -130,8 +119,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col justify-content-center align-items-center">
+                                    <div class="col-auto justify-content-center align-items-center">
+                                       <p id="descriptionEvent">
+                                        ¡Prepárate para vivir una experiencia única con Melendi en vivo! El reconocido cantautor español llega con su energía inigualable, su voz inconfundible y un repertorio lleno de emociones.
+                                       </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-start gap-3">
                                         <button type="submit" class="btn btn-primary rounded-pill btn-lg" id="btnReservar">Reservar</button>
+                                
+                                        <a href="RegistrarUsuario.html">
+                                            <button type="button" class="btn btn-primary rounded-pill btn-lg" id="btnAtrasVerEvento">Atrás</button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -149,5 +149,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!--ARCHIVO JS-->
     <script type="text/javascript" src="/scriptMenuUser.js"></script>
+    <script type="text/javascript" src="/viewEvent.js"></script>
 </body>
 </html>
