@@ -1,0 +1,152 @@
+/* Estilos generales */
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Contenedor principal */
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 20px;
+    
+}
+
+/* Tabla - versión mejorada */
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+#tablaEventos {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+#tablaEventos th, 
+#tablaEventos td {
+    padding: 12px 15px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+#tablaEventos th {
+    background-color: #eaeaea;
+    color: rgb(0, 0, 0);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-color: #ffffff;
+}
+
+#tablaEventos tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+#tablaEventos tr:hover {
+    background-color: rgba(202, 202, 202, 0.637);
+}
+
+/* Cabecera */
+.header-container {
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px #fffefe;
+    border-color: white;
+    border: none;
+}
+
+.titulo-principal {
+    color: #343a40;
+    margin-bottom: 0.5rem;
+}
+
+.subtitulo {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Botón agregar */
+.btn-agregar {
+    background-color: #001163;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 500;
+    color: white;
+    transition: all 0.3s;
+}
+
+.btn-agregar:hover {
+    background-color: #000d49;
+    transform: translateY(-1px);
+}
+
+/* Badges de estado */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 50px;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.bg-info {
+    background-color: #17a2b8 !important;
+}
+
+/* Botones de acción */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    margin-right: 4px;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+/* Eliminar márgenes no deseados */
+.card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Ajustes para imágenes */
+.img-thumbnail {
+    border: none;
+    border-radius: 4px;
+    max-width: 50px;
+    height: auto;
+}
