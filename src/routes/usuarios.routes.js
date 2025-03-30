@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUsuarios, createUsuarios, deleteUsuarios, updateUsuarios, login, validateUserData } from "../controllers/usuarios.controller.js";   
+import { getUsuarios, createUsuarios, deleteUsuarios, updateUsuarios, login, validateUserData, getEventDistribution, getTop5Events} from "../controllers/usuarios.controller.js";   
 
 
 
@@ -18,6 +18,12 @@ router.post("/Login", login);
 
 // Ruta para Validar Datos de Usuario
 router.post("/Usuario/ValidateData", validateUserData);
+
+// Ruta para Top5 (retorna los 5 eventos con más reservaciones)
+router.get("/Top5", getTop5Events);
+
+// Ruta para Distribución de Eventos (por estado)
+router.get("/DistribucionEvento", getEventDistribution);
 
 
 export default router;

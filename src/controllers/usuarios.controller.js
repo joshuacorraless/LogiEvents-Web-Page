@@ -170,7 +170,7 @@ export const deleteUsuarios = (req, res) => res.send('eliminando usuarios');
 
 
 
-//* Daniela type shi
+//!Daniela type shi
 
 /**
  ** FUNCION 1: Login
@@ -243,5 +243,68 @@ export const login = async (req, res) => {
     } catch (error) {
       console.error("Error en validateUserData:", error);
       return res.status(500).json({ error: "Error en el servidor." });
+    }
+  };
+
+
+  
+/**
+ * *FUNCTION 1: Top5
+ * *Ruta: GET /api/Top5
+ * 
+ * *Función:
+ * *  - Cuenta las reservaciones de los eventos y retorna los 5 eventos con más reservaciones.
+ ** Retorna:
+ * *  Caso 1: Array de objetos con { id_evento, nombre_evento, totalReservaciones }
+ * *  Caso 2: Si no hay reservaciones, retorna un mensaje "No hay bro".
+ */
+export const getTop5Events = async (req, res) => {
+    try {
+      const [rows] = await pool.query(`
+        SELECT r.id_evento, e.nombre_evento, COUNT(*) AS totalReservaciones
+        FROM Reservacion r
+        JOIN Evento e ON r.id_evento = e.id_evento
+        GROUP BY r.id_evento, e.nombre_evento
+        ORDER BY totalReservaciones DESC
+        LIMIT 5
+      `);
+  
+      if (rows.length === 0) {
+        return res.status(404).json({ message: "No hay bro" });
+      }
+  
+      return res.json(rows);
+    } catch (error) {
+      console.error("Error en getTop5Events:", error);
+      return res.status(500).json({ message: "Error en el servidor", error });
+    }
+  };
+  
+  /**
+   **FUNCTION 2: DistribucionEvento
+   * *Ruta: GET /api/DistribucionEvento
+   * 
+   * *Función:
+   * *  - Cuenta los eventos por estado (Activos, Agotados, Próximos)
+   * *Retorna:
+   *  * Caso 1: Array de objetos con { estado, cantidad }
+   * *  Caso 2: Si no hay eventos, retorna "No hay bro".
+   */
+  export const getEventDistribution = async (req, res) => {
+    try {
+      const [rows] = await pool.query(`
+        SELECT estado, COUNT(*) AS cantidad
+        FROM Evento
+        GROUP BY estado
+      `);
+  
+      if (rows.length === 0) {
+        return res.status(404).json({ message: "No hay" });
+      }
+  
+      return res.json(rows);
+    } catch (error) {
+      console.error("Error en getEventDistribution:", error);
+      return res.status(500).json({ message: "Error en el servidor", error });
     }
   };
