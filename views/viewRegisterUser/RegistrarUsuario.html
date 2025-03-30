@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resgistrarse</title>
 
+    <!--ALERTAS-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!---ICONS-->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
@@ -22,6 +24,7 @@
     <link rel="shortcut icon" href="/ICONOS/USUARIO/FAVICON/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="ICONOS/USUARIO/FAVICON/apple-touch-icon.png" />
     <link rel="manifest" href="/ICONOS/USUARIO/FAVICON/site.webmanifest" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     
@@ -39,66 +42,66 @@
         <div class="row p-6 justify-content-center m-5">
         
             <div class="col-8 bodyRegister p-5">
-                <form>
+
+                <form id="formRegister">
 
                     <div class="row justify-content-center">
-                    
                         <div class="col-4">
                             <div class="row p-2">
                                 <label for="inputName" class="form-label">Nombre Completo</label>
-                                <input type="Text" class="form-control" id="reg_nombre" placeholder="Nombre Completo">
+                                <input type="text" class="form-control" id="reg_nombre" name="reg_nombre" placeholder="Nombre Completo">
                                 <div id="nombreError" class="text-danger" style="display: none;">El nombre completo es obligatorio.</div>
                             </div>
                             <div class="row p-2">
                                 <label for="inputName" class="form-label">Identificacion</label>
-                                <input type="Text" class="form-control" id="reg_identificacion" placeholder="0-0000-0000">
-                                <div id="identificacionError" class="text-danger" style="display: none;">La identificación debe tener el formato 0-0000-0000.</div>
+                                <input type="text" class="form-control" id="reg_identificacion" name="reg_identificacion" placeholder="000000000">
+                                <div id="identificacionError" class="text-danger" style="display: none;">La identificación debe tener el formato 000000000.</div>
                             </div>
                             <div class="row p-2">
                                 <label for="inputName" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="reg_email" placeholder="email@dominio.com">
+                                <input type="email" class="form-control" id="reg_email" name="reg_email" placeholder="email@dominio.com">
                                 <div id="emailError" class="text-danger" style="display: none;">Por favor, ingresa un correo electrónico válido.</div>
                             </div>
                             <div class="row p-2">
                                 <label for="inputName" class="form-label">Numero Telefonico</label>
-                                <input type="Text" class="form-control" id="reg_numTelefono" placeholder="00000000">
+                                <input type="text" class="form-control" id="reg_numTelefono" name="reg_numTelefono" placeholder="00000000">
                                 <div id="telefonoError" class="text-danger" style="display: none;">El número telefónico debe tener el formato 00000000.</div>
                             </div>
                         </div>
+                
                         <div class="col-2"></div>
+                
                         <div class="col-4 p-1">
-    
                             <div class="row text-center">
                                 <h4 class="text-secondary">Credenciales de usuario</h4>
                             </div>
-                            
+                
                             <div class="row p-2 justify-content-center">
                                 <label for="inputName" class="form-label">Usuario</label>
-                                <input type="Text" class="form-control" id="reg_usuario" placeholder="usuario">
+                                <input type="text" class="form-control" id="reg_usuario" name="reg_usuario" placeholder="usuario">
                                 <div id="usuarioError" class="text-danger" style="display: none;">El usuario es obligatorio.</div>
                             </div>
+                
                             <div class="row p-2 justify-content-center">
                                 <label for="inputName" class="form-label">Contraseña</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña" required>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
                                     <span class="input-group-text" id="togglePassword" style="cursor: pointer;">
                                         <i class="bi bi-eye"></i>
                                     </span>
                                 </div>
                                 <div id="passError" class="text-danger" style="display: none;">La contraseña debe tener al menos 6 caracteres.</div>
                             </div>
-
+                
                             <div class="row text-center p-2">
                                 <div class="col justify-content-center">
                                     <button type="button" class="btn btn-primary rounded-pill btn-lg" id="btnConfirmarRegistro">Registrarse</button>
-
                                 </div>
                             </div>
                         </div>
-    
                     </div>
-
                 </form>
+
             </div>
 
         </div>

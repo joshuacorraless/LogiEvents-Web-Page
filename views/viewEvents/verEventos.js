@@ -1,3 +1,14 @@
+//VALIDACION DE SEGURIDAD, EVITA QUE LOS USUARIOS ACCEDAN A SITOS SIN PERMISOS
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario")) {
+    
+    window.location.href = 'http://localhost:3000/Login'; 
+}
+
+
+
 const mostPopProducts = document.querySelector(".most-popular-products");
 
 
@@ -6,7 +17,7 @@ fetch('http://localhost:3000/api/eventos')
 		return respone.json();
 	})
 	.then((data) => {
-        
+        //carga las card insertando el codigo en el html
 		data.map((product) => {
 			const { id_evento, nombre_evento, precio, imagen, estado,fecha } = product;
 			mostPopProducts.innerHTML += `
