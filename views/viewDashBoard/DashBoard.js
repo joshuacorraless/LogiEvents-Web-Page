@@ -34,14 +34,14 @@ fetch('http://localhost:3000/api/DistribucionEvento')
         label: "Estado",
         data: valores,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 205, 86, 0.2)'
+          'rgba(212, 175, 55, 0.2)',
+          'rgba(178, 34, 34, 0.2)',
+          'rgba(220, 20, 60, 0.2)'
         ],
         borderColor: [
-          'rgb(255, 99, 132)',
-          'rgb(255, 159, 64)',
-          'rgb(255, 205, 86)'
+          'rgb(212, 175, 55)',
+          'rgb(178, 34, 34)',
+          'rgb(220, 20, 60)'
         ],
         borderWidth: 1
       }]
@@ -54,18 +54,16 @@ fetch('http://localhost:3000/api/DistribucionEvento')
       options: {
         scales: {
           y: {
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          title: {
-            display: true,
-            text: 'Distribución de eventos según su estado', // Título del gráfico
-            font: {
-              size: 18 // Tamaño de la fuente
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return Number.isInteger(value) ? value : '';
+              }
             }
           }
         }
+       
       }
     });
   })

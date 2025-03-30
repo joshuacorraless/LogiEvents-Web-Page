@@ -4,7 +4,7 @@
     color: #666;      /* Gris suave */
     font-weight: bold;
     display: block;
-    margin: 20px 0;
+    margin: 5px 0;
 }
 
 
@@ -14,16 +14,20 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-bottom: 2.5rem;
   }
   
-
+  .colChart {
+    display: flex;
+    flex-direction: column;
+  }
   
   section ul {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     width: min(22rem, 25rem);
+    padding-left: 0;
+    margin-left: 0;
   }
   
   section li {
@@ -47,12 +51,12 @@
     display: flex;
     justify-content: space-between; /* Espacio uniforme entre los elementos */
     padding: 10px;
+    color: white;
   }
   
   .headerTop span {
     font-size: 1rem;
     font-weight: bold;
-    color: #000000;
   }
 
 
