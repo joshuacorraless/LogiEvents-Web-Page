@@ -1,11 +1,12 @@
 //VALIDACION DE SEGURIDAD, EVITA QUE LOS USUARIOS ACCEDAN A SITOS SIN PERMISOS
-var idUser=sessionStorage.getItem("userID");
-var tipoUsuario=sessionStorage.getItem("tipoUsuario");
-
-if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario")) {
-    
-    window.location.href = 'http://localhost:3000/Login'; 
-}
+let idUser = sessionStorage.getItem("userID");
+let tipoUsuario = sessionStorage.getItem("tipoUsuario");
+console.log(tipoUsuario);
+console.log(idUser);
+/*
+if (!idUser || tipoUsuario !== "usuario") {
+    window.location.href = 'http://localhost:3000/Login';
+}*/
 
 
 

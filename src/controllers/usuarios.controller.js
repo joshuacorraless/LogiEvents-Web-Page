@@ -192,20 +192,20 @@ export const login = async (req, res) => {
       //* Busca el usuario por username
       const [rows] = await pool.query("SELECT * FROM Usuario WHERE username = ?", [username]);
       if (rows.length === 0) {
-        return res.status(401).json({ error: "El usuario y la contraseña no coinciden." });
+        return res.status(401).json({ message: "El usuario y la contraseña no coinciden." });
       }
   
       const user = rows[0];
       //* Aquí se compara directamente; en producción usa hash y bcrypt.compare
       if (user.password !== password) {
-        return res.status(401).json({ error: "El usuario y la contraseña no coinciden." });
+        return res.status(401).json({ message: "El usuario y la contraseña no coinciden." });
       }
   
       // *Retorna id y tipo de usuario (ajusta los nombres de columnas según tu BD)
       return res.json({ id: user.id_usuario, tipo: user.tipo_usuario });
     } catch (error) {
       console.error("Error en login:", error);
-      return res.status(500).json({ error: "Error en el servidor." });
+      return res.status(500).json({ message: "Error en el servidor." });
     }
   };
   

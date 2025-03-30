@@ -65,7 +65,7 @@ function validarLogin(){
     };
     
     console.log(data);
-    /*fetch(`http://localhost:3000/api/Login`, {
+    fetch(`http://localhost:3000/api/Login`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -82,33 +82,32 @@ function validarLogin(){
         return response.json(); // Si la respuesta es ok, continuamos
     })
     .then(data => {
-        
-        validarUsuario(data.id, data.tipoUsuario);
+        console.log(data);
+        validarUsuario(data.id, data.tipo);
             
     })
     .catch(error => {
         // Muestra una alerta de error
         Swal.fire({
-        icon: 'error',  // Icono de error
+        icon: 'info',  // Icono de error
         title: '¡Ups!',
         text: error.message,  // Muestra el mensaje de error
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#D4AF37',  // Color del botón
         });
-    });*/
+    });
 
 }
 
 function validarUsuario(id, tipoUsuario){
-    sessionStorage.setItem("userId", id);  //Id del usuario utilizado en las paginas
+    sessionStorage.setItem("userID", id);  //Id del usuario utilizado en las paginas
     sessionStorage.setItem("tipoUsuario", tipoUsuario);  //Tipo del usuario utilizado en las paginas
-    
-    if(tipoUsuario == "usuario"){
-
+    console.log(id);
+    console.log(tipoUsuario);
+    if (tipoUsuario === "usuario") {
         window.location.href = 'http://localhost:3000/VerEventos';
-
-    }else if(tipoUsuario == "administrador"){
-        
+    } else if (tipoUsuario === "administrador") {
+        window.location.href = 'http://localhost:3000/DashBoard';
     }
 
 }

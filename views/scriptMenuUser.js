@@ -29,7 +29,7 @@ window.onload = function() {
     // Añadir un event listener a los enlaces de los botones
     loginLink.addEventListener('click', function(event) {
       event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
-      
+      sessionStorage.clear(); //limpia la session en la que se ha guardado el id del usuario anterior
       // Redirigir al usuario a la nueva URL
       window.location.href = 'http://localhost:3000/Login';
     });

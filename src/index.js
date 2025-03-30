@@ -62,7 +62,7 @@ app.get('/Login', (req, res) => {
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewEvent')));
 app.get('/VerEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
-  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'VerEvento.html');
+  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'viewEvent.html');
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error al enviar el archivo:', err);
