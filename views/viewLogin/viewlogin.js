@@ -18,3 +18,54 @@ document.getElementById('togglePassword').addEventListener('click', function() {
         icon.classList.add('bi-eye'); // Cambiar el ícono al de ojo abierto
     }
 });
+
+function validarLogin(){
+
+    const formData = new FormData(form);
+    telefono =formData.get("loginForm");
+    const data = {
+        correo: formData.get("reserva_email"),
+        telefono: '506'+formData.get("reserva_numeroTelefono"),
+        nombre_completo: formData.get("reserva_nombre"),
+        cantidad: formData.get("reserva_cantidadentradas"),
+        id_evento: idEvento,
+        id_usuario: 1
+    };
+    
+    console.log(data);
+    fetch(`http://localhost:3000/api/reservations/start`, {
+            method: "POST", // Enviar como PUT
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
+                    });
+                }
+        return response.json(); // Si la respuesta es ok, continuamos
+    })
+    .then(data => {
+        console.log("Reserva hecha:", data);
+        tempReservationId = data.tempReservationId;    
+        
+        solicitarMensaje();
+            
+            
+        })
+    .catch(error => {
+        // Muestra una alerta de error
+        Swal.fire({
+        icon: 'error',  // Icono de error
+        title: '¡Ups!',
+        text: error.message,  // Muestra el mensaje de error
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#D4AF37',  // Color del botón
+        });
+    });
+
+}
