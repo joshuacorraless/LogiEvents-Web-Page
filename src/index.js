@@ -43,11 +43,26 @@ app.use(express.static(path.join(__dirname, '..', 'views', 'ICONOS')));
 app.use(express.static(path.join(__dirname, '..', 'uploads')));
 app.use(express.static(path.join(__dirname, '..')));
 
+//URL LOGIN
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewLogin')));
+app.get('/Login', (req, res) => {
+
+  const filePath = path.join(__dirname, '..', 'views', 'viewLogin', 'index.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+
+
 //URL VER EVENTO
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewEvent')));
 app.get('/VerEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
-  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'index.html');
+  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'VerEvento.html');
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error al enviar el archivo:', err);
@@ -58,7 +73,7 @@ app.get('/VerEvento', (req, res) => {
 
 //URL REGISTRAR EVENTO
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
-app.get('/api/RegistarEvento', (req, res) => {
+app.get('/RegistarEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewRegisterEvent', 'RegistrarEvento.html');
   res.sendFile(filePath, (err) => {
@@ -83,7 +98,7 @@ app.get('/ReservarEvento', (req, res) => {
 
 //URL REGISTRAR Usuario
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
-app.get('/api/RegistarUsuario', (req, res) => {
+app.get('/RegistarUsuario', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewRegisterUser', 'RegistrarUsuario.html');
   res.sendFile(filePath, (err) => {
