@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservar Entrada</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <!--ALERTAS-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!---ICONS-->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <!---CDN DE BOOTSTRAP-->
@@ -22,6 +26,8 @@
     <link rel="shortcut icon" href="/ICONOS/USUARIO/FAVICON/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href=/ICONOS/USUARIO/FAVICON/apple-touch-icon.png" />
     <link rel="manifest" href="/ICONOS/USUARIO/FAVICON/site.webmanifest" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <!--INICIO MENU VERTICAL-->
@@ -37,26 +43,26 @@
             </div>
             <ul class="sidebar-nav ">
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link" id="perfilLink">
+                    <a href="" class="sidebar-link" id="perfilLink">
                         <i class="bi bi-person-fill fs-4"></i>
                         <span>Perfil</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link itemSelected">
+                    <a href="" class="sidebar-link itemSelected" id="eventosLink">
                         <i class="bi bi-people-fill fs-4"></i>
                         <span>Eventos</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="" class="sidebar-link">
                         <i class="bi bi-bell-fill fs-4"></i>
                         <span>Notificaciones</span>
                     </a>
                 </li>
             </ul>
             <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
+                <a href="" class="sidebar-link">
                     <img src="/ICONOS/USUARIO/SALIS.svg" alt="Icono">
                     <span>Logout</span>
                 </a>
@@ -90,34 +96,34 @@
             <div class="row justify-content-center">
 
                 <div class="col-7 bodyReservar">
-                    <form>
+                    <form id="formReservaEvento">
 
                         <div class="row g-3 p-3 mx-auto justify-content-center">
                             <div class="col-md-4">
                               <label for="inputName" class="form-label fw-bold">Nombre Completo</label>
-                              <input type="Text" class="form-control" id="reserva_nombre" placeholder="Nombre Completo">
+                              <input type="Text" class="form-control" id="reserva_nombre" name="reserva_nombre" placeholder="Nombre Completo">
                             </div>
                             <div class="col-md-4">
                               <label for="inputEmail" class="form-label fw-bold">Correo Electronico</label>
-                              <input type="email" class="form-control" id="reserva_email" placeholder="email@dominio.cr">
+                              <input type="email" class="form-control" id="reserva_email"  name="reserva_email" placeholder="email@dominio.cr">
                             </div>
                         </div>
             
                         <div class="row g-3 p-5 mx-auto justify-content-center">
                             <div class="col-md-4">
                               <label for="inputCantidadEntradas" class="form-label fw-bold">Cantidad de entradas</label>
-                              <input type="number" class="form-control" id="reserva_cantidadentradas" placeholder="0 entradas">
+                              <input type="number" class="form-control" id="reserva_cantidadentradas" name="reserva_cantidadentradas" placeholder="0 entradas" min="1" value="1">
                             </div>
                             <div class="col-md-4">
                               <label for="inputNumeroTelefonico" class="form-label fw-bold">Numero Telefonico</label>
-                              <input type="text" class="form-control" id="reserva_numeroTelefono" placeholder="0000-0000">
+                              <input type="text" class="form-control" id="reserva_numeroTelefono" name="reserva_numeroTelefono" placeholder="00000000">
                             </div>
                         </div>
             
                         <div class="row g-3 p-1">
                             <div class="col-11">
                                 <div class="text-center">
-                                    <h1 class="display-7">
+                                    <h1 class="display-7" id="precioEntrada">
                                         Precio por entrada:
                                     </h1>
                                 </div>
@@ -127,7 +133,7 @@
                         <div class="row">
                             <div class="col-md-11">
                                 <div class="text-center">
-                                    <h1>
+                                    <h1 id="precioTotal">
                                         Precio total:
                                     </h1>
                                 </div>
@@ -138,7 +144,7 @@
     
                         <div class="row g-3 p-5 mx-auto justify-content-center">
                             <div class="col-md-4 justify-content-center">
-                                <button type="submit" class="btn btn-primary rounded-pill btn-lg" id="btnConfirmarReserva">Confirmar Reserva</button>
+                                <button type="button" class="btn btn-primary rounded-pill btn-lg" id="btnConfirmarReserva">Confirmar Reserva</button>
                             </div>
                             <div class="col-md-4 justify-content-center d-flex">
                              
@@ -155,8 +161,8 @@
                                             ¿Estás seguro de que deseas cancelar la reserva?
                                             </div>
                                             <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                            <button type="button" class="btn btn-danger">Cancelar Reserva</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+                                            <button type="button" class="btn btn-danger" id="CancelarReserva">Cancelar Reserva</button>
                                             </div>
                                         </div>
                                     </div>
@@ -182,5 +188,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!--ARCHIVO JS-->
     <script src="/scriptMenuUser.js"></script>
+    <script src="/viewReservarEvent/ReservarEvento.js"></script>
 </body>
 </html>

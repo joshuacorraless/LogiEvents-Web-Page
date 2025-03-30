@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import eventosRoutes from './routes/eventos.routes.js';
+import reservationsRoutes from './routes/reservations.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,18 +34,35 @@ app.use(express.json());
 app.use('/api', eventosRoutes)
 app.use('/api',usuariosRoutes)
 app.use('/api',indexRoutes)
+app.use('/api', reservationsRoutes);
 
 //Servir archivos estáticos desde 'views'
 app.use(express.static(path.join(__dirname, '..', 'views')));
 //Servir archivos estáticos desde 'views/ICONOS'
 app.use(express.static(path.join(__dirname, '..', 'views', 'ICONOS')));
+app.use(express.static(path.join(__dirname, '..', 'uploads')));
+app.use(express.static(path.join(__dirname, '..')));
+
+//URL LOGIN
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewLogin')));
+app.get('/Login', (req, res) => {
+
+  const filePath = path.join(__dirname, '..', 'views', 'viewLogin', 'index.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
 
 
 //URL VER EVENTO
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewEvent')));
-app.get('/api/VerEvento', (req, res) => {
+app.get('/VerEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
-  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'index.html');
+  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'VerEvento.html');
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error al enviar el archivo:', err);
@@ -55,7 +73,7 @@ app.get('/api/VerEvento', (req, res) => {
 
 //URL REGISTRAR EVENTO
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
-app.get('/api/RegistarEvento', (req, res) => {
+app.get('/RegistarEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewRegisterEvent', 'RegistrarEvento.html');
   res.sendFile(filePath, (err) => {
@@ -67,7 +85,7 @@ app.get('/api/RegistarEvento', (req, res) => {
 });
 
 //URL RESERVAR EVENTO
-app.get('/api/ReservarEvento', (req, res) => {
+app.get('/ReservarEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewReservarEvent', 'ReservarEvento.html');
   res.sendFile(filePath, (err) => {
@@ -80,7 +98,7 @@ app.get('/api/ReservarEvento', (req, res) => {
 
 //URL REGISTRAR Usuario
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
-app.get('/api/RegistarUsuario', (req, res) => {
+app.get('/RegistarUsuario', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewRegisterUser', 'RegistrarUsuario.html');
   res.sendFile(filePath, (err) => {
@@ -93,7 +111,7 @@ app.get('/api/RegistarUsuario', (req, res) => {
 
 
 //URL VER PERFIL Usuario
-app.get('/api/MiPerfil', (req, res) => {
+app.get('/MiPerfil', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
   const filePath = path.join(__dirname, '..', 'views', 'viewUserProfile', 'PerfilUsuario.html');
   res.sendFile(filePath, (err) => {
@@ -103,6 +121,21 @@ app.get('/api/MiPerfil', (req, res) => {
     }
   });
 });
+
+//URL Ver Eventos
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewEvents')));
+app.get('/VerEventos', (req, res) => {
+  // Usamos path.join para construir la ruta absoluta del archivo index.html
+  const filePath = path.join(__dirname, '..', 'views', 'viewEvents', 'VerEventos.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+
 //En caso de ingresar un url no registrado
 app.use((req, res) => {
   res.status(404).send('No se encontro la pagina')

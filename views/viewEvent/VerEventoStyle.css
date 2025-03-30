@@ -6,6 +6,11 @@
     background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
 
+.headerNombre{
+    background-image: url('ICONOS/USUARIO/FONDOVEREVEN.svg');
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
 
 /*BOTONES*/
 #btnAtrasVerEvento {
@@ -38,3 +43,12 @@
     background-color: #e5e5f0da; /* Usando el valor hexadecimal de $gray-300 */
     border-radius: 15px;
 }
+
+#imagenEvento {
+    width: 80%;
+    height: 60% ;
+    object-fit: cover; /* Mantiene las proporciones sin deformar */
+	position: relative;
+	object-position: top; /* Muestra la parte superior de la imagen */
+}
+

@@ -5,8 +5,12 @@ import {
     updateEventos,
 
     requestDeleteEvent,
-    confirmDeleteEvent
-  } from '../controllers/eventos.controller.js';
+    confirmDeleteEvent,
+    startDeleteAgotado,
+    verifySmsWord,
+    sendEmailCode,
+    verifyEmailCode,
+    confirmDeleteAgotado  } from '../controllers/eventos.controller.js';
   
 
 
@@ -21,4 +25,11 @@ router.put('/eventos/:id_evento', updateEventos);
 router.post('/events/:id/request-delete', requestDeleteEvent);
 router.post('/events/:id/confirm-delete', confirmDeleteEvent);
 
+
+// Rutas para la eliminación de eventos agotados
+router.post('/events/:id/agotado-start-delete', startDeleteAgotado);
+router.post('/events/:id/agotado-verify-sms', verifySmsWord);
+router.post('/events/:id/agotado-send-email', sendEmailCode);
+router.post('/events/:id/agotado-verify-email', verifyEmailCode);
+router.post('/events/:id/agotado-confirm-delete', confirmDeleteAgotado);
 export default router;

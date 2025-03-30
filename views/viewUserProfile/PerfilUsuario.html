@@ -25,11 +25,11 @@
         <link rel="shortcut icon" href="/ICONOS/USUARIO/FAVICON/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/ICONOS/USUARIO/FAVICON/apple-touch-icon.png" />
         <link rel="manifest" href="/ICONOS/USUARIO/FAVICON/site.webmanifest" />
-        <script src="/viewUserProfile/PerfilUsuario.js"></script>
+
+        <!-- Cargar jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    
-
             <!--INICIO MENU VERTICAL-->
             <div class="wrapper">
                 <aside id="sidebar">
@@ -43,13 +43,13 @@
                     </div>
                     <ul class="sidebar-nav ">
                         <li class="sidebar-item ">
-                            <a href="#" class="sidebar-link itemSelected" id="perfilLink">
+                            <a href="" class="sidebar-link itemSelected" id="perfilLink">
                                 <i class="bi bi-person-fill fs-4"></i>
                                 <span>Perfil</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="#" class="sidebar-link ">
+                            <a href="http://localhost:3000/VerEventos" class="sidebar-link " id="eventosLink">
                                 <i class="bi bi-people-fill fs-4"></i>
                                 <span>Eventos</span>
                             </a>
@@ -68,7 +68,7 @@
                         </a>
                     </div>
                 </aside>
-        
+
             <!--FIN MENU VERTICAL-->
 
             <div class="main justify-content-center align-items-center vh-100 p-5">
@@ -198,14 +198,12 @@
                 </div>
             </div>
 
+
+
     <!---CDN DE BOOTSTRAP-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!--ARCHIVO JS-->
-    <!-- Cargar jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 
-    <!-- Cargar Bootstrap JS (después de jQuery) -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
     <script src="/scriptMenuUser.js"></script>
     <script src="/viewUserProfile/PerfilUsuario.js"></script>
 </body>
