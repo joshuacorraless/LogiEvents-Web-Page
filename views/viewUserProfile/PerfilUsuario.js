@@ -1,5 +1,13 @@
 //Variable globla que almacena el id del usuario
-var idUser=1;
+
+//VALIDACION DE SEGURIDAD, EVITA QUE LOS USUARIOS ACCEDAN A SITOS SIN PERMISOS
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario" || tipoUsuario != "administrador")) {
+    
+    window.location.href = 'http://localhost:3000/Login'; 
+}
 
 window.onload = function() {
     traerUsuario();
@@ -8,7 +16,7 @@ window.onload = function() {
     modalload();
     const btnRegresarUser = document.getElementById('btnRegresarUser');
 
-    // Añadir un event listener al botón
+    // Añade un event listener al botón
     btnRegresarUser.addEventListener('click', function() {
         window.history.back();  // Regresar a la página anterior en el historial
     });
@@ -18,7 +26,6 @@ window.onload = function() {
 
 function modalload(){
 
-    console.log("cargo");
     
     const form = document.getElementById("formModificarUsuario");
         const btnGuardar = document.getElementById("btnGuardarUsuarioM");
@@ -49,12 +56,12 @@ function modalload(){
             })
             .then(response => {
                 if (!response.ok) {
-                    // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+                    // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
                     return response.json().then(errorData => {
                         throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
                     });
                 }
-                return response.json(); // Si la respuesta es ok, continuamos
+                return response.json(); // Si la respuesta es ok, continua
             })
             .then(data => {
                 console.log("Usuario actualizado:", data);
@@ -68,7 +75,7 @@ function modalload(){
                     confirmButtonColor: '#b99725',  // Color del botón
                 });
             
-                // Cierra el modal después de actualizar con una pequeña animación
+                // Cierra el modal después de actualizar
                 $('#modificarUsuarioModal').modal('hide'); 
             
                 // Refresca la información del usuario
@@ -95,12 +102,12 @@ function btnModificar(){
 
     
     document.getElementById('btnModificarPerfilUser').addEventListener('click', function() {
-        // Obtener los valores de los elementos que contienen el correo y el teléfono
+        // Obtiene los valores de los elementos que contienen el correo y el teléfono
         var correo = document.getElementById('perfil_email').textContent;
         var telefono = document.getElementById('perfil_number').textContent;
 
         
-        // Asignar esos valores a los campos dentro del modal
+        // Asigna esos valores a los campos dentro del modal
         document.getElementById('correo').value = correo;
         document.getElementById('telefono').value = telefono;
         const modal = document.getElementById('modificarUsuarioModal');
@@ -119,16 +126,16 @@ function btnModificar(){
 function traerUsuario() {
     
 
-    // Realizar la solicitud HTTP GET al endpoint
+    // Realiza la solicitud HTTP GET al api
     fetch('http://localhost:3000/api/usuarios')
-    .then(response => response.json()) // Convertir la respuesta a JSON
+    .then(response => response.json()) // Convierte la respuesta a JSON
     .then(data => {
-        console.log(data[0].nombre_completo); // Verificar que la data contiene el campo 'nombre_completo'
+        console.log(data[0].nombre_completo); // Verifica que la data contiene el campo 'nombre_completo'
 
-        // Verificar que los datos estén presentes
+        // Verificar` que los datos estén presentes
         if (data && data.length > 0) {
             const usuario = data[0]; // Obtener el primer usuario
-            console.log(usuario); // Verificar los datos del usuario
+            console.log(usuario); // Verificar` los datos del usuario
 
             idUser=usuario.id_usuario;
             document.getElementById('perfil_name').textContent = usuario.nombre_completo;

@@ -20,8 +20,8 @@ document.getElementById('togglePassword').addEventListener('click', function() {
 });
 
 
-
-// Obtener los elementos de los campos
+//VALIDACION DE LOS CAMPOS
+// Obtener los elementos de los campos a validar
 const nombreInput = document.getElementById('reg_nombre');
 const identificacionInput = document.getElementById('reg_identificacion');
 const emailInput = document.getElementById('reg_email');
@@ -92,6 +92,7 @@ passInput.addEventListener('input', function() {
 });
 
 
+//VALIDACION DE LOS CAMPOS AL PRESIONAR EL BOTON
 botonRegistrarse.addEventListener('click', function() {
 
     let valid = true;
@@ -149,6 +150,7 @@ botonRegistrarse.addEventListener('click', function() {
     }
 });
 
+//Envia el registro que realizo el usuario
 function enviarRegistro(){
 
     const form = document.getElementById("formRegister");
@@ -180,12 +182,12 @@ function enviarRegistro(){
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
             return response.json().then(errorData => {
                 throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
             });
         }
-        return response.json(); // Si la respuesta es ok, continuamos
+        return response.json(); // Si la respuesta es ok, continua
     })
     .then(data => {
         console.log("Usuario actualizado:", data);
@@ -199,7 +201,7 @@ function enviarRegistro(){
             confirmButtonColor: '#b99725',  // Color del botón
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "http://localhost:3000/Login";  // Cambia por la URL real
+                window.location.href = "http://localhost:3000/Login";
             }
         });
     

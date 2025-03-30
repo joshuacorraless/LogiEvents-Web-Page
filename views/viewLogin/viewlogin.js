@@ -19,21 +19,24 @@ document.getElementById('togglePassword').addEventListener('click', function() {
     }
 });
 
+
+document.getElementById('btnAcceder').addEventListener('click', function(event) {
+    event.preventDefault();  // Previene la acción por defecto del enlace
+    validarLogin();
+});
+
+
 function validarLogin(){
 
+    const form = document.getElementById('loginForm');
     const formData = new FormData(form);
-    telefono =formData.get("loginForm");
     const data = {
-        correo: formData.get("reserva_email"),
-        telefono: '506'+formData.get("reserva_numeroTelefono"),
-        nombre_completo: formData.get("reserva_nombre"),
-        cantidad: formData.get("reserva_cantidadentradas"),
-        id_evento: idEvento,
-        id_usuario: 1
+        username: formData.get("username"),
+        password: formData.get("password"),
     };
     
     console.log(data);
-    fetch(`http://localhost:3000/api/reservations/start`, {
+    /*fetch(`http://localhost:3000/api/Login`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -50,13 +53,10 @@ function validarLogin(){
         return response.json(); // Si la respuesta es ok, continuamos
     })
     .then(data => {
-        console.log("Reserva hecha:", data);
-        tempReservationId = data.tempReservationId;    
         
-        solicitarMensaje();
+        validarUsuario(data.id, data.tipoUsuario);
             
-            
-        })
+    })
     .catch(error => {
         // Muestra una alerta de error
         Swal.fire({
@@ -66,6 +66,20 @@ function validarLogin(){
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#D4AF37',  // Color del botón
         });
-    });
+    });*/
+
+}
+
+function validarUsuario(id, tipoUsuario){
+    sessionStorage.setItem("userId", id);  //Id del usuario utilizado en las paginas
+    sessionStorage.setItem("tipoUsuario", tipoUsuario);  //Tipo del usuario utilizado en las paginas
+    
+    if(tipoUsuario == "usuario"){
+
+        window.location.href = 'http://localhost:3000/VerEventos';
+
+    }else if(tipoUsuario == "administrador"){
+        
+    }
 
 }

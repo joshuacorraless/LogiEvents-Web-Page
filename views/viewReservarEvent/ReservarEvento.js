@@ -1,3 +1,13 @@
+//VALIDACION DE SEGURIDAD, EVITA QUE LOS USUARIOS ACCEDAN A SITOS SIN PERMISOS
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario" || tipoUsuario != "administrador")) {
+    
+    window.location.href = 'http://localhost:3000/Login'; 
+}
+
+
 var precio = 0;
 var precioTotal = precio;
 var idEvento = 0;
@@ -9,9 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     idEvento = sessionStorage.getItem("idEvento");
     const nombre = sessionStorage.getItem("nombreEvento");
     precio = sessionStorage.getItem("precio");
-    // Usar el id_evento obtenido para hacer lo que necesites, por ejemplo, cargar el evento
-    console.log("ID del evento en la vista:", idEvento);
-    console.log("ID del evento en la vista:", nombre);
 
     document.getElementById("reserva_nameEvent").textContent = nombre;
     document.getElementById("precioEntrada").textContent = "Precio por entrada: ₡"+precio;
@@ -90,7 +97,7 @@ function enviarReserva(){
         nombre_completo: formData.get("reserva_nombre"),
         cantidad: formData.get("reserva_cantidadentradas"),
         id_evento: idEvento,
-        id_usuario: 1
+        id_usuario: idUser
     };
     
     console.log(data);
@@ -103,12 +110,12 @@ function enviarReserva(){
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
                     return response.json().then(errorData => {
                         throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
                     });
                 }
-        return response.json(); // Si la respuesta es ok, continuamos
+        return response.json(); // Si la respuesta es ok, continua
     })
     .then(data => {
         console.log("Reserva hecha:", data);
@@ -153,7 +160,7 @@ function solicitarMensaje(){
     }).then((result) => {
         // Si el usuario hizo clic en el botón de confirmación
         if (result.isConfirmed) {
-            // Aquí puedes obtener la palabra ingresada
+            // Obtien la palabra ingresada
             const palabra = result.value;
            
 
@@ -170,12 +177,12 @@ function solicitarMensaje(){
         })
         .then(response => {
             if (!response.ok) {
-                // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+                // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
                         return response.json().then(errorData => {
                             throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
                         });
                     }
-            return response.json(); // Si la respuesta es ok, continuamos
+            return response.json(); // Si la respuesta es ok, continua
         })
         .then(data => {
 
@@ -191,7 +198,7 @@ function solicitarMensaje(){
                 confirmButtonText: 'Volver a ingresarla',
                 confirmButtonColor: '#D4AF37',  // Color del botón
             }).then(() => {
-                // Aquí después de que el usuario cierre el modal, puedes llamar a la siguiente función
+                //en caso de no ser vuelve a solicitar el mensaje
                 solicitarMensaje();
             });
         });
