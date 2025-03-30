@@ -3,10 +3,10 @@ let idUser = sessionStorage.getItem("userID");
 let tipoUsuario = sessionStorage.getItem("tipoUsuario");
 console.log(tipoUsuario);
 console.log(idUser);
-/*
+
 if (!idUser || tipoUsuario !== "usuario") {
     window.location.href = 'http://localhost:3000/Login';
-}*/
+}
 
 
 
