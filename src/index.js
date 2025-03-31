@@ -14,19 +14,24 @@ const __dirname = path.dirname(__filename);
 
 
 const app = express();
+
+
+// Configurar Multer para guardar con el nombre original en 'uploads/eventos/'
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'uploads/eventos/'); // Carpeta donde se guardarán las imágenes
-  },
+  destination: "uploads/eventos/",
   filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname); // Obtenemos la extensión de la imagen
-      cb(null, Date.now() + ext); // Usamos la fecha como nombre del archivo
-  }
+      cb(null, file.originalname); // Agrega timestamp para evitar duplicados
+  },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-
+app.post("/upload", upload.single("imagen"), (req, res) => {
+  if (!req.file) {
+      return res.status(400).send("No se envió ninguna imagen.");
+  }
+  res.send("Imagen guardada en: " + req.file.path);
+});
 
 app.use(express.json());
 

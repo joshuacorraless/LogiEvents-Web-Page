@@ -34,18 +34,8 @@ export const getEventos = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
-    const imagen = req.file ? req.file.filename : null;  //* Obtener el nombre de la imagen cargada
-  
-    //* Validación de los campos
-    const fechaRegex = /^\d{4}-\d{2}-\d{2}$/; // *Formato de fecha (YYYY-MM-DD)
-    const horaRegex = /^\d{2}:\d{2}$/; //* Formato de hora (HH:MM)
-    if (!fecha.match(fechaRegex)) {
-      return res.status(400).json({ message: 'La fecha no tiene un formato válido (YYYY-MM-DD).' });
-    }
-    if (!hora.match(horaRegex)) {
-      return res.status(400).json({ message: 'La hora no tiene un formato válido (HH:MM).' });
-    }
+    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
+    
   
     try {
       const [result] = await pool.query(

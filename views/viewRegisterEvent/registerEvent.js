@@ -145,6 +145,87 @@ registerButton.addEventListener('click', function() {
 
 function enviarEvento(){
 
-    console.log("enviao");
+    const form = document.getElementById("formRegistrar");
+    //recoleccion de datos
+    const formData = new FormData(form);
 
+    const fechaCompleta = formData.get("regevento_fecha"); // Obtiene el valor en formato YYYY-MM-DDTHH:MM
+    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null; // Convierte a objeto Date
+
+    // Formato YYYY-MM-DD
+    const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
+
+    // Formato HH:MM
+    const hora = fechaObjeto.toTimeString().slice(0, 5);
+
+
+    const data = {
+        nombre_evento: formData.get("regevento_nombre"),
+        descripcion: formData.get("regevento_descripcion"),
+        fecha: fechaFormateada, // Fecha formateada
+        hora: hora, // Hora formateada
+        precio: formData.get("regevento_precio"),
+        capacidad: formData.get("regevento_capacidad"),
+        ubicacion: formData.get("regevento_ubicacion"),
+        estado: formData.get("regevento_estado"),
+        categoria: formData.get("regevento_categoria"),
+        imagen: formData.get("regevento_imagen").name // Esto devuelve el archivo si hay uno
+    };
+
+    console.log(data); // Para verificar los datos antes de enviarlos
+
+
+    fetch(`http://localhost:3000/api/Eventos`, {
+        method: "POST", // Enviar como POST
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) {
+            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
+            return response.json().then(errorData => {
+                throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
+            });
+        }
+        return response.json(); // Si la respuesta es ok, continua
+    })
+    .then(data => {
+        console.log("Evento Registrado:", data);
+        subirImagen();
+        // Muestra una alerta de éxito
+        Swal.fire({
+            icon: 'success',  // Icono de éxito
+            title: '¡Evento registrado correctamente!',
+            text: 'Los cambios se guardaron con éxito.',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',  // Color del botón
+        });
+    
+    })
+    .catch(error => {
+        // Muestra una alerta de error
+        Swal.fire({
+            icon: 'error',  // Icono de error
+            title: '¡Ups!',
+            text: error.message,  // Muestra el mensaje de error
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',  // Color del botón
+        });
+    });
+
+}
+
+function subirImagen() {
+    const inputFile = document.getElementById("regevento_imagen");
+    const formData = new FormData();
+    formData.append("imagen", inputFile.files[0]);
+    console.log(inputFile.files[0]),
+    fetch("http://localhost:3000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => console.log(res))
+    .catch(error => console.error("Error:", error));
 }
