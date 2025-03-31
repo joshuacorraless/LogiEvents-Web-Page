@@ -6,7 +6,7 @@ import twilio from 'twilio';
 
 // Si deseas tenerlos directos en el código:
 const TWILIO_ACCOUNT_SID = 'AC4670cf651877445e181e3b1a2cf8e79a';
-const TWILIO_AUTH_TOKEN = '23a55e16eebc589971d5f7e5c4fd8fda';
+const TWILIO_AUTH_TOKEN = 'e1981d88701046d14d020cc325b8e9f1';
 const TWILIO_PHONE_NUMBER = '+13435013067';
 
 const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);

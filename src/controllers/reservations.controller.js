@@ -6,7 +6,7 @@ import nodemailer from 'nodemailer';
 let reservationsFlow = {}; // Almacén temporal de reservas en proceso
 
 // Configuración de Twilio (para enviar SMS)
-const twilioClient = twilio('AC4670cf651877445e181e3b1a2cf8e79a', '23a55e16eebc589971d5f7e5c4fd8fda');
+const twilioClient = twilio('AC4670cf651877445e181e3b1a2cf8e79a', 'e1981d88701046d14d020cc325b8e9f1');
 
 
 // Config nodemailer (correo remitente)
