@@ -1,6 +1,4 @@
-// scriptEditarEvento.js
 document.addEventListener('DOMContentLoaded', function() {
-    // ========== ELEMENTOS DEL DOM ==========
     const form = document.querySelector('.card-body');
     const titleElement = document.querySelector('.title');
     const priceInput = document.getElementById('precio');
@@ -9,19 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.querySelector('.upload-area');
     const submitButton = document.querySelector('.btn-primary');
     const cancelButton = document.querySelector('.btn-secondary');
-    
-    // Elemento input file oculto
     const imageInput = document.createElement('input');
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
     imageInput.style.display = 'none';
     document.body.appendChild(imageInput);
-    
-    // ========== VARIABLES GLOBALES ==========
     const idEvento = sessionStorage.getItem('idEventoEditar');
     let currentImageUrl = null;
 
-    // ========== INICIALIZACIÓN ==========
     if (!idEvento) {
         mostrarError('No se encontró el ID del evento', 'http://localhost:3000/EventosAdmin');
         return;
@@ -29,28 +22,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Mostrar loading
     titleElement.innerHTML = '<i class="bi bi-arrow-repeat spinner"></i> Cargando evento...';
-    
-    // Cargar datos del evento
+
     cargarDatosEvento(idEvento);
-    
-    // Configurar eventos
     setupEventListeners();
 
-    // ========== FUNCIONES PRINCIPALES ==========
+    
     function setupEventListeners() {
-        // Click en el área de subida
+
         uploadArea.addEventListener('click', handleUploadClick);
-        
-        // Cambio de imagen seleccionada
         imageInput.addEventListener('change', handleImageSelection);
-        
-        // Drag and drop
         setupDragAndDrop();
-        
-        // Envío del formulario
         submitButton.addEventListener('click', handleFormSubmit);
-        
-        // Botón cancelar
         if (cancelButton) {
             cancelButton.addEventListener('click', confirmCancel);
         }
@@ -65,21 +47,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const evento = await response.json();
-            
-            // Actualizar UI con los datos del evento
+            //actualizar datos
             updateUIWithEventData(evento);
             
         } catch (error) {
             console.error('Error al cargar el evento:', error);
-            //mostrarError('No se pudo cargar la información del evento', '/EventosAdmin');
+            mostrarError('No se pudo cargar la información del evento', '/EventosAdmin');
         }
     }
 
     function updateUIWithEventData(evento) {
-        // Actualizar título
-        titleElement.textContent = evento.nombre || 'Editar Evento';
-        
         // Llenar campos del formulario
+        titleElement.textContent = evento.nombre || 'Editar Evento';
         priceInput.value = evento.precio || '';
         locationInput.value = evento.ubicacion || '';
         capacityInput.value = evento.capacidad || '';
@@ -99,16 +78,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleImageSelection(e) {
         const file = e.target.files[0];
-        if (file && file.type.startsWith('image/')) {
+        if (file) {
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo no válido',
+                    text: 'Por favor selecciona una imagen válida (JPEG, PNG, etc.)',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+            
+            // Validar tamaño de archivo (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo demasiado grande',
+                    text: 'La imagen no puede superar los 5MB',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+            
             currentImageUrl = null; // Reseteamos la URL si suben nueva imagen
             showImagePreview(URL.createObjectURL(file));
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Archivo no válido',
-                text: 'Por favor selecciona una imagen válida',
-                confirmButtonText: 'Entendido'
-            });
         }
     }
 
@@ -148,7 +142,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const dt = e.dataTransfer;
         const file = dt.files[0];
         
-        if (file && file.type.startsWith('image/')) {
+        if (file) {
+            // Validaciones igual que en handleImageSelection
+            if (!file.type.startsWith('image/')) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo no válido',
+                    text: 'Por favor selecciona una imagen válida',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Archivo demasiado grande',
+                    text: 'La imagen no puede superar los 5MB',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+            
             currentImageUrl = null;
             showImagePreview(URL.createObjectURL(file));
             imageInput.files = dt.files; // Asignar el archivo al input
@@ -159,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadArea.innerHTML = `
             <img src="${imageSrc}" class="img-thumbnail mb-2" style="max-height: 200px;">
             <button class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
+            <p class="small text-muted mt-1">Tamaño máximo: 5MB</p>
         `;
     }
 
@@ -182,22 +198,44 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('ubicacion', locationInput.value);
             formData.append('capacidad', capacityInput.value);
             
-            // Si hay nueva imagen, agregarla
+            // Manejo de imágenes
             if (imageInput.files.length > 0) {
-                formData.append('imagen', imageInput.files[0]);
+                // Subir nueva imagen primero
+                const uploadResponse = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    body: (() => {
+                        const fd = new FormData();
+                        fd.append('imagen', imageInput.files[0]);
+                        return fd;
+                    })()
+                });
+                
+                if (!uploadResponse.ok) {
+                    throw new Error('Error al subir la nueva imagen');
+                }
+                
+                const uploadResult = await uploadResponse.json();
+                formData.append('imagenUrl', uploadResult.url);
             } else if (currentImageUrl) {
-                // Si mantiene la imagen existente
+                // Mantener la imagen existente
                 formData.append('imagenUrl', currentImageUrl);
+            } else {
+                // No hay imagen seleccionada ni existente
+                throw new Error('Debes seleccionar una imagen para el evento');
             }
             
             // Enviar datos al servidor
             const response = await fetch(`http://localhost:3000/api/eventos/${idEvento}`, {
                 method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                },
                 body: formData
             });
             
             if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+                const errorData = await response.json();
+                throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
             }
             
             const result = await response.json();
@@ -215,18 +253,18 @@ document.addEventListener('DOMContentLoaded', function() {
             
         } catch (error) {
             console.error('Error al actualizar el evento:', error);
-            mostrarError('Ocurrió un error al actualizar el evento');
+            mostrarError(error.message || 'Ocurrió un error al actualizar el evento');
         } finally {
             // Restaurar botón
             submitButton.disabled = false;
-            submitButton.textContent = 'Registrar';
+            submitButton.textContent = 'Guardar Cambios';
         }
     }
 
     function validateForm() {
         // Validar precio
-        if (!priceInput.value || isNaN(priceInput.value)) {
-            mostrarError('Por favor ingrese un precio válido');
+        if (!priceInput.value || isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
+            mostrarError('Por favor ingrese un precio válido (mayor que 0)');
             priceInput.focus();
             return false;
         }
@@ -239,8 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Validar capacidad
-        if (!capacityInput.value || isNaN(capacityInput.value)) {
-            mostrarError('Por favor ingrese una capacidad válida');
+        if (!capacityInput.value || isNaN(capacityInput.value) || parseInt(capacityInput.value) <= 0) {
+            mostrarError('Por favor ingrese una capacidad válida (mayor que 0)');
             capacityInput.focus();
             return false;
         }
@@ -255,7 +293,9 @@ document.addEventListener('DOMContentLoaded', function() {
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sí, descartar',
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6'
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'http://localhost:3000/EventosAdmin';
@@ -268,7 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
             icon: 'error',
             title: 'Error',
             text: mensaje,
-            confirmButtonText: 'Aceptar'
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725'
         }).then(() => {
             if (redirectUrl) {
                 window.location.href = redirectUrl;
