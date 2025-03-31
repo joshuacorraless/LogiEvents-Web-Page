@@ -53,7 +53,7 @@ body {
     /*relleno de abajo y arriba*/
     padding-bottom: 2%;
     padding-top: 1%;
-    background-image: url('/ICONOS/USUARIO/fondoMenu.svg');
+    background-image: url('/ICONOS/USUARIO/FondoConfetti.svg');
     background-size: cover; /* Asegura que la imagen cubra toda el área */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */

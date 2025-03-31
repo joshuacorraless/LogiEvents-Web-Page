@@ -34,50 +34,52 @@
 <body>
 
     <!--INICIO MENU VERTICAL-->
-    <div class="wrapper">
-        <aside id="sidebar">
-            <div class="d-flex">
-                <button class="toggle-btn" type="button">
-                    <i class="bi bi-list fs-2"></i>
-                </button>
-                <div class="sidebar-logo">
-                    <a href="#">LogiEvents</a>
-                </div>
-            </div>
-            <ul class="sidebar-nav ">
-                <li class="sidebar-item ">
-                    <a href="#" class="sidebar-link" id="perfilLink">
-                        <i class="bi bi-person-fill fs-4"></i>
-                        <span>Perfil</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link itemSelected">
-                        <i class="bi bi-calendar3"></i>
-                        <span>Eventos</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-graph-up-arrow"></i>
-                        <span>Estadisticas</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-people"></i>
-                        <span>Administradores</span>
-                    </a>
-                </li>
-            </ul>
+    
+            <!--INICIO MENU VERTICAL-->
+            <div class="wrapper">
+                <aside id="sidebar">
+                    <div class="d-flex">
+                        <button class="toggle-btn" type="button">
+                            <i class="bi bi-list fs-2"></i>
+                        </button>
+                        <div class="sidebar-logo">
+                            <a href="#">LogiEvents</a>
+                        </div>
+                    </div>
+                    <ul class="sidebar-nav ">
+                        <li class="sidebar-item ">
+                            <a href="http://localhost:3000/" class="sidebar-link" id="perfilLink">
+                                <i class="bi bi-person-fill fs-4"></i>
+                                <span>Perfil</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="http://localhost:3000/EventosAdmin" class="sidebar-link itemSelected">
+                                <i class="bi bi-calendar3"></i>
+                                <span>Eventos</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="http://localhost:3000/" class="sidebar-link">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                <span>Estadisticas</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="http://localhost:3000/VerAdmins" class="sidebar-link">
+                                <i class="bi bi-people"></i>
+                                <span>Administradores</span>
+                            </a>
+                        </li>
+                    </ul>
 
-            <div class="sidebar-footer">
-                <a href="#" class="sidebar-link">
-                    <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
-                    <span>Logout</span>
-                </a>
-            </div>
-        </aside>
+                    <div class="sidebar-footer">
+                        <a href="http://localhost:3000/" class="sidebar-link">
+                            <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </aside>
     <!--FIN MENU VERTICAL-->
     <div class="container-fluid vh-100 d-flex align-items-center justify-content-center main">
         <div class="row w-100 h-100">
