@@ -1,3 +1,12 @@
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if (!idUser || !tipoUsuario || (tipoUsuario !== "usuario" && tipoUsuario !== "administrador")) {
+    window.location.href = 'http://localhost:3000/Login'; 
+}
+
+
+
 //grafico de barraas
 const ctx = document.getElementById('barrasChart');
 

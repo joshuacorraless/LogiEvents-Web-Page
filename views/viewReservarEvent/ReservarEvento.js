@@ -245,3 +245,13 @@ document.getElementById('reserva_nombre').addEventListener('input', function () 
         document.getElementById('reserva_nombre').classList.remove('is-invalid');
     }
 });
+
+function generarNotificacion(nombreEvento) {
+    // Usar template literals para interpolar el valor de nombreEvento
+    const notification = [
+      { title: 'Acabas de realizar una reservación!', description: `Recuerda vivir tu experiencia con ${nombreEvento}` }
+    ];
+  
+    // Guardar la notificación en sessionStorage
+    sessionStorage.setItem('notifications', JSON.stringify(notification));
+  }

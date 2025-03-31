@@ -74,7 +74,7 @@ function modalload(){
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#b99725',  // Color del botón
                 });
-            
+                generarNotificacion();
                 // Cierra el modal después de actualizar
                 $('#modificarUsuarioModal').modal('hide'); 
             
@@ -130,14 +130,13 @@ function traerUsuario() {
     fetch('http://localhost:3000/api/usuarios')
     .then(response => response.json()) // Convierte la respuesta a JSON
     .then(data => {
-        console.log(data[0].nombre_completo); // Verifica que la data contiene el campo 'nombre_completo'
-
+        console.log(data);
         // Verificar` que los datos estén presentes
         if (data && data.length > 0) {
-            const usuario = data[0]; // Obtener el primer usuario
-            console.log(usuario); // Verificar` los datos del usuario
+            console.log(idUser);
 
-            idUser=usuario.id_usuario;
+            const usuario = data.find(user => user.id_usuario === Number(idUser));
+
             document.getElementById('perfil_name').textContent = usuario.nombre_completo;
             document.getElementById('perfil_identificacion').textContent = usuario.identificacion;
             document.getElementById('perfil_email').textContent = usuario.correo;
@@ -152,3 +151,13 @@ function traerUsuario() {
         console.error('Error al obtener los datos:', error);
     });
 }
+
+function generarNotificacion() {
+    // Usar template literals para interpolar el valor de nombreEvento
+    const notification = [
+      { title: 'Acabas de realizar una modificacion en tus datos!', description: `Si no fuiste tu, contactanos!` }
+    ];
+    console.log(222);
+    // Guardar la notificación en sessionStorage
+    sessionStorage.setItem('notifications', JSON.stringify(notification));
+  }
