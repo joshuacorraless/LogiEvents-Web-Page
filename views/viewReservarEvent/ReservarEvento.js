@@ -1,10 +1,11 @@
 //VALIDACION DE SEGURIDAD, EVITA QUE LOS USUARIOS ACCEDAN A SITOS SIN PERMISOS
-var idUser=sessionStorage.getItem("userID");
-var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+let idUser = sessionStorage.getItem("userID");
+let tipoUsuario = sessionStorage.getItem("tipoUsuario");
+console.log(tipoUsuario);
+console.log(idUser);
 
-if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario" || tipoUsuario != "administrador")) {
-    
-    window.location.href = 'http://localhost:3000/Login'; 
+if (!idUser || tipoUsuario !== "usuario") {
+    window.location.href = 'http://localhost:3000/Login';
 }
 
 
@@ -65,10 +66,7 @@ btnConfirmarReserva.addEventListener("click", function (event) {
     const regexEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;  // Validación de correo electrónico
     const nombre = document.getElementById('reserva_nombre').value;
 
-    // Verifica si el número de teléfono es válido
-    if (!regexTelefono.test(numeroTelefono)) {
-        document.getElementById('reserva_numeroTelefono').classList.add('is-invalid');
-    }
+    
 
     if (!regexEmail.test(email)) {
         Swal.fire('¡Ups!', 'El correo electrónico no tiene un formato válido.', 'info');
@@ -79,7 +77,7 @@ btnConfirmarReserva.addEventListener("click", function (event) {
         Swal.fire('¡Ups!', 'Ingresa un nombre válido.', 'info');
     }
 
-    if (regexTelefono.test(numeroTelefono) && regexEmail.test(email) && nombre.trim() !== '') {
+    if ( regexEmail.test(email) && nombre.trim() !== '') {
         
         enviarReserva();
     }
@@ -93,7 +91,7 @@ function enviarReserva(){
     telefono =formData.get("reserva_numeroTelefono");
     const data = {
         correo: formData.get("reserva_email"),
-        telefono: '506'+formData.get("reserva_numeroTelefono"),
+        telefono: formData.get("reserva_numeroTelefono"),
         nombre_completo: formData.get("reserva_nombre"),
         cantidad: formData.get("reserva_cantidadentradas"),
         id_evento: idEvento,
@@ -119,8 +117,7 @@ function enviarReserva(){
     })
     .then(data => {
         console.log("Reserva hecha:", data);
-        tempReservationId = data.tempReservationId;    
-        
+        tempReservationId = data.tempReservationId;  
         solicitarMensaje();
             
             
@@ -163,6 +160,7 @@ function solicitarMensaje(){
             // Obtien la palabra ingresada
             const palabra = result.value;
            
+            console.log(palabra, tempReservationId);
 
             const data = {
                 tempReservationId: tempReservationId,
@@ -187,10 +185,11 @@ function solicitarMensaje(){
         .then(data => {
 
             Swal.fire('¡Éxito!', `Has reservado el evento!`, 'success');
+            generarNotificacion(document.getElementById("reserva_nameEvent").textContent);
                 
         })
         .catch(error => {
-            
+            console.log(error);
             Swal.fire({
                 icon: 'warning',
                 title: '¡Ups!',
@@ -208,7 +207,7 @@ function solicitarMensaje(){
 
 }
 
-// Listener para el número de teléfono
+/*// Listener para el número de teléfono
 document.getElementById('reserva_numeroTelefono').addEventListener('input', function () {
     const numeroTelefono = document.getElementById('reserva_numeroTelefono').value;
     const regexTelefono = /^[0-9]{8}$/;
@@ -219,7 +218,7 @@ document.getElementById('reserva_numeroTelefono').addEventListener('input', func
     } else {
         document.getElementById('reserva_numeroTelefono').classList.remove('is-invalid');
     }
-});
+});*/
 
 // Listener para el correo electrónico
 document.getElementById('reserva_email').addEventListener('input', function () {
@@ -245,3 +244,13 @@ document.getElementById('reserva_nombre').addEventListener('input', function () 
         document.getElementById('reserva_nombre').classList.remove('is-invalid');
     }
 });
+
+function generarNotificacion(nombreEvento) {
+    // Usar template literals para interpolar el valor de nombreEvento
+    const notification = [
+      { title: 'Acabas de realizar una reservación!', description: `Recuerda vivir tu experiencia con ${nombreEvento}` }
+    ];
+  
+    // Guardar la notificación en sessionStorage
+    sessionStorage.setItem('notifications', JSON.stringify(notification));
+}

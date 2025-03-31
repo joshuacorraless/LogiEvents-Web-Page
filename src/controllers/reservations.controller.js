@@ -1,15 +1,20 @@
 import { pool } from "../db.js";
-import axios from 'axios';
+import twilio from 'twilio';
 import nodemailer from 'nodemailer';
 
+
 let reservationsFlow = {}; // Almacén temporal de reservas en proceso
+
+// Configuración de Twilio (para enviar SMS)
+const twilioClient = twilio('AC4670cf651877445e181e3b1a2cf8e79a', '23a55e16eebc589971d5f7e5c4fd8fda');
+
 
 // Config nodemailer (correo remitente)
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'logieventsreal@gmail.com',
-    pass: 'vobc cusb slyf edua' // O la clave directamente
+    pass: 'fkfq mbok xqnk lkos' // O la contraseña de aplicación
   }
 });
 
@@ -21,17 +26,17 @@ function generateTempId() {
 }
 
 /**
- * Genera una palabra aleatoria que se enviará por SMS
+ * Genera una palabra aleatoria que se enviará por SMS (6 caracteres)
  */
 function generateRandomWord() {
-  return Math.random().toString(36).substring(2, 8); // 6 caracteres alfanuméricos
+  return Math.random().toString(36).substring(2, 8);
 }
 
 /**
  * 1) startReservation
- *    - Verifica que el evento esté "Activo"
- *    - Genera una palabra aleatoria, la envía por SMS usando Infobip
- *    - Guarda los datos en reservationsFlow
+ *    - Verifica que el evento esté "Activo" y tenga cupos suficientes
+ *    - Genera una palabra aleatoria, la envía por SMS usando Twilio
+ *    - Guarda los datos en reservationsFlow y retorna un tempReservationId
  */
 export const startReservation = async (req, res) => {
   try {
@@ -66,7 +71,7 @@ export const startReservation = async (req, res) => {
     const smsWord = generateRandomWord();
     const tempReservationId = generateTempId();
 
-    // 4. Guardar en memoria
+    // 4. Guardar la información de la reserva en memoria
     reservationsFlow[tempReservationId] = {
       id_usuario,
       id_evento,
@@ -77,45 +82,28 @@ export const startReservation = async (req, res) => {
       smsWord
     };
 
-    // >>>>> CAMBIOS PRINCIPALES: Envío SMS con Infobip <<<<<
-    // Ajusta con tus credenciales y URL base
-    const infobipApiKey = '17961e1d190891c0d55c5cfabfeb0d0e-4d70d28a-3190-46f8-ac63-1a60dd18c0f5'; // Reemplaza con tu clave real
-    const infobipBaseUrl = 'https://api.infobip.com'; // Ajusta según tu subdominio
+    // 5. Preparar el número en formato internacional
+    // Si el usuario no incluye el signo '+' se lo agregamos; si ya está, se usa tal cual.
+    let phoneNumber = telefono;
+    if (!phoneNumber.startsWith('+')) {
+      phoneNumber = `+${phoneNumber}`;
+    }
 
-    // Si deseas usar el número ingresado por el usuario, ajusta:
-    // const phoneNumber = telefono.startsWith('+') ? telefono : `+${telefono}`;
-    const phoneNumber = '50661963811'; // fijo para prueba
+    // 6. Preparar el mensaje de SMS
     const messageText = `La palabra para confirmar tu reserva en "${event.nombre_evento}" es: ${smsWord}`;
 
 
-    // Llamada a Infobip
-    const response = await axios.post(
-      `${infobipBaseUrl}/sms/2/text/advanced`,
-      {
-        messages: [
-          {
-            destinations: [
-              { to: phoneNumber }
-            ],
-            from: "447491163443", // Ajusta el remitente si tu cuenta demo lo permite
-            text: messageText
-          }
-        ]
-      },
-      {
-        headers: {
-          Authorization: `App ${infobipApiKey}`,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      }
-    );
+    // 7. Enviar SMS usando Twilio
+    const twilioResponse = await twilioClient.messages.create({
+      body: messageText,
+      from:'+13435013067',
+      to: phoneNumber
+    });
+    console.log('Twilio response:', twilioResponse);
 
-    console.log('Infobip response:', response);
-
-    // 5. Responder
+    // 8. Responder con el tempReservationId para que se use en la verificación
     return res.json({
-      message: 'Se envió la palabra al celular. Ingrese la palabra para confirmarla',
+      message: 'Se envió la palabra al celular. Use /api/reservations/verify para confirmarla.',
       tempReservationId
     });
   } catch (error) {
@@ -126,21 +114,20 @@ export const startReservation = async (req, res) => {
 
 /**
  * 2) verifyReservation
- *    - Recibe tempReservationId y la palabra
- *    - Si coincide, inserta en la tabla Reservacion
- *    - Envía correo de confirmación al usuario
+ *    - Recibe tempReservationId y la palabra (SMS) ingresada por el usuario
+ *    - Si coincide, inserta la reserva en la tabla Reservacion, actualiza la capacidad del evento y envía un correo de confirmación
  */
 export const verifyReservation = async (req, res) => {
   try {
     const { tempReservationId, word } = req.body;
 
-    // 1. Verificar que tengamos un flujo
+    // 1. Verificar que exista el flujo para ese tempReservationId
     const flow = reservationsFlow[tempReservationId];
     if (!flow) {
       return res.status(400).json({ message: 'No se ha iniciado una reserva con ese ID' });
     }
 
-    // 2. Comparar la palabra
+    // 2. Comparar la palabra ingresada con la generada
     if (flow.smsWord !== word) {
       return res.status(400).json({ message: 'La palabra ingresada no coincide' });
     }
@@ -160,19 +147,19 @@ export const verifyReservation = async (req, res) => {
       flow.cantidad
     ]);
 
-    // Restar la capacidad del evento
+    // 4. Actualizar la capacidad del evento restando la cantidad reservada
     await pool.query(
       'UPDATE Evento SET capacidad = capacidad - ? WHERE id_evento = ?',
       [flow.cantidad, flow.id_evento]
     );
 
-    // (Opcional) Si la capacidad llega a 0, cambiar el estado a 'Agotado'
+    // 5. (Opcional) Si la capacidad llega a 0, cambiar el estado a "Agotado"
     await pool.query(
       'UPDATE Evento SET estado = "Agotado" WHERE id_evento = ? AND capacidad <= 0',
       [flow.id_evento]
     );
 
-    // 4. Enviar correo de confirmación
+    // 6. Enviar correo de confirmación al usuario
     const mailOptions = {
       from: 'logieventsreal@gmail.com',
       to: flow.correo,
@@ -188,7 +175,7 @@ export const verifyReservation = async (req, res) => {
     };
     await transporter.sendMail(mailOptions);
 
-    // 5. Limpiar la memoria
+    // 7. Limpiar la información temporal
     delete reservationsFlow[tempReservationId];
 
     return res.json({ message: 'Reserva creada exitosamente y correo enviado.' });

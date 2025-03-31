@@ -55,7 +55,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="#" class="sidebar-link" id="notiLink">
                         <i class="bi bi-bell-fill fs-4"></i>
                         <span>Notificaciones</span>
                     </a>
@@ -68,6 +68,15 @@
                 </a>
             </div>
         </aside>
+        <div class="notification" id="notificationBox">
+            <button class="btn close-btn" onclick="toggleNotification()">
+                <i class="bi bi-x-lg"></i> <!-- Ícono de la "X" de Bootstrap -->
+              </button>
+            <ul id="notificationList">
+              <!-- Las notificaciones se cargarán aquí -->
+            </ul>
+            
+        </div>
 
     <!--FIN MENU VERTICAL-->
     <div class="main justify-content-center align-items-center"> 

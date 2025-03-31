@@ -22,7 +22,36 @@ document.getElementById('togglePassword').addEventListener('click', function() {
 
 document.getElementById('btnAcceder').addEventListener('click', function(event) {
     event.preventDefault();  // Previene la acción por defecto del enlace
-    validarLogin();
+
+    //valida los campos del username y la contrasena
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+
+    const usernameError = document.getElementById("usernameError");
+    const passwordError = document.getElementById("passwordError");
+
+    let valid = true;
+
+        // Limpiar los mensajes de error previos
+        usernameError.style.display = "none";
+        passwordError.style.display = "none";
+
+        // Validar el campo de usuario
+        if (!usernameInput.value.trim()) {
+            usernameError.style.display = "block";  // Mostrar mensaje de error
+            valid = false;
+        }
+
+        // Validar el campo de contraseña
+        if (!passwordInput.value.trim()) {
+            passwordError.style.display = "block";  // Mostrar mensaje de error
+            valid = false;
+        }
+
+        if (valid) { //si no hay errores, validad las credenciales
+            validarLogin();
+        }
+    
 });
 
 
@@ -36,7 +65,7 @@ function validarLogin(){
     };
     
     console.log(data);
-    /*fetch(`http://localhost:3000/api/Login`, {
+    fetch(`http://localhost:3000/api/Login`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -45,41 +74,40 @@ function validarLogin(){
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es ok, lanzamos un error con el mensaje recibido del servidor
+            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
                     return response.json().then(errorData => {
                         throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
                     });
                 }
-        return response.json(); // Si la respuesta es ok, continuamos
+        return response.json(); // Si la respuesta es ok, continua
     })
     .then(data => {
-        
-        validarUsuario(data.id, data.tipoUsuario);
+        console.log(data);
+        validarUsuario(data.id, data.tipo);
             
     })
     .catch(error => {
         // Muestra una alerta de error
         Swal.fire({
-        icon: 'error',  // Icono de error
+        icon: 'info',  // Icono de error
         title: '¡Ups!',
         text: error.message,  // Muestra el mensaje de error
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#D4AF37',  // Color del botón
         });
-    });*/
+    });
 
 }
 
 function validarUsuario(id, tipoUsuario){
-    sessionStorage.setItem("userId", id);  //Id del usuario utilizado en las paginas
+    sessionStorage.setItem("userID", id);  //Id del usuario utilizado en las paginas
     sessionStorage.setItem("tipoUsuario", tipoUsuario);  //Tipo del usuario utilizado en las paginas
-    
-    if(tipoUsuario == "usuario"){
-
+    console.log(id);
+    console.log(tipoUsuario);
+    if (tipoUsuario === "usuario") {
         window.location.href = 'http://localhost:3000/VerEventos';
-
-    }else if(tipoUsuario == "administrador"){
-        
+    } else if (tipoUsuario === "administrador") {
+        window.location.href = 'http://localhost:3000/DashBoard';
     }
 
 }

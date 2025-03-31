@@ -14,19 +14,24 @@ const __dirname = path.dirname(__filename);
 
 
 const app = express();
+
+
+// Configurar Multer para guardar con el nombre original en 'uploads/eventos/'
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'uploads/eventos/'); // Carpeta donde se guardarán las imágenes
-  },
+  destination: "uploads/eventos/",
   filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname); // Obtenemos la extensión de la imagen
-      cb(null, Date.now() + ext); // Usamos la fecha como nombre del archivo
-  }
+      cb(null, file.originalname); // Agrega timestamp para evitar duplicados
+  },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-
+app.post("/upload", upload.single("imagen"), (req, res) => {
+  if (!req.file) {
+      return res.status(400).send("No se envió ninguna imagen.");
+  }
+  res.send("Imagen guardada en: " + req.file.path);
+});
 
 app.use(express.json());
 
@@ -62,7 +67,31 @@ app.get('/Login', (req, res) => {
 app.use(express.static(path.join(__dirname, '..', 'views', 'viewEvent')));
 app.get('/VerEvento', (req, res) => {
   // Usamos path.join para construir la ruta absoluta del archivo index.html
-  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'VerEvento.html');
+  const filePath = path.join(__dirname, '..', 'views', 'viewEvent', 'viewEvent.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+//URL DASHBOARD
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewDashBoard')));
+app.get('/DashBoard', (req, res) => {
+  const filePath = path.join(__dirname, '..', 'views', 'viewDashBoard', 'DashBoard.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+//URL REGISTAR EVENTO
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
+app.get('/RegistrarEvento', (req, res) => {
+  const filePath = path.join(__dirname, '..', 'views', 'viewRegisterEvent', 'RegistrarEvento.html');
   res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error al enviar el archivo:', err);

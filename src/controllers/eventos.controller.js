@@ -2,6 +2,15 @@ import { pool } from "../db.js";
 import nodemailer from 'nodemailer';
 import axios from 'axios';
 import { format } from "mysql2";
+import twilio from 'twilio';
+
+// Si deseas tenerlos directos en el código:
+const TWILIO_ACCOUNT_SID = 'AC4670cf651877445e181e3b1a2cf8e79a';
+const TWILIO_AUTH_TOKEN = '23a55e16eebc589971d5f7e5c4fd8fda';
+const TWILIO_PHONE_NUMBER = '+13435013067';
+
+const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
 
 //?Todo lo relacionado a los eventos:
 
@@ -25,18 +34,8 @@ export const getEventos = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
-    const imagen = req.file ? req.file.filename : null;  //* Obtener el nombre de la imagen cargada
-  
-    //* Validación de los campos
-    const fechaRegex = /^\d{4}-\d{2}-\d{2}$/; // *Formato de fecha (YYYY-MM-DD)
-    const horaRegex = /^\d{2}:\d{2}$/; //* Formato de hora (HH:MM)
-    if (!fecha.match(fechaRegex)) {
-      return res.status(400).json({ message: 'La fecha no tiene un formato válido (YYYY-MM-DD).' });
-    }
-    if (!hora.match(horaRegex)) {
-      return res.status(400).json({ message: 'La hora no tiene un formato válido (HH:MM).' });
-    }
+    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
+    
   
     try {
       const [result] = await pool.query(
@@ -123,7 +122,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: 'logieventsreal@gmail.com',
-    pass: 'foyl slnv ktmq qpsp'       
+    pass: 'fkfq mbok xqnk lkos'       
   }
 });
 
@@ -208,17 +207,27 @@ export const confirmDeleteEvent = async (req, res) => {
 
   //* Aca la funcion para eliminar un evento en estado agotado
 
-  //*  token -> 9Cktfuztw5XijiA9lOqjioTonDgDoE3B2C3t69qq
+ 
 
   let deletionFlow = {};
   //* ----------------------------------------------
 // *1) Solicitar el número de teléfono y enviar una palabra por SMS
 //* ----------------------------------------------
+
+/**
+ * POST /events/:id/request-delete (para eventos NO agotados)
+ * (Esta función no se modifica, sigue usando nodemailer para enviar el código al correo)
+ */
+
+/**
+ * Función para eliminar un evento en estado "Agotado" mediante proceso de verificación por SMS y correo.
+ * 1) startDeleteAgotado: envía una palabra por SMS usando Twilio.
+ */
 export const startDeleteAgotado = async (req, res) => {
   try {
     const eventId = parseInt(req.params.id);
 
-    //* 1. Verificar si el evento está realmente "Agotado"
+    // 1. Verificar si el evento existe y está "Agotado"
     const [rows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [eventId]);
     if (rows.length === 0) {
       return res.status(404).json({ message: 'Evento no encontrado' });
@@ -229,11 +238,10 @@ export const startDeleteAgotado = async (req, res) => {
       return res.status(400).json({ message: 'Este proceso aplica solo para eventos agotados' });
     }
 
-    // *2. Generar una palabra aleatoria (puede ser un string simple)
-    // *   Ejemplo: 6 letras. Usa la librería que prefieras; aquí haremos algo sencillo:
-    const randomWord = Math.random().toString(36).substring(2, 8); // 6 caracteres alfanuméricos
+    // 2. Generar una palabra aleatoria (6 caracteres)
+    const randomWord = Math.random().toString(36).substring(2, 8);
 
-    //*3. Guardamos en nuestro objeto "deletionFlow"
+    // 3. Guardar la información en el objeto "deletionFlow"
     deletionFlow[eventId] = {
       phoneWord: randomWord,
       phoneVerified: false,
@@ -241,72 +249,57 @@ export const startDeleteAgotado = async (req, res) => {
       emailVerified: false
     };
 
-    // *4. Enviar SMS al administrador
-    // *   Asumimos que siempre usas el número +506 8431-1955 según tu prueba con SMSAPI
-    // *   O podrías recibirlo de req.body si quieres hacerlo dinámico
-    const phoneNumber = '+50684311955';
+    // 4. Enviar SMS al administrador usando Twilio.
+    // Puedes usar un número fijo o, si lo deseas, recibirlo en req.body.
+    // En este ejemplo, usamos el número +50684311955.
+    const phoneNumber = '+50662666896'; // ! CAMBIE ESTO UNA VEZ SE VENZA LA PRUEBA
 
-    // *Llamada a la API de SMSAPI (ejemplo usando axios)
-    // *Ajusta según la documentación de SMSAPI
-    // *Documentación: https://smsapi.com/docs/
-    // *Endpoint (ejemplo): https://api.smsapi.com/sms.do
-    // *Usando el token de API en el header Authorization: Bearer ...
-    const smsApiToken = '9Cktfuztw5XijiA9lOqjioTonDgDoE3B2C3t69qq'; 
+    const messageText = `La palabra para eliminar el evento "${event.nombre_evento}" es: ${randomWord}`;
 
-    await axios.post(
-      'https://api.smsapi.com/sms.do',
-      null, // body
-      {
-        params: {
-          to: phoneNumber,
-          message: `La palabra para eliminar el evento "${event.nombre_evento}" es: ${randomWord}`,
-          from: 'Test',
-          format: 'json'
-        },
-        headers: {
-          Authorization: `Bearer ${smsApiToken}`
-        }
-      }
-    );
+    const twilioResponse = await twilioClient.messages.create({
+      body: messageText,
+      from: TWILIO_PHONE_NUMBER,
+      to: phoneNumber
+    });
 
-    //* 5. Responder éxito
+    console.log('Twilio response:', twilioResponse);
+
+    // 5. Responder con éxito
     return res.json({ 
       message: 'Se envió la palabra por SMS. Ahora el administrador debe ingresar la palabra.'
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error al iniciar la eliminación de evento agotado', error });
+    console.error('Error en startDeleteAgotado:', error.response?.data || error.message);
+    return res.status(500).json({ message: 'Error al iniciar la eliminación de evento agotado', error });
   }
 };
 
-//* ----------------------------------------------
-//* 2) Verificar la palabra enviada por SMS
-//* ----------------------------------------------
+/**
+ * 2) verifySmsWord: Verifica la palabra enviada por SMS.
+ */
 export const verifySmsWord = async (req, res) => {
   try {
     const eventId = parseInt(req.params.id);
-    const { word } = req.body; //* la palabra que el admin ingresa
+    const { word } = req.body; // La palabra ingresada por el administrador
 
-    //* Verificar que tengamos un flujo de eliminación para este evento
+    // Verificar que exista un flujo para este evento
     const flow = deletionFlow[eventId];
     if (!flow) {
       return res.status(400).json({ message: 'No se ha iniciado el proceso de eliminación para este evento' });
     }
 
-    //* Comparar la palabra
+    // Comparar la palabra
     if (flow.phoneWord !== word) {
       return res.status(400).json({ message: 'La palabra ingresada no coincide' });
     }
 
-    //* Marcar phoneVerified = true
+    // Marcar la verificación exitosa
     flow.phoneVerified = true;
 
-    res.json({
-      message: 'Palabra verificada correctamente. Ahora se debe enviar el código al correo.'
-    });
+    res.json({ message: 'Palabra verificada correctamente. Ahora se debe enviar el código al correo.' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error verificando la palabra', error });
+    console.error('Error en verifySmsWord:', error.response?.data || error.message);
+    return res.status(500).json({ message: 'Error verificando la palabra', error });
   }
 };
 
