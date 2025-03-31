@@ -28,94 +28,84 @@
         
 </head>
 <body>
-    
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn" type="button">
+                    <i class="bi bi-list fs-2"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="#">LogiEvents</a>
+                </div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" id="perfilLink">
+                        <i class="bi bi-person-fill fs-4"></i>
+                        <span>Perfil</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-calendar3"></i>
+                        <span>Eventos</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="bi bi-graph-up-arrow"></i>
+                        <span>Estadisticas</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link itemSelected">
+                        <i class="bi bi-people"></i>
+                        <span>Administradores</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-link">
+                    <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
+                    <span>Logout</span>
+                </a>
+            </div>
+        </aside>
 
-            <!--INICIO MENU VERTICAL-->
-            <div class="wrapper">
-                <aside id="sidebar">
-                    <div class="d-flex">
-                        <button class="toggle-btn" type="button">
-                            <i class="bi bi-list fs-2"></i>
-                        </button>
-                        <div class="sidebar-logo">
-                            <a href="#">LogiEvents</a>
-                        </div>
-                    </div>
-                    <ul class="sidebar-nav ">
-                        <li class="sidebar-item ">
-                            <a href="#" class="sidebar-link" id="perfilLink">
-                                <i class="bi bi-person-fill fs-4"></i>
-                                <span>Perfil</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link ">
-                                <i class="bi bi-calendar3"></i>
-                                <span>Eventos</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link">
-                                <i class="bi bi-graph-up-arrow"></i>
-                                <span>Estadisticas</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="#" class="sidebar-link itemSelected">
-                                <i class="bi bi-people"></i>
-                                <span>Administradores</span>
-                            </a>
-                        </li>
-                    </ul>
+        <!-- Contenido principal -->
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-start mb-4 header-container">
+                <div>
+                    <h1 class="titulo-principal">Administradores</h1>
+                    <h8 class="subtitulo">LogiEvents</h8>
+                </div>
+                <button class="btn btn-primary btn-agregar">
+                    <i class="bi bi-plus-circle"></i> Agregar Administrador
+                </button>
+            </div>
 
-                    <div class="sidebar-footer">
-                        <a href="#" class="sidebar-link">
-                            <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </aside>
-                <!-- Header con botón flotante -->
-                <div class="container mt-5">
-                    <div class="d-flex justify-content-between align-items-start mb-4 header-container">
-                        <div>
-                            <h1 class="titulo-principal">Administradores </h1>
-                            <h8 class="subtitulo">LogiEvents</h8>
-                        </div>
-                        <button class="btn btn-primary btn-agregar" style="background-color:#001163;border-color: #000d49;">
-                            <i class="bi bi-plus-circle"></i> Agregar Administrador
-                        </button>
-                    </div>
-            <!-- tablas para eventos-->
-            <div class="d-flex justify-content-center">  <!-- Flex para centrar -->
-                <div class="w-100">  <!-- Ocupa todo el ancho disponible -->
+            <!-- Tabla de administradores -->
+            <div class="d-flex justify-content-center">
+                <div class="w-100">
                     <div class="card shadow-sm">
-                        <div class="card-body p-0">  <!-- Sin padding interno -->
+                        <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0" id="tablaEventos">
                                     <thead class="cabecera-tabla">
-                                    <tr>
-                                        <th class="col-id">ID</th>
-                                        <th class="col-evento">Nombre</th>
-                                        <th class="col-fecha">Email</th>
-                                        <th class="col-asistencia">Telefono</th>
-                                        <th class="col-estado">Cédula</th>
-                                        <th class="col-accion">Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>010</td>
-                                        <td>Carlos Abarca</td>
-                                        <td>charlie@gmail.com</td>
-                                        <td>88888888</td>
-                                        <td><span>305610469</span></td>
-                                        <td>
-                                            <button class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Editar</button>
-                                            <button class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> Eliminar</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                        <tr>
+                                            <th class="col-id">ID</th>
+                                            <th class="col-evento">Nombre</th>
+                                            <th class="col-fecha">Email</th>
+                                            <th class="col-asistencia">Telefono</th>
+                                            <th class="col-estado">Cédula</th>
+                                            <th class="col-accion">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                    
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -123,6 +113,33 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div class="modal fade confirm-modal" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="confirmDeleteModalLabel">Advertencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Después de eliminar el administrador<br>no se podrán revertir cambios</p>
+                    <div class="confirm-checkbox">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="confirmCheckbox">
+                            <label class="form-check-label" for="confirmCheckbox">¿Estas seguro?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-confirm" id="confirmDeleteBtn">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
             
             
 <!---CDN DE BOOTSTRAP-->
@@ -134,6 +151,7 @@
 <!-- Cargar Bootstrap JS (después de jQuery) -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
 <script src="../scriptMenuAdmin.js"></script>
+<script src="./visualizarUsuarios.js"></script>
 
 </body>
 </html>

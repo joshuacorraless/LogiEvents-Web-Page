@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Administradores</title>
+
+        <!--ALERTAS-->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <!---ICONS-->
+        <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+        <!---CDN DE BOOTSTRAP-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!---CDN DE BOOTSTRAP ICONS-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    
+        <!---Hoja de estilos-->
+        <link rel="stylesheet" href="../styleMenuAdmin.css">
+        <link rel="stylesheet" href="./styleEditarEvento.css">
+
+    
+        <!---FAVICON-->
+        <link rel="icon" type="image/png" href="../ICONOS/USUARIO/FAVICON/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="../ICONOS/USUARIO/FAVICON/favicon.svg" />
+        <link rel="shortcut icon" href="../ICONOS/USUARIO/FAVICON/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="../ICONOS/USUARIO/FAVICON/apple-touch-icon.png" />
+        <link rel="manifest" href="../ICONOS/USUARIO/FAVICON/site.webmanifest" />
+        
+</head>
+<body>
+    
+
+            <!--INICIO MENU VERTICAL-->
+            <div class="wrapper">
+                <aside id="sidebar">
+                    <div class="d-flex">
+                        <button class="toggle-btn" type="button">
+                            <i class="bi bi-list fs-2"></i>
+                        </button>
+                        <div class="sidebar-logo">
+                            <a href="#">LogiEvents</a>
+                        </div>
+                    </div>
+                    <ul class="sidebar-nav ">
+                        <li class="sidebar-item ">
+                            <a href="#" class="sidebar-link" id="perfilLink">
+                                <i class="bi bi-person-fill fs-4"></i>
+                                <span>Perfil</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link itemSelected ">
+                                <i class="bi bi-calendar3"></i>
+                                <span>Eventos</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                <span>Estadisticas</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link ">
+                                <i class="bi bi-people"></i>
+                                <span>Administradores</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="sidebar-footer">
+                        <a href="#" class="sidebar-link">
+                            <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </aside>
+                 <!-- Header -->
+                 <div class="container mt-5">
+                    <div class="d-flex justify-content-between align-items-start mb-4 header-container">
+                        <div>
+                            <h1 class="display-4 " >Editar Evento</h1>
+                            <h8 class="subtitulo">LogiEvents</h8>
+                            
+                        </div>
+                        <div class="col-1">
+                            <img src="../ICONOS/USUARIO/LogoLogiEvents.svg" alt="LOGO">
+                        </div>
+                    </div>
+                <hr class="border border-2" style="--bs-border-color: #ac9607;">
+                <h1 class="title text-center" >PLACEHOLDER </h1>
+                <div class="container py-5">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-4">
+                            
+                            <div class="row g-4">
+                                <!-- Columna Izquierda -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="precio" class="form-label">Precio</label>
+                                        <input type="text" class="form-control" id="precio" placeholder="Ingrese el precio del evento">
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="ubicacion" class="form-label">Ubicación</label>
+                                        <input type="text" class="form-control" id="ubicacion" placeholder="Ingrese la ubicación del evento">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="capacidad" class="form-label">Capacidad</label>
+                                        <input type="text" class="form-control" id="capacidad" placeholder="Ingrese la capacidad máxima">
+                                    </div>
+                                </div>
+                                
+                                <!-- Columna Derecha -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Imagen</label>
+                                        <div class="border rounded-3 p-4 text-center upload-area">
+                                            <p class="text-muted mb-3">Arrastra tu imagen aquí o haz clic para seleccionar</p>
+                                            <button class="btn btn-outline-secondary">Subir imagen</button>
+                                        </div>
+                                    </div>
+                                    
+                                   
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-center gap-3 mt-4 pt-3 border-top">
+                                <button type="button" class="btn btn-secondary me-md-2">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Registrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!---CDN DE BOOTSTRAP-->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+            <!--ARCHIVO JS-->
+            <!-- Cargar jQuery -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+            <!-- Cargar Bootstrap JS (después de jQuery) -->
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+            <script src="../scriptMenuAdmin.js"></script>
+            <script src="./scriptEditarEvento.js"></script>
+
+            </body>
+            </html>
+            
+                
+                
