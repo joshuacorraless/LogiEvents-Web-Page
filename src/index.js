@@ -159,6 +159,42 @@ app.get('/VerEventos', (req, res) => {
   });
 });
 
+//URL ver eventos admin
+app.get('/EventosAdmin', (req, res) => {
+  // Usamos path.join para construir la ruta absoluta del archivo index.html
+  const filePath = path.join(__dirname, '..', 'views', 'viewVisualizarEventoAdmin', 'visualizarEventoAdmin.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+//URL Agregar eventos
+app.use(express.static(path.join(__dirname, '..', 'views', 'viewRegisterEvent')));
+app.get('/AgregarEvento', (req, res) => {
+  // Usamos path.join para construir la ruta absoluta del archivo index.html
+  const filePath = path.join(__dirname, '..', 'views', 'viewRegisterEvent', 'RegistrarEvento.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
+
+//URL Ver Admins
+app.get('/VerAdmins', (req, res) => {
+  // Usamos path.join para construir la ruta absoluta del archivo index.html
+  const filePath = path.join(__dirname, '..', 'views', 'viewVisualizarUsuarios', 'visualizarUsuarios.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
 
 //En caso de ingresar un url no registrado
 app.use((req, res) => {

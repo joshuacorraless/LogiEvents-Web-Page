@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 sessionStorage.setItem('idEventoEditar', idEvento);
                 
                 // Redirigir a la página de edición
-                window.location.href = `http://localhost:3000/api/EditarEvento`;
+                window.location.href = `http://localhost:3000/EditarEvento`;
             }
         });
     }
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para eliminar evento
     function eliminarEvento(idEvento) {
-        fetch(`http://localhost:3000/api/eventos/${idEvento}`, {
+        fetch(`http://localhost:3000/eventos/${idEvento}`, {
             method: 'DELETE'
         })
         .then(response => {
