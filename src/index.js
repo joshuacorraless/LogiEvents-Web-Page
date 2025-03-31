@@ -1,6 +1,9 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 import usuariosRoutes from './routes/usuarios.routes.js';

@@ -1,20 +1,25 @@
 import { pool } from "../db.js";
 import twilio from 'twilio';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
+// Cargar las variables de entorno
+dotenv.config();
 
 let reservationsFlow = {}; // Almacén temporal de reservas en proceso
 
-// Configuración de Twilio (para enviar SMS)
-const twilioClient = twilio('AC4670cf651877445e181e3b1a2cf8e79a', 'e1981d88701046d14d020cc325b8e9f1');
+// Configuración de Twilio (para enviar SMS) usando variables de entorno
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 
-
-// Config nodemailer (correo remitente)
+// Configuración de nodemailer (correo remitente) usando variables de entorno
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'logieventsreal@gmail.com',
-    pass: 'fkfq mbok xqnk lkos' // O la contraseña de aplicación
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -83,7 +88,6 @@ export const startReservation = async (req, res) => {
     };
 
     // 5. Preparar el número en formato internacional
-    // Si el usuario no incluye el signo '+' se lo agregamos; si ya está, se usa tal cual.
     let phoneNumber = telefono;
     if (!phoneNumber.startsWith('+')) {
       phoneNumber = `+${phoneNumber}`;
@@ -95,7 +99,7 @@ export const startReservation = async (req, res) => {
     // 7. Enviar SMS usando Twilio
     const twilioResponse = await twilioClient.messages.create({
       body: messageText,
-      from:'+13435013067',
+      from: process.env.TWILIO_PHONE_NUMBER,
       to: phoneNumber
     });
     console.log('Twilio response:', twilioResponse);
@@ -158,9 +162,9 @@ export const verifyReservation = async (req, res) => {
       [flow.id_evento]
     );
 
-    // 6. Enviar correo de confirmación al usuario
+    // 6. Enviar correo de confirmación al usuario usando las variables de entorno
     const mailOptions = {
-      from: 'logieventsreal@gmail.com',
+      from: process.env.EMAIL_USER,
       to: flow.correo,
       subject: 'Confirmación de Reserva',
       text: `

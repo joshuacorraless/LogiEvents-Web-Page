@@ -1,13 +1,18 @@
 import { pool } from "../db.js";
 import nodemailer from 'nodemailer';
-import axios from 'axios';
-import { format } from "mysql2";
 import twilio from 'twilio';
+import dotenv from 'dotenv';
 
-// Si deseas tenerlos directos en el código:
-const TWILIO_ACCOUNT_SID = 'AC4670cf651877445e181e3b1a2cf8e79a';
-const TWILIO_AUTH_TOKEN = 'e1981d88701046d14d020cc325b8e9f1';
-const TWILIO_PHONE_NUMBER = '+13435013067';
+// Configuración de dotenv (asegúrate de que esté al inicio del proceso)
+dotenv.config();
+
+// Variables de entorno
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
+const TWILIO_PHONE_NUMBER = process.env.TWILIO_PHONE_NUMBER;
+
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
 const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
@@ -127,12 +132,12 @@ export const updateEventos = async (req, res) => {
 // *(en producción podrías guardarlos en una tabla de la DB)
 const deletionCodes = {};
 
-// *Configuramos nodemailer para usar la cuenta de Gmail "logieventsreal@gmail.com"
+// *Configuración de nodemailer usando las variables de entorno
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'logieventsreal@gmail.com',
-    pass: 'fkfq mbok xqnk lkos'       
+    user: EMAIL_USER,
+    pass: EMAIL_PASS      
   }
 });
 
