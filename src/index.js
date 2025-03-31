@@ -200,6 +200,17 @@ app.get('/VerAdmins', (req, res) => {
     }
   });
 });
+//URL VER PERFIL admin
+app.get('/MiPerfilAdmin', (req, res) => {
+  // Usamos path.join para construir la ruta absoluta del archivo index.html
+  const filePath = path.join(__dirname, '..', 'views', 'viewAdminProfile', 'PerfilAdmin.html');
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.error('Error al enviar el archivo:', err);
+      res.status(500).send('Error al cargar la página');
+    }
+  });
+});
 
 //En caso de ingresar un url no registrado
 app.use((req, res) => {
