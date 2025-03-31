@@ -86,35 +86,48 @@
                     <div class="row p-5 justify-content-center">
                         <div class="col-5">
                             <label for="regevento_nombre" class="form-label fw-bold pt-1">Nombre</label>
-                            <input type="text" class="form-control" id="regevento_nombre" placeholder="">
+                            <input type="text" class="form-control" id="regevento_nombre" placeholder="" required>
+                            <div id="nombreError" style="color: red; display: none;">El nombre es obligatorio.</div>
+
 
                             <label for="regevento_fecha" class="form-label fw-bold pt-2">Fecha</label>
-                            <input type="datetime-local" class="form-control" id="regevento_fecha" placeholder="">
+                            <input type="datetime-local" class="form-control" id="regevento_fecha" placeholder="" required>
+                            <div id="fechaError" style="color: red; display: none;">La fecha debe ser igual o mayor a la fecha actual.</div>
 
-                            <label for="regevento_precio" class="form-label fw-bold pt-2">Precio</label>
-                            <input type="text" class="form-control" id="regevento_precio" placeholder="">
+
+                            <label for="regevento_precio" class="form-label fw-bold pt-2">Precio (en colones)</label>
+                            <input type="text" class="form-control" id="regevento_precio" placeholder="Ingrese el precio en colones"  required>
+                            <div id="usernameError" style="color: red; display: none;">El precio debe ser un número entero mayor que 0 en colones.</div>
 
                             <label for="regevento_capacidad" class="form-label fw-bold pt-2">Capacidad</label>
-                            <input type="number" class="form-control" id="regevento_capacidad" placeholder="">
+                            <input type="number" class="form-control" id="regevento_capacidad" placeholder="1" min="1" required>
+                            <div id="capacidadError" style="color: red; display: none;">La capacidad debe ser mayor que 0.</div>
 
-                            
-                            <label for="regevento_ubicacion" class="form-label fw-bold pt-2">Ubicacion</label>
-                            <input type="text" class="form-control" id="regevento_ubicacion" placeholder="">
+
+                            <label for="regevento_ubicacion" class="form-label fw-bold pt-2">Ubicación</label>
+                            <input type="text" class="form-control" id="regevento_ubicacion" placeholder="" required>
+                            <div id="ubicacionError" style="color: red; display: none;">La ubicación es obligatoria.</div>
+
 
                             <label for="regevento_estado" class="form-label fw-bold pt-2">Estado</label>
                             <select class="form-select pt-2" aria-label="Default select example" id="regevento_estado">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Activo</option>
+                                <option value="2">Próximamente</option>
+                                <option value="3">Agotado</option>
                             </select>
 
                             <label for="regevento_categoria" class="form-label fw-bold pt-2">Categoria</label>
                             <select class="form-select pt-2" aria-label="Default select example" id="regevento_categoria">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                                <option selected>Conciertos</option>
+                                <option value="2">Festivales</option>
+                                <option value="3">Deportes</option>
+                                <option value="4">Teatro</option>
+                                <option value="5">Cine</option>
+                                <option value="6">Conferencias</option>
+                                <option value="7">Exposiciones</option>
+                                <option value="8">Talleres</option>
+                                <option value="9">Fiestas</option>
+                                <option value="10">Ferias</option>
                             </select>
                         </div>
                 
@@ -122,12 +135,14 @@
                             
                             <label for="regevento_descripcion" class="form-label">Descripcion</label>
                             <textarea class="form-control" id="regevento_descripcion" rows="3"></textarea>
+                            <div id="descError" style="color: red; display: none;">La descripcion es obligatoria.</div>
 
                             <label for="regevento_imagen" class="form-label fw-bold">Sube una imagen</label>
                             <input type="file" class="form-control" id="regevento_imagen" accept="image/*">
+                            <div id="imagenError" style="color: red; display: none;">La imagen es obligatoria.</div>
 
                             <div class="col-auto justify-content-center align-items-center pt-5">
-                                <img src="ICONOS/USUARIO/melendiPrueba.png" alt="Imagen del evento" class="img-fluid" id="imagenEvento">
+                                <img src="" alt="Ingresa un iamgen" class="img-fluid" id="imagenEvento">
                             </div>
                         </div>
                             
@@ -159,7 +174,7 @@
                             </div>
                             <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-danger">Volver</button>
+                            <button type="button" class="btn btn-danger" id="cerrarbtn">Volver</button>
                             </div>
                         </div>
                     </div>
@@ -173,6 +188,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <!--ARCHIVO JS-->
     <script src="../scriptMenuAdmin.js"></script>
-    <script src="./RegistrarEventoJS.js"></script>
+    <script src="./registerEvent.js"></script>
 </body>
 </html>
