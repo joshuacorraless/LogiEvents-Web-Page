@@ -56,17 +56,17 @@ function cargarEventos() {
                 let estadoTexto = '';
                 
                 switch(evento.estado) {
-                    case 'activo':
+                    case 'Activo':
                         estadoClase = 'bg-success';
                         estadoTexto = 'Activo';
                         break;
-                    case 'cancelado':
+                    case 'Agotado':
                         estadoClase = 'bg-danger';
-                        estadoTexto = 'Cancelado';
+                        estadoTexto = 'Agotado';
                         break;
-                    case 'pendiente':
+                    case 'Proximamente':
                         estadoClase = 'bg-warning';
-                        estadoTexto = 'Pendiente';
+                        estadoTexto = 'Proximamente';
                         break;
                     default:
                         estadoClase = 'bg-secondary';
@@ -75,7 +75,7 @@ function cargarEventos() {
 
                 fila.innerHTML = `
                     <td>${evento.id_evento || ''}</td>
-                    <td>${evento.nombre || 'Sin nombre'}</td>
+                    <td>${evento.nombre_evento || 'Sin nombre'}</td>
                     <td>${fechaEvento}</td>
                     <td>${evento.asistentes || 0} / ${evento.capacidad || '∞'}</td>
                     <td>
