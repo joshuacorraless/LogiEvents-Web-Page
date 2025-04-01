@@ -48,7 +48,8 @@ function cargarEventos() {
                 const fila = document.createElement('tr');
                 
                
-                const fechaEvento = evento.fecha ; 
+                const fecha = new Date(evento.fecha);
+                const fechaEvento = fecha.toLocaleDateString('es-MX');  
 
                 
                 // Determinar clase CSS según el estado
@@ -76,7 +77,7 @@ function cargarEventos() {
                 fila.innerHTML = `
                     <td>${evento.id_evento || ''}</td>
                     <td>${evento.nombre_evento || 'Sin nombre'}</td>
-                    <td>${fechaEvento}</td>
+                    <td>${fechaEvento} ${evento.hora}</td>
                     <td>${evento.asistentes || 0} / ${evento.capacidad || '∞'}</td>
                     <td>
                         <span class="badge ${estadoClase}">

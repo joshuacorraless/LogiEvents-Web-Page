@@ -25,7 +25,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    width: min(22rem, 25rem);
+    width: min(20rem, 20rem);
     padding-left: 0;
     margin-left: 0;
   }
@@ -37,7 +37,7 @@
     justify-content: space-around;
     border-radius: 1rem;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.5rem;
     width: 100%;
     transition: background-color 0.3s;
   }
@@ -78,7 +78,7 @@
     font-size: 1.25rem;
     font-weight: bold;
     color: #000000;
-    width: min(30%, 20rem);
+    width: min(30%, 10rem);
   }
   
   @media (min-width: 600px) {
@@ -89,6 +89,6 @@
 
   
     section li p {
-      min-width: 20rem;
+      min-width: 10rem;
     }
   }

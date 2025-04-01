@@ -1,7 +1,7 @@
 var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
-if (!idUser || !tipoUsuario || (tipoUsuario !== "usuario" && tipoUsuario !== "administrador")) {
+if (!idUser || tipoUsuario !== "administrador") {
     window.location.href = 'http://localhost:3000/Login'; 
 }
 

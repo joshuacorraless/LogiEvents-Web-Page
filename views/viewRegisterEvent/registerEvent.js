@@ -1,3 +1,11 @@
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if (!idUser || tipoUsuario !== "administrador") {
+    window.location.href = 'http://localhost:3000/Login'; 
+}
+
+
 document.getElementById('regevento_imagen').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -196,12 +204,16 @@ function enviarEvento(){
         subirImagen();
         // Muestra una alerta de éxito
         Swal.fire({
-            icon: 'success',  // Icono de éxito
+            icon: 'success',
             title: '¡Evento registrado correctamente!',
             text: 'Los cambios se guardaron con éxito.',
             confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#b99725',  // Color del botón
+            confirmButtonColor: '#b99725',
+        }).then(() => {
+            window.location.href = 'http://localhost:3000/EventosAdmin';
         });
+        
+        
     
     })
     .catch(error => {
