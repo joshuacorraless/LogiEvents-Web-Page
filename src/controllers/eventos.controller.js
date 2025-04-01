@@ -262,13 +262,13 @@ export const startDeleteAgotado = async (req, res) => {
 
     const messageText = `La palabra para eliminar el evento "${event.nombre_evento}" es: ${randomWord}`;
 
-   /* const twilioResponse = await twilioClient.messages.create({
+    const twilioResponse = await twilioClient.messages.create({
       body: messageText,
       from: TWILIO_PHONE_NUMBER,
       to: phoneNumber
     });
 
-    console.log('Twilio response:', twilioResponse);*/
+    console.log('Twilio response:', twilioResponse);
     console.log(randomWord)
     // 5. Responder con éxito
     return res.json({ 
