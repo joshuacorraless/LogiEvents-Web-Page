@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeButton) {
         closeButton.addEventListener('click', function() {
             // Redirigir a la URL deseada
-            window.location.href = 'http://localhost:3000/Login';  // Cambia la URL por la que necesites
+            window.location.href = 'http://localhost:3000/EventosAdmin';  // Cambia la URL por la que necesites
         });
     }
 });

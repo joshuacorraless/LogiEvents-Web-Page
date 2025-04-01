@@ -3,6 +3,7 @@ $(document).ready(function() {
         fetch('http://localhost:3000/api/usuarios')
         .then(response => response.json())
         .then(data => {
+            console.log(33);
             console.log('Datos recibidos:', data);
             const tbody = document.querySelector('#tablaEventos tbody');
             tbody.innerHTML = '';
@@ -56,7 +57,7 @@ $(document).ready(function() {
     
     
     // Llamar a la función cuando se cargue la página
-    document.addEventListener('DOMContentLoaded', traerAdministradores);
+    document.addEventListener('DOMContentLoaded', traerAdministradores());
 
     // Manejar el evento de eliminación
     $('#confirmDeleteBtn').click(function() {

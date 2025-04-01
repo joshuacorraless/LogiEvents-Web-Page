@@ -172,35 +172,35 @@ function solicitarMensaje(){
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
-                        return response.json().then(errorData => {
-                            throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
-                        });
-                    }
-            return response.json(); // Si la respuesta es ok, continua
-        })
-        .then(data => {
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
+                                return response.json().then(errorData => {
+                                    throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
+                                });
+                            }
+                    return response.json(); // Si la respuesta es ok, continua
+                })
+                .then(data => {
 
-            Swal.fire('¡Éxito!', `Has reservado el evento!`, 'success');
-            generarNotificacion(document.getElementById("reserva_nameEvent").textContent);
-                
-        })
-        .catch(error => {
-            console.log(error);
-            Swal.fire({
-                icon: 'warning',
-                title: '¡Ups!',
-                text: error.message,  // Muestra el mensaje de error
-                confirmButtonText: 'Volver a ingresarla',
-                confirmButtonColor: '#D4AF37',  // Color del botón
-            }).then(() => {
-                //en caso de no ser vuelve a solicitar el mensaje
-                solicitarMensaje();
-            });
-        });
+                    Swal.fire('¡Éxito!', `Has reservado el evento!`, 'success');
+                    generarNotificacion(document.getElementById("reserva_nameEvent").textContent);
+                        
+                })
+                .catch(error => {
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Ups!',
+                        text: error.message,  // Muestra el mensaje de error
+                        confirmButtonText: 'Volver a ingresarla',
+                        confirmButtonColor: '#D4AF37',  // Color del botón
+                    }).then(() => {
+                        //en caso de no ser vuelve a solicitar el mensaje
+                        solicitarMensaje();
+                    });
+                });
 
         }
     });
