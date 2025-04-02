@@ -13,7 +13,7 @@ if (!idUser || tipoUsuario !== "usuario") {
 const mostPopProducts = document.querySelector(".most-popular-products");
 
 
-fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/eventos')
+fetch('https://requeproyectoweb-production.up.railway.app/api/eventos')
 	.then((respone) => {
 		return respone.json();
 	})
@@ -66,7 +66,7 @@ fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/eventos')
 // Función para obtener los eventos desde la API
 async function obtenerEventos() {
 	try {
-		const respuesta = await fetch("https://requeproyectoweb-production-3d39.up.railway.app/api/eventos");
+		const respuesta = await fetch("https://requeproyectoweb-production.up.railway.app/api/eventos");
 		if (!respuesta.ok) {
 			throw new Error("Error al obtener los eventos");
 		}

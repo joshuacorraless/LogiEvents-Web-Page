@@ -173,7 +173,7 @@ function enviarRegistro(){
 
     console.log(data);
 
-    fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/usuarios`, {
+    fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios`, {
         method: "POST", // Enviar como PUT
         headers: {
             "Content-Type": "application/json",

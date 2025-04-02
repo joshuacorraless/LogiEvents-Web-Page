@@ -183,7 +183,7 @@ function enviarEvento(){
     console.log(data); // Para verificar los datos antes de enviarlos
 
 
-    fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/Eventos`, {
+    fetch(`https://requeproyectoweb-production.up.railway.app/api/Eventos`, {
         method: "POST", // Enviar como POST
         headers: {
             "Content-Type": "application/json",

@@ -99,7 +99,7 @@ function enviarReserva(){
     };
     
     console.log(data);
-    fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/reservations/start`, {
+    fetch(`https://requeproyectoweb-production.up.railway.app/api/reservations/start`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function solicitarMensaje(){
                 tempReservationId: tempReservationId,
                 word: palabra
             };
-            fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/reservations/verify`, {
+            fetch(`https://requeproyectoweb-production.up.railway.app/api/reservations/verify`, {
                 method: "POST", // Enviar como PUT
                 headers: {
                     "Content-Type": "application/json",

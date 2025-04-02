@@ -12,7 +12,7 @@ const ctx = document.getElementById('barrasChart');
 
 
 
-fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/DistribucionEvento') 
+fetch('https://requeproyectoweb-production.up.railway.app/api/DistribucionEvento') 
   .then(response => response.json())
   .then(data => {
     // Extraer etiquetas y valores desde el JSON
@@ -92,7 +92,7 @@ cargarRanking();
 
 function cargarRanking(){
 
-    fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/Top5')
+    fetch('https://requeproyectoweb-production.up.railway.app/api/Top5')
     .then(response => response.json())
     .then(data => {
       console.log(data);

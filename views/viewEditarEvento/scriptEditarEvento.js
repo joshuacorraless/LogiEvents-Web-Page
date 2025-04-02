@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/eventos/${id}`);
+            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${id}`);
             
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Enviar datos al servidor
-            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/eventos/${idEvento}`, {
+            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
