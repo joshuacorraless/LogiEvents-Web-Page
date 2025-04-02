@@ -110,7 +110,7 @@ export const updateEventos = async (req, res) => {
             fieldsToUpdate.push('precio = ?');
             values.push(precio);
         }
-        if (imagenFile) {
+        if (imagen) {
             const result = await new Promise((resolve, reject) => {
                 const uploadStream = cloudinary.uploader.upload_stream(
                     { folder: "eventos" },
@@ -119,7 +119,7 @@ export const updateEventos = async (req, res) => {
                         else resolve(result);
                     }
                 );
-                uploadStream.end(imagenFile.buffer);
+                uploadStream.end(imagen.buffer);
             });
 
             fieldsToUpdate.push('imagen = ?');

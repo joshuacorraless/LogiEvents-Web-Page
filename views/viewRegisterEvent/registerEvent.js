@@ -155,84 +155,60 @@ function enviarEvento() {
     const form = document.getElementById("formRegistrar");
     const formData = new FormData(form);
 
-    const fechaCompleta = formData.get("regevento_fecha"); // Obtiene el valor en formato YYYY-MM-DDTHH:MM
-    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null; // Convierte a objeto Date
-
-    // Formato YYYY-MM-DD
+    const fechaCompleta = formData.get("regevento_fecha");
+    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
     const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
-
-    // Formato HH:MM
     const hora = fechaObjeto.toTimeString().slice(0, 5);
 
+    // Crear nuevo FormData con todos los campos
+    const requestData = new FormData();
+    requestData.append("nombre_evento", formData.get("regevento_nombre"));
+    requestData.append("descripcion", formData.get("regevento_descripcion"));
+    requestData.append("fecha", fechaFormateada);
+    requestData.append("hora", hora);
+    requestData.append("precio", formData.get("regevento_precio"));
+    requestData.append("capacidad", formData.get("regevento_capacidad"));
+    requestData.append("ubicacion", formData.get("regevento_ubicacion"));
+    requestData.append("estado", formData.get("regevento_estado"));
+    requestData.append("categoria", formData.get("regevento_categoria"));
+    
+    // Añadir la imagen si existe
+    const imagenInput = document.getElementById('regevento_imagen');
+    if (imagenInput.files.length > 0) {
+        requestData.append("imagen", imagenInput.files[0]);
+    }
 
-            const data = {
-                nombre_evento: formData.get("regevento_nombre"),
-                descripcion: formData.get("regevento_descripcion"),
-                fecha: fechaFormateada,
-                hora: hora,
-                precio: formData.get("regevento_precio"),
-                capacidad: formData.get("regevento_capacidad"),
-                ubicacion: formData.get("regevento_ubicacion"),
-                estado: formData.get("regevento_estado"),
-                categoria: formData.get("regevento_categoria"),
-                imagen: uploadResult.url,
-                imagenPublicId: uploadResult.public_id
-            };
-
-            // Enviar datos del evento al servidor
-            return fetch(`http://localhost:3000/api/eventos`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw new Error(errorData.message);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Evento Registrado:", data);
-            Swal.fire({
-                icon: 'success',
-                title: '¡Evento registrado correctamente!',
-                text: 'Los cambios se guardaron con éxito.',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#b99725',
-            });
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            Swal.fire({
-                icon: 'error',
-                title: '¡Ups!',
-                text: error.message,
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#b99725',
-            });
-        });
-}
-
-// Función para subir imagen a Cloudinary
-function subirImagen(file) {
-    const formData = new FormData();
-    formData.append("imagen", inputFile.files[0]);
-    console.log(inputFile.files[0]),
-    fetch("https://requeproyectoweb-production-3d39.up.railway.app/upload", {
+    fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
-        body: formData
+        body: requestData
     })
     .then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw new Error(errorData.error || 'Error al subir la imagen');
+                throw new Error(errorData.message);
             });
         }
         return response.json();
+    })
+    .then(data => {
+        console.log("Evento Registrado:", data);
+        Swal.fire({
+            icon: 'success',
+            title: '¡Evento registrado correctamente!',
+            text: 'Los cambios se guardaron con éxito.',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',
+        });
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        Swal.fire({
+            icon: 'error',
+            title: '¡Ups!',
+            text: error.message,
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',
+        });
     });
 }
+

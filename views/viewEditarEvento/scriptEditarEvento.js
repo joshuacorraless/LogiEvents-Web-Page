@@ -222,58 +222,14 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append('ubicacion', locationInput.value);
             formData.append('capacidad', capacityInput.value);
             
-            // Manejo de imágenes
-            let imagenUrl = currentImageUrl;
-            let imagenPublicId = cloudinaryPublicId;
-            
+            // Agregar la imagen si hay una nueva
             if (imageInput.files.length > 0) {
-                // Subir nueva imagen
-                const uploadFormData = new FormData();
-                uploadFormData.append('imagen', imageInput.files[0]);
-                
-                const uploadResponse = await fetch('http://localhost:3000/upload', {
-                    method: "POST",
-                    body: uploadFormData
-                });
-                
-                if (!uploadResponse.ok) {
-                    const errorData = await uploadResponse.json();
-                    throw new Error(errorData.message || 'Error al subir la imagen');
-                }
-                
-                const uploadResult = await uploadResponse.json();
-                imagenUrl = uploadResult.url;
-                imagenPublicId = uploadResult.public_id;
-                
-                // Si había una imagen anterior, eliminarla
-                if (cloudinaryPublicId) {
-                    try {
-                        await fetch(`http://localhost:3000/api/images/${encodeURIComponent(cloudinaryPublicId)}`, {
-                            method: "DELETE"
-                        });
-                    } catch (deleteError) {
-                        console.warn('No se pudo eliminar la imagen anterior:', deleteError);
-                    }
-                }
-            }
-            
-            // Asegurarse de que hay una imagen
-            if (!imagenUrl) {
-                throw new Error('Debes seleccionar una imagen para el evento');
-            }
-            
-            // Agregar datos de imagen al formData
-            formData.append('imagenUrl', imagenUrl);
-            if (imagenPublicId) {
-                formData.append('imagenPublicId', imagenPublicId);
+                formData.append('imagen', imageInput.files[0]);
             }
             
             // Enviar datos al servidor
             const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
                 method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                },
                 body: formData
             });
             
@@ -289,7 +245,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Aceptar'
             });
             
-            // Redirigir a la lista de eventos
             window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
             
         } catch (error) {

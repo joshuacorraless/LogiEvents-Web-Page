@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Actualizar los elementos del DOM con los datos del evento
         document.getElementById("nameEventos").textContent = evento.nombre_evento;
-        document.getElementById("imagenEvento").src = `/uploads/eventos/${evento.imagen}`;
+        document.getElementById("imagenEvento").src = evento.imagen;
         document.getElementById("descriptionEvent").textContent = evento.descripcion;
         document.getElementById("viewestado").textContent = evento.estado;
         document.getElementById("viewconcierto").textContent = evento.categoria;
