@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config();
 
 
@@ -13,6 +14,8 @@ import reservationsRoutes from './routes/reservations.routes.js';
 
 
 const app = express();
+// Configuración básica que permite cualquier origen
+app.use(cors());
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, 'uploads/eventos/'); // Carpeta donde se guardarán las imágenes
