@@ -1,6 +1,6 @@
 document.getElementById('volverLogin').addEventListener('click', function(event) {
     event.preventDefault();  // Previene la acción por defecto del enlace
-    window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app//Login";  // Redirige a la nueva URL
+    window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/Login";  // Redirige a la nueva URL
 });
 
 document.getElementById('togglePassword').addEventListener('click', function() {
@@ -173,7 +173,7 @@ function enviarRegistro(){
 
     console.log(data);
 
-    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/usuarios`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/usuarios`, {
         method: "POST", // Enviar como PUT
         headers: {
             "Content-Type": "application/json",
@@ -201,7 +201,7 @@ function enviarRegistro(){
             confirmButtonColor: '#b99725',  // Color del botón
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app//Login";
+                window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/Login";
             }
         });
     

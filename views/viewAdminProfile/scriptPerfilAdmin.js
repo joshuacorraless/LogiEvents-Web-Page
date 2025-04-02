@@ -5,7 +5,7 @@ var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
 if (!idUser || !tipoUsuario || (tipoUsuario !== "usuario" && tipoUsuario !== "administrador")) {
-    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login'; 
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login'; 
 }
 
 
@@ -47,7 +47,7 @@ function modalload(){
             };
     
             console.log(data);
-            fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/usuarios/${idUser}`, {
+            fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/usuarios/${idUser}`, {
                 method: "PUT", // Enviar como PUT
                 headers: {
                     "Content-Type": "application/json",
@@ -127,7 +127,7 @@ function traerUsuario() {
     
 
     // Realiza la solicitud HTTP GET al api
-    fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/usuarios')
+    fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/usuarios')
     .then(response => response.json()) // Convierte la respuesta a JSON
     .then(data => {
         console.log(data);

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentImageUrl = null;
 
     if (!idEvento) {
-        mostrarError('No se encontró el ID del evento', 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin');
+        mostrarError('No se encontró el ID del evento', 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin');
         return;
     }
 
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/eventos/${id}`);
+            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/eventos/${id}`);
             
             if (!response.ok) {
                 throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Manejo de imágenes
             if (imageInput.files.length > 0) {
                 // Subir nueva imagen primero
-                const uploadResponse = await fetch('https://requeproyectoweb-production-3d39.up.railway.app//upload', {
+                const uploadResponse = await fetch('https://requeproyectoweb-production-3d39.up.railway.app/upload', {
                     method: 'POST',
                     body: (() => {
                         const fd = new FormData();
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Enviar datos al servidor
-            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/eventos/${idEvento}`, {
+            const response = await fetch(`https://requeproyectoweb-production-3d39.up.railway.app/api/eventos/${idEvento}`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Redirigir a la lista de eventos
-            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin';
+            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
             
         } catch (error) {
             console.error('Error al actualizar el evento:', error);
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelButtonColor: '#3085d6'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin';
+                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
             }
         });
     }

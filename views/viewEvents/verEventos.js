@@ -5,7 +5,7 @@ console.log(tipoUsuario);
 console.log(idUser);
 
 if (!idUser || tipoUsuario !== "usuario") {
-    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login';
 }
 
 
@@ -13,7 +13,7 @@ if (!idUser || tipoUsuario !== "usuario") {
 const mostPopProducts = document.querySelector(".most-popular-products");
 
 
-fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/eventos')
+fetch('https://requeproyectoweb-production-3d39.up.railway.app/api/eventos')
 	.then((respone) => {
 		return respone.json();
 	})
@@ -66,7 +66,7 @@ fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/eventos')
 // Función para obtener los eventos desde la API
 async function obtenerEventos() {
 	try {
-		const respuesta = await fetch("https://requeproyectoweb-production-3d39.up.railway.app//api/eventos");
+		const respuesta = await fetch("https://requeproyectoweb-production-3d39.up.railway.app/api/eventos");
 		if (!respuesta.ok) {
 			throw new Error("Error al obtener los eventos");
 		}
@@ -80,5 +80,5 @@ async function obtenerEventos() {
 // Función para mostrar la información del evento en la página
 function mostrarEvento(evento) {
 	sessionStorage.setItem("eventoSeleccionado", JSON.stringify(evento));
-	window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//VerEvento';
+	window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/VerEvento';
 }
