@@ -1,9 +1,8 @@
-// src/config/multer.config.js
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { Readable } from 'stream';
 
-// Configura Cloudinary
+// Configura Cloudinary (v2)
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -11,19 +10,26 @@ cloudinary.config({
   secure: true
 });
 
-// Configura el almacenamiento en Cloudinary
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'eventos',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif']
-  }
-});
+// Configura Multer para usar memoria
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-// Crea el middleware de Multer
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // Límite de 10MB
-});
+// Función para subir buffers a Cloudinary v2
+export const uploadStreamToCloudinary = (buffer, folder = 'eventos') => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder, resource_type: 'auto' },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    
+    const readableStream = new Readable();
+    readableStream.push(buffer);
+    readableStream.push(null);
+    readableStream.pipe(uploadStream);
+  });
+};
 
 export default upload;

@@ -1,4 +1,5 @@
 import { pool } from "../db.js";
+import { uploadStreamToCloudinary } from '../config/multer.config.js';
 import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
@@ -43,37 +44,36 @@ export const createEventos = async (req, res) => {
   const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
   
   try {
-      let imagenUrl = null;
-      
-      // Subir a Cloudinary si hay imagen
-      if (req.file) {
-          const result = await new Promise((resolve, reject) => {
-              const uploadStream = cloudinary.uploader.upload_stream(
-                  { folder: "eventos" },
-                  (error, result) => {
-                      if (error) reject(error);
-                      else resolve(result);
-                  }
-              );
-              uploadStream.end(req.file.buffer);
-          });
-          imagenUrl = result.secure_url;
-      }
+    let imagenUrl = null;
+    let imagenPublicId = null;
+    
+    // Subir imagen a Cloudinary si existe
+    if (req.file) {
+      const result = await uploadStreamToCloudinary(req.file.buffer);
+      imagenUrl = result.secure_url;
+      imagenPublicId = result.public_id;
+    }
 
-      const [dbResult] = await pool.query(
-          'INSERT INTO Evento (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
-      );
+    // Insertar en la base de datos
+    const [dbResult] = await pool.query(
+      `INSERT INTO Evento 
+       (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
+    );
 
-      res.status(201).json({ 
-          message: 'Evento creado',
-          id: dbResult.insertId,
-          imagen: imagenUrl 
-      });
+    res.status(201).json({ 
+      message: 'Evento creado exitosamente',
+      id: dbResult.insertId,
+      imagen: imagenUrl
+    });
 
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al crear evento' });
+    console.error('Error al crear evento:', error);
+    res.status(500).json({ 
+      message: 'Error al crear evento',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 
