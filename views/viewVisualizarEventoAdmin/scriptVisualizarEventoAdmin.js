@@ -5,7 +5,7 @@ var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 var correo="";
 if (!idUser || !tipoUsuario || tipoUsuario !== "administrador") {
-    window.location.href = 'http://localhost:3000/Login'; 
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login'; 
 }
 
 
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar eventos al iniciar
     cargarEventos();
     document.querySelector('.btn-agregar').addEventListener('click', function() {
-        window.location.href = 'http://localhost:3000/RegistrarEvento';
+        window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//RegistrarEvento';
     });
 
 });
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Función para cargar los eventos
 function cargarEventos() {
-    fetch('http://localhost:3000/api/eventos')
+    fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/eventos')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener eventos');
@@ -145,7 +145,7 @@ function editarEvento(idEvento) {
             sessionStorage.setItem('idEventoEditar', idEvento);
             
             // Redirigir a la página de edición
-            window.location.href = `http://localhost:3000/EditarEvento`;
+            window.location.href = `https://requeproyectoweb-production-3d39.up.railway.app//EditarEvento`;
         }
     });
 }
@@ -182,7 +182,7 @@ function eliminarEventoActivo(idEvento,estado) {
         email: correo
     };
     console.log(data);
-    fetch(`http://localhost:3000/api/events/${idEvento}/request-delete`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/request-delete`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ function eliminarEventoActivo(idEvento,estado) {
 
 function eliminarEventoAgotado(idEvento,estado) {
     
-    fetch(`http://localhost:3000/api/events/${idEvento}/agotado-start-delete`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/agotado-start-delete`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ function traerUsuario() {
     
 
     // Realiza la solicitud HTTP GET al api
-    fetch('http://localhost:3000/api/usuarios')
+    fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/usuarios')
     .then(response => response.json()) // Convierte la respuesta a JSON
     .then(data => {
         console.log(data);
@@ -286,7 +286,7 @@ function solicitarMensajeActivo(idEvento){
                 const data = {
                     code: palabra
                 };
-                fetch(`http://localhost:3000/api/events/${idEvento}/confirm-delete`, {
+                fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/confirm-delete`, {
                     method: "POST", // Enviar como PUT
                     headers: {
                         "Content-Type": "application/json",
@@ -352,7 +352,7 @@ function solicitarSMSAgotado(idEvento){
                 const data = {
                     word: palabra
                 };
-                fetch(`http://localhost:3000/api/events/${idEvento}/agotado-verify-sms`, {
+                fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/agotado-verify-sms`, {
                     method: "POST", // Enviar como PUT
                     headers: {
                         "Content-Type": "application/json",
@@ -418,7 +418,7 @@ function solicitarCorreoAgotado(idEvento){
                 const data = {
                     code: palabra
                 };
-                fetch(`http://localhost:3000/api/events/${idEvento}/agotado-verify-email`, {
+                fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/agotado-verify-email`, {
                     method: "POST", // Enviar como PUT
                     headers: {
                         "Content-Type": "application/json",
@@ -466,7 +466,7 @@ function enviarEmailAgotado(idEvento){
         email: correo
     };
     console.log(data);
-    fetch(`http://localhost:3000/api/events/${idEvento}/agotado-send-email`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/agotado-send-email`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -500,7 +500,7 @@ function confirmarEliminarAgotado(idEvento){
         email: correo
     };
     console.log(data);
-    fetch(`http://localhost:3000/api/events/${idEvento}/agotado-confirm-delete`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/events/${idEvento}/agotado-confirm-delete`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

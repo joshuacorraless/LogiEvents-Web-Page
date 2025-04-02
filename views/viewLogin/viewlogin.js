@@ -1,6 +1,6 @@
 document.getElementById('Registrarme').addEventListener('click', function(event) {
     event.preventDefault();  // Previene la acción por defecto del enlace
-    window.location.href = "http://localhost:3000/RegistarUsuario";  // Redirige a la nueva URL
+    window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app//RegistarUsuario";  // Redirige a la nueva URL
 });
 
 document.getElementById('togglePassword').addEventListener('click', function() {
@@ -65,7 +65,7 @@ function validarLogin(){
     };
     
     console.log(data);
-    fetch(`http://localhost:3000/api/Login`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/Login`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -105,9 +105,9 @@ function validarUsuario(id, tipoUsuario){
     console.log(id);
     console.log(tipoUsuario);
     if (tipoUsuario === "usuario") {
-        window.location.href = 'http://localhost:3000/VerEventos';
+        window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//VerEventos';
     } else if (tipoUsuario === "administrador") {
-        window.location.href = 'http://localhost:3000/DashBoard';
+        window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//DashBoard';
     }
 
 }

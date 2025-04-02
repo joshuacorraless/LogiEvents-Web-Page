@@ -15,7 +15,7 @@ window.onload = function() {
       event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
       
       // Redirigir al usuario a la nueva URL
-      window.location.href = 'http://localhost:3000/MiPerfilAdmin';
+      window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//MiPerfilAdmin';
   });
 
   // Añadir un event listener a los enlaces de los botones
@@ -23,19 +23,19 @@ window.onload = function() {
     event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
     
     // Redirigir al usuario a la nueva URL
-    window.location.href = 'http://localhost:3000/EventosAdmin';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin';
   });
   AdminLink.addEventListener('click', function(event) {
     event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
     
     // Redirigir al usuario a la nueva URL
-    window.location.href = 'http://localhost:3000/VerAdmins';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//VerAdmins';
   });
   StatsLink.addEventListener('click', function(event) {
     event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
     
     // Redirigir al usuario a la nueva URL
-    window.location.href = 'http://localhost:3000/DashBoard';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//DashBoard';
   });
 
     // Añadir un event listener a los enlaces de los botones
@@ -43,6 +43,6 @@ window.onload = function() {
       event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
       
       // Redirigir al usuario a la nueva URL
-      window.location.href = 'http://localhost:3000/Login';
+      window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login';
     });
 };

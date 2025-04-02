@@ -5,7 +5,7 @@ console.log(tipoUsuario);
 console.log(idUser);
 
 if (!idUser || tipoUsuario !== "usuario") {
-    window.location.href = 'http://localhost:3000/Login';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login';
 }
 
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("CancelarReserva").addEventListener("click", function() {
     // Redirigir a otra página
-    window.location.href = 'http://localhost:3000/VerEventos';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//VerEventos';
 });
 
 // Obtener los elementos del DOM
@@ -99,7 +99,7 @@ function enviarReserva(){
     };
     
     console.log(data);
-    fetch(`http://localhost:3000/api/reservations/start`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/reservations/start`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function solicitarMensaje(){
                 tempReservationId: tempReservationId,
                 word: palabra
             };
-            fetch(`http://localhost:3000/api/reservations/verify`, {
+            fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/reservations/verify`, {
                 method: "POST", // Enviar como PUT
                 headers: {
                     "Content-Type": "application/json",

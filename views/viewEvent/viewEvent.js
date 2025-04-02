@@ -4,7 +4,7 @@ var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
 if ((!idUser || !tipoUsuario) || (tipoUsuario != "usuario")) {
     
-    window.location.href = 'http://localhost:3000/Login'; 
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login'; 
 }
 
 
@@ -39,7 +39,7 @@ btnAtrasVerEvento.addEventListener('click', function(event) {
     event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
     
     // Redirigir al usuario a la nueva URL
-    window.location.href = 'http://localhost:3000/VerEventos';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//VerEventos';
 });
 
 btnReservar.addEventListener('click', function(event) {
@@ -53,7 +53,7 @@ btnReservar.addEventListener('click', function(event) {
     sessionStorage.setItem("nombreEvento", nombre);
     sessionStorage.setItem("precio", precio);
     // Redirigir al usuario a la nueva URL
-    window.location.href = `http://localhost:3000/ReservarEvento`;
+    window.location.href = `https://requeproyectoweb-production-3d39.up.railway.app//ReservarEvento`;
 
 
 });

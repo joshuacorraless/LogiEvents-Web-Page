@@ -2,7 +2,7 @@ var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
 if (!idUser || tipoUsuario !== "administrador") {
-    window.location.href = 'http://localhost:3000/Login'; 
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//Login'; 
 }
 
 
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeButton) {
         closeButton.addEventListener('click', function() {
             // Redirigir a la URL deseada
-            window.location.href = 'http://localhost:3000/EventosAdmin';  // Cambia la URL por la que necesites
+            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin';  // Cambia la URL por la que necesites
         });
     }
 });
@@ -183,7 +183,7 @@ function enviarEvento(){
     console.log(data); // Para verificar los datos antes de enviarlos
 
 
-    fetch(`http://localhost:3000/api/Eventos`, {
+    fetch(`https://requeproyectoweb-production-3d39.up.railway.app//api/Eventos`, {
         method: "POST", // Enviar como POST
         headers: {
             "Content-Type": "application/json",
@@ -210,7 +210,7 @@ function enviarEvento(){
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#b99725',
         }).then(() => {
-            window.location.href = 'http://localhost:3000/EventosAdmin';
+            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app//EventosAdmin';
         });
         
         
@@ -234,7 +234,7 @@ function subirImagen() {
     const formData = new FormData();
     formData.append("imagen", inputFile.files[0]);
     console.log(inputFile.files[0]),
-    fetch("http://localhost:3000/upload", {
+    fetch("https://requeproyectoweb-production-3d39.up.railway.app//upload", {
         method: "POST",
         body: formData
     })

@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function traerAdministradores() {
-        fetch('http://localhost:3000/api/usuarios')
+        fetch('https://requeproyectoweb-production-3d39.up.railway.app//api/usuarios')
         .then(response => response.json())
         .then(data => {
             console.log(33);
