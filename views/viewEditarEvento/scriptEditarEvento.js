@@ -40,19 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${id}`);
-            
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
+            const eventoSeleccionado = eventos.find(e => e.id_evento == id);
+    
+            if (eventoSeleccionado) {
+                console.log("Evento encontrado:", eventoSeleccionado);
+                updateUIWithEventData(eventoSeleccionado);
+            } else {
+                console.log("Evento no encontrado.");
             }
-            
-            const evento = await response.json();
-            //actualizar datos
-            updateUIWithEventData(evento);
-            
         } catch (error) {
-            console.error('Error al cargar el evento:', error);
-            mostrarError('No se pudo cargar la información del evento', '/EventosAdmin');
+            console.error("Error al cargar el evento:", error);
         }
     }
 
@@ -315,5 +313,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = redirectUrl;
             }
         });
+    }
+
+    // Función para obtener los eventos desde la API
+    async function obtenerEventos() {
+        try {
+            const respuesta = await fetch("https://requeproyectoweb-production.up.railway.app/api/eventos");
+            if (!respuesta.ok) {
+                throw new Error("Error al obtener los eventos");
+            }
+            return await respuesta.json();
+        } catch (error) {
+            console.error("Error al cargar los eventos:", error);
+            return [];
+        }
     }
 });
