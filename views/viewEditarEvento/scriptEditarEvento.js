@@ -208,51 +208,89 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        if (!validateForm()) return;
-        
+        // Validación más robusta
+        if (!validateForm()) {
+            mostrarError('Por favor complete todos los campos requeridos correctamente');
+            return;
+        }
+    
         try {
+            // Deshabilitar botón y mostrar spinner
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Guardando...
+                Guardando cambios...
             `;
-            
-            const formData = new FormData();
-            formData.append('precio', priceInput.value);
-            formData.append('ubicacion', locationInput.value);
-            formData.append('capacidad', capacityInput.value);
-            
-            // Agregar la imagen si hay una nueva
-            if (imageInput.files.length > 0) {
-                formData.append('imagen', imageInput.files[0]);
-            }
-            
-            // Enviar datos al servidor
-            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
+    
+            // Crear objeto con los datos en lugar de FormData
+            const datosActualizacion = {
+                precio: priceInput.value,
+                ubicacion: locationInput.value,
+                capacidad: capacityInput.value
+            };
+    
+            // Opciones para fetch
+            const opcionesFetch = {
                 method: 'PUT',
-                body: formData
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datosActualizacion)
+            };
+    
+            // Si hay imagen, usar FormData especial
+            let formDataConImagen;
+            if (imageInput.files.length > 0) {
+                formDataConImagen = new FormData();
+                formDataConImagen.append('imagen', imageInput.files[0]);
+                formDataConImagen.append('datos', JSON.stringify(datosActualizacion));
+                
+                // Cambiar opciones para FormData
+                opcionesFetch.headers = {}; // Eliminar Content-Type para que el navegador lo establezca con boundary
+                opcionesFetch.body = formDataConImagen;
             }
-            
+    
+            const response = await fetch(
+                `https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`,
+                opcionesFetch
+            );
+    
+            const data = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(data.message || 'Error al actualizar el evento');
+            }
+    
+            // Notificación de éxito mejorada
             await Swal.fire({
                 icon: 'success',
-                title: '¡Éxito!',
-                text: 'Evento actualizado correctamente',
-                confirmButtonText: 'Aceptar'
+                title: 'Actualización exitosa',
+                text: 'Los cambios se han guardado correctamente',
+                showConfirmButton: true,
+                confirmButtonText: 'Continuar',
+                confirmButtonColor: '#3085d6',
+                timer: 3000
             });
-            
-            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
-            
+    
+            // Redirección con retraso para mejor UX
+            setTimeout(() => {
+                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
+            }, 500);
+    
         } catch (error) {
-            console.error('Error al actualizar el evento:', error);
-            mostrarError(error.message || 'Ocurrió un error al actualizar el evento');
+            console.error('Error en handleFormSubmit:', error);
+            
+            // Mostrar error específico si está disponible
+            const mensajeError = error.message.includes('No se proporcionaron datos')
+                ? 'Complete al menos un campo para actualizar'
+                : error.message || 'Error al conectar con el servidor';
+            
+            mostrarError(mensajeError);
+            
         } finally {
+            // Restaurar botón
             submitButton.disabled = false;
-            submitButton.textContent = 'Guardar Cambios';
+            submitButton.innerHTML = 'Guardar Cambios';
         }
     }
 

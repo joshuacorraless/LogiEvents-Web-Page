@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
 
+
 // Routes
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
@@ -60,7 +61,7 @@ const uploadToCloudinary = (fileBuffer, folder, publicId) => {
 
 
 
-
+app.get('/favicon.ico', (req, res) => res.status(204));
 //Api
 app.use('/api', eventosRoutes)
 app.use('/api',usuariosRoutes)
