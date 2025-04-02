@@ -11,9 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
     imageInput.style.display = 'none';
+    imageInput.name = 'imagen'; // Importante para el FormData
     document.body.appendChild(imageInput);
+    
     const idEvento = sessionStorage.getItem('idEventoEditar');
     let currentImageUrl = null;
+    let cloudinaryPublicId = null; // Para almacenar el public_id de la imagen en Cloudinary
 
     if (!idEvento) {
         mostrarError('No se encontró el ID del evento', 'http://localhost:3000/EventosAdmin');
@@ -26,9 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarDatosEvento(idEvento);
     setupEventListeners();
 
-    
     function setupEventListeners() {
-
         uploadArea.addEventListener('click', handleUploadClick);
         imageInput.addEventListener('change', handleImageSelection);
         setupDragAndDrop();
@@ -66,6 +67,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mostrar imagen si existe
         if (evento.imagenUrl) {
             currentImageUrl = evento.imagenUrl;
+            
+            // Extraer el public_id de la URL de Cloudinary
+            // Si el evento ya tiene un public_id guardado, usarlo
+            if (evento.imagenPublicId) {
+                cloudinaryPublicId = evento.imagenPublicId;
+            } else {
+                // Intentar extraer el public_id de la URL
+                try {
+                    // Las URLs de Cloudinary suelen seguir este patrón:
+                    // https://res.cloudinary.com/cloud_name/image/upload/v1234567890/folder/filename.ext
+                    const urlRegex = /\/v\d+\/(.+)\.\w+$/;
+                    const match = evento.imagenUrl.match(urlRegex);
+                    
+                    if (match && match[1]) {
+                        cloudinaryPublicId = match[1]; // folder/filename
+                    }
+                } catch (error) {
+                    console.warn('No se pudo extraer el public_id de la URL:', error);
+                    // Continuamos sin el public_id, lo que significa que no podremos eliminar
+                    // la imagen antigua si el usuario sube una nueva
+                }
+            }
+            
             showImagePreview(evento.imagenUrl);
         }
     }
@@ -101,8 +125,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            currentImageUrl = null; // Reseteamos la URL si suben nueva imagen
+            // Mostrar vista previa localmente
             showImagePreview(URL.createObjectURL(file));
+            
+            // Cambiar estado para indicar que hay una nueva imagen
+            currentImageUrl = null;
+            cloudinaryPublicId = null;
         }
     }
 
@@ -165,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             currentImageUrl = null;
+            cloudinaryPublicId = null;
             showImagePreview(URL.createObjectURL(file));
             imageInput.files = dt.files; // Asignar el archivo al input
         }
@@ -173,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showImagePreview(imageSrc) {
         uploadArea.innerHTML = `
             <img src="${imageSrc}" class="img-thumbnail mb-2" style="max-height: 200px;">
-            <button class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
             <p class="small text-muted mt-1">Tamaño máximo: 5MB</p>
         `;
     }
@@ -181,55 +210,69 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validar formulario
         if (!validateForm()) return;
         
         try {
-            // Mostrar loading en el botón
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Guardando...
             `;
             
-            // Preparar datos para enviar
             const formData = new FormData();
             formData.append('precio', priceInput.value);
             formData.append('ubicacion', locationInput.value);
             formData.append('capacidad', capacityInput.value);
             
             // Manejo de imágenes
+            let imagenUrl = currentImageUrl;
+            let imagenPublicId = cloudinaryPublicId;
+            
             if (imageInput.files.length > 0) {
-                // Subir nueva imagen primero
+                // Subir nueva imagen
+                const uploadFormData = new FormData();
+                uploadFormData.append('imagen', imageInput.files[0]);
+                
                 const uploadResponse = await fetch('http://localhost:3000/upload', {
-                    method: 'POST',
-                    body: (() => {
-                        const fd = new FormData();
-                        fd.append('imagen', imageInput.files[0]);
-                        return fd;
-                    })()
+                    method: "POST",
+                    body: uploadFormData
                 });
                 
                 if (!uploadResponse.ok) {
-                    throw new Error('Error al subir la nueva imagen');
+                    const errorData = await uploadResponse.json();
+                    throw new Error(errorData.message || 'Error al subir la imagen');
                 }
                 
                 const uploadResult = await uploadResponse.json();
-                formData.append('imagenUrl', uploadResult.url);
-            } else if (currentImageUrl) {
-                // Mantener la imagen existente
-                formData.append('imagenUrl', currentImageUrl);
-            } else {
-                // No hay imagen seleccionada ni existente
+                imagenUrl = uploadResult.url;
+                imagenPublicId = uploadResult.public_id;
+                
+                // Si había una imagen anterior, eliminarla
+                if (cloudinaryPublicId) {
+                    try {
+                        await fetch(`http://localhost:3000/api/images/${encodeURIComponent(cloudinaryPublicId)}`, {
+                            method: "DELETE"
+                        });
+                    } catch (deleteError) {
+                        console.warn('No se pudo eliminar la imagen anterior:', deleteError);
+                    }
+                }
+            }
+            
+            // Asegurarse de que hay una imagen
+            if (!imagenUrl) {
                 throw new Error('Debes seleccionar una imagen para el evento');
+            }
+            
+            // Agregar datos de imagen al formData
+            formData.append('imagenUrl', imagenUrl);
+            if (imagenPublicId) {
+                formData.append('imagenPublicId', imagenPublicId);
             }
             
             // Enviar datos al servidor
             const response = await fetch(`http://localhost:3000/api/eventos/${idEvento}`, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                },
+                method: "PUT",
                 body: formData
             });
             
@@ -238,9 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
             }
             
-            const result = await response.json();
-            
-            // Mostrar mensaje de éxito
             await Swal.fire({
                 icon: 'success',
                 title: '¡Éxito!',
@@ -248,14 +288,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Aceptar'
             });
             
-            // Redirigir a la lista de eventos
             window.location.href = 'http://localhost:3000/EventosAdmin';
             
         } catch (error) {
             console.error('Error al actualizar el evento:', error);
             mostrarError(error.message || 'Ocurrió un error al actualizar el evento');
         } finally {
-            // Restaurar botón
             submitButton.disabled = false;
             submitButton.textContent = 'Guardar Cambios';
         }

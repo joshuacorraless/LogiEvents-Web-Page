@@ -15,10 +15,10 @@ import {
 
 
 const router = Router();
-
+router.post('/eventos', upload.single('imagen'), createEventos);
+router.put('/eventos/:id_evento', upload.single('imagen'), updateEventos);
 router.get('/eventos', getEventos);
-router.post('/eventos', createEventos);
-router.put('/eventos/:id_evento', updateEventos);
+
 
 
 // NUEVAS rutas para el proceso de eliminación con verificación

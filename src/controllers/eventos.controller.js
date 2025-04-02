@@ -34,19 +34,41 @@ export const getEventos = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
-    
+  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
   
-    try {
-      const [result] = await pool.query(
-        'INSERT INTO Evento (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado]
+  try {
+      let imagenUrl = null;
+      
+      // Subir a Cloudinary si hay imagen
+      if (req.file) {
+          const result = await new Promise((resolve, reject) => {
+              const uploadStream = cloudinary.uploader.upload_stream(
+                  { folder: "eventos" },
+                  (error, result) => {
+                      if (error) reject(error);
+                      else resolve(result);
+                  }
+              );
+              uploadStream.end(req.file.buffer);
+          });
+          imagenUrl = result.secure_url;
+      }
+
+      const [dbResult] = await pool.query(
+          'INSERT INTO Evento (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
       );
-      res.status(201).json({ message: 'Evento creado correctamente', evento: result });
-    } catch (error) {
+
+      res.status(201).json({ 
+          message: 'Evento creado',
+          id: dbResult.insertId,
+          imagen: imagenUrl 
+      });
+
+  } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error al crear el evento.' });
-    }
+      res.status(500).json({ message: 'Error al crear evento' });
+  }
 };
 
 
@@ -83,9 +105,20 @@ export const updateEventos = async (req, res) => {
             fieldsToUpdate.push('precio = ?');
             values.push(precio);
         }
-        if (imagen) {
+        if (imagenFile) {
+            const result = await new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    { folder: "eventos" },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+                uploadStream.end(imagenFile.buffer);
+            });
+
             fieldsToUpdate.push('imagen = ?');
-            values.push('uploads/eventos/' + imagen); // Ruta relativa de la imagen
+            values.push(result.secure_url); // Guarda la URL de Cloudinary
         }
 
         // Si no hay campos para actualizar, devolver error
