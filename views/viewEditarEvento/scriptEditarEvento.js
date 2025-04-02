@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let cloudinaryPublicId = null; // Para almacenar el public_id de la imagen en Cloudinary
 
     if (!idEvento) {
-        mostrarError('No se encontró el ID del evento', 'http://localhost:3000/EventosAdmin');
+        mostrarError('No se encontró el ID del evento', 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin');
         return;
     }
 
@@ -41,19 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`http://localhost:3000/api/eventos/${id}`);
-            
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
+            const eventoSeleccionado = eventos.find(e => e.id_evento == id);
+    
+            if (eventoSeleccionado) {
+                console.log("Evento encontrado:", eventoSeleccionado);
+                updateUIWithEventData(eventoSeleccionado);
+            } else {
+                console.log("Evento no encontrado.");
             }
-            
-            const evento = await response.json();
-            //actualizar datos
-            updateUIWithEventData(evento);
-            
         } catch (error) {
-            console.error('Error al cargar el evento:', error);
-            mostrarError('No se pudo cargar la información del evento', '/EventosAdmin');
+            console.error("Error al cargar el evento:", error);
         }
     }
 
@@ -271,8 +269,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Enviar datos al servidor
-            const response = await fetch(`http://localhost:3000/api/eventos/${idEvento}`, {
-                method: "PUT",
+            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                },
                 body: formData
             });
             
@@ -288,7 +289,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Aceptar'
             });
             
-            window.location.href = 'http://localhost:3000/EventosAdmin';
+            // Redirigir a la lista de eventos
+            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
             
         } catch (error) {
             console.error('Error al actualizar el evento:', error);
@@ -336,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelButtonColor: '#3085d6'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = 'http://localhost:3000/EventosAdmin';
+                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
             }
         });
     }
@@ -353,5 +355,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = redirectUrl;
             }
         });
+    }
+
+    // Función para obtener los eventos desde la API
+    async function obtenerEventos() {
+        try {
+            const respuesta = await fetch("https://requeproyectoweb-production.up.railway.app/api/eventos");
+            if (!respuesta.ok) {
+                throw new Error("Error al obtener los eventos");
+            }
+            return await respuesta.json();
+        } catch (error) {
+            console.error("Error al cargar los eventos:", error);
+            return [];
+        }
     }
 });

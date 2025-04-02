@@ -5,7 +5,7 @@ console.log(tipoUsuario);
 console.log(idUser);
 
 if (!idUser || tipoUsuario !== "usuario") {
-    window.location.href = 'http://localhost:3000/Login';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login';
 }
 
 
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("CancelarReserva").addEventListener("click", function() {
     // Redirigir a otra página
-    window.location.href = 'http://localhost:3000/VerEventos';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/VerEventos';
 });
 
 // Obtener los elementos del DOM
@@ -99,7 +99,7 @@ function enviarReserva(){
     };
     
     console.log(data);
-    fetch(`http://localhost:3000/api/reservations/start`, {
+    fetch(`https://requeproyectoweb-production.up.railway.app/api/reservations/start`, {
             method: "POST", // Enviar como PUT
             headers: {
                 "Content-Type": "application/json",
@@ -166,41 +166,41 @@ function solicitarMensaje(){
                 tempReservationId: tempReservationId,
                 word: palabra
             };
-            fetch(`http://localhost:3000/api/reservations/verify`, {
+            fetch(`https://requeproyectoweb-production.up.railway.app/api/reservations/verify`, {
                 method: "POST", // Enviar como PUT
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
-                        return response.json().then(errorData => {
-                            throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
-                        });
-                    }
-            return response.json(); // Si la respuesta es ok, continua
-        })
-        .then(data => {
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
+                                return response.json().then(errorData => {
+                                    throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
+                                });
+                            }
+                    return response.json(); // Si la respuesta es ok, continua
+                })
+                .then(data => {
 
-            Swal.fire('¡Éxito!', `Has reservado el evento!`, 'success');
-            generarNotificacion(document.getElementById("reserva_nameEvent").textContent);
-                
-        })
-        .catch(error => {
-            console.log(error);
-            Swal.fire({
-                icon: 'warning',
-                title: '¡Ups!',
-                text: error.message,  // Muestra el mensaje de error
-                confirmButtonText: 'Volver a ingresarla',
-                confirmButtonColor: '#D4AF37',  // Color del botón
-            }).then(() => {
-                //en caso de no ser vuelve a solicitar el mensaje
-                solicitarMensaje();
-            });
-        });
+                    Swal.fire('¡Éxito!', `Has reservado el evento!`, 'success');
+                    generarNotificacion(document.getElementById("reserva_nameEvent").textContent);
+                        
+                })
+                .catch(error => {
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '¡Ups!',
+                        text: error.message,  // Muestra el mensaje de error
+                        confirmButtonText: 'Volver a ingresarla',
+                        confirmButtonColor: '#D4AF37',  // Color del botón
+                    }).then(() => {
+                        //en caso de no ser vuelve a solicitar el mensaje
+                        solicitarMensaje();
+                    });
+                });
 
         }
     });

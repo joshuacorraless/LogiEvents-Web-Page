@@ -1,3 +1,11 @@
+var idUser=sessionStorage.getItem("userID");
+var tipoUsuario=sessionStorage.getItem("tipoUsuario");
+
+if (!idUser || tipoUsuario !== "administrador") {
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login'; 
+}
+
+
 document.getElementById('regevento_imagen').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -91,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeButton) {
         closeButton.addEventListener('click', function() {
             // Redirigir a la URL deseada
-            window.location.href = 'http://localhost:3000/Login';  // Cambia la URL por la que necesites
+            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';  // Cambia la URL por la que necesites
         });
     }
 });
@@ -146,30 +154,16 @@ registerButton.addEventListener('click', function() {
 function enviarEvento() {
     const form = document.getElementById("formRegistrar");
     const formData = new FormData(form);
-    
-    // Obtener la imagen del input
-    const imagenInput = document.getElementById('regevento_imagen');
-    const imagenFile = imagenInput.files[0];
-    
-    // Validar que haya una imagen
-    if (!imagenFile) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Debes seleccionar una imagen para el evento',
-            confirmButtonText: 'Aceptar'
-        });
-        return;
-    }
 
-    // Primero subir la imagen a Cloudinary
-    subirImagen(imagenFile)
-        .then(uploadResult => {
-            // Preparar datos del evento con la URL de la imagen
-            const fechaCompleta = formData.get("regevento_fecha");
-            const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
-            const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
-            const hora = fechaObjeto.toTimeString().slice(0, 5);
+    const fechaCompleta = formData.get("regevento_fecha"); // Obtiene el valor en formato YYYY-MM-DDTHH:MM
+    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null; // Convierte a objeto Date
+
+    // Formato YYYY-MM-DD
+    const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
+
+    // Formato HH:MM
+    const hora = fechaObjeto.toTimeString().slice(0, 5);
+
 
             const data = {
                 nombre_evento: formData.get("regevento_nombre"),
@@ -227,9 +221,9 @@ function enviarEvento() {
 // Función para subir imagen a Cloudinary
 function subirImagen(file) {
     const formData = new FormData();
-    formData.append("imagen", file);
-
-    return fetch("http://localhost:3000/upload", {
+    formData.append("imagen", inputFile.files[0]);
+    console.log(inputFile.files[0]),
+    fetch("https://requeproyectoweb-production-3d39.up.railway.app/upload", {
         method: "POST",
         body: formData
     })

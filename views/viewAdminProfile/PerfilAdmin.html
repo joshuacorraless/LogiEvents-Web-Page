@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     
         <!---Hoja de estilos-->
-        <link rel="stylesheet" href="./stylePerfilAdmin.css">
+        <link rel="stylesheet" href="/viewAdminProfile/stylePerfilAdmin.css">
         <link rel="stylesheet" href="../styleMenuAdmin.css">
     
         <!---FAVICON-->
@@ -43,25 +43,25 @@
                     </div>
                     <ul class="sidebar-nav ">
                         <li class="sidebar-item ">
-                            <a href="http://localhost:3000/" class="sidebar-link itemSelected" id="perfilLink">
+                            <a href="https://requeproyectoweb-production-3d39.up.railway.app/" class="sidebar-link itemSelected" id="perfilLink">
                                 <i class="bi bi-person-fill fs-4"></i>
                                 <span>Perfil</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="http://localhost:3000/EventosAdmin" class="sidebar-link" id="eventosLink">
+                            <a href="https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin" class="sidebar-link" id="eventosLink">
                                 <i class="bi bi-calendar3"></i>
                                 <span>Eventos</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="http://localhost:3000/" class="sidebar-link" id="statsLink">
+                            <a href="https://requeproyectoweb-production-3d39.up.railway.app/DashBoard" class="sidebar-link" id="statsLink">
                                 <i class="bi bi-graph-up-arrow"></i>
                                 <span>Estadisticas</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="http://localhost:3000/VerAdmins" class="sidebar-link " id="usersLink">
+                            <a href="https://requeproyectoweb-production-3d39.up.railway.app/VerAdmins" class="sidebar-link " id="usersLink">
                                 <i class="bi bi-people"></i>
                                 <span>Administradores</span>
                             </a>
@@ -69,7 +69,7 @@
                     </ul>
 
                     <div class="sidebar-footer">
-                        <a href="http://localhost:3000/" class="sidebar-link">
+                        <a href="https://requeproyectoweb-production-3d39.up.railway.app/" class="sidebar-link">
                             <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
                             <span>Logout</span>
                         </a>
@@ -97,7 +97,7 @@
 
                 <div class="row justify-content-center ">
 
-                    <div class="col-5  bodyRegister">
+                    <div class="col-8  bodyRegister">
                         
     
                             <div class="row g-3 p-4 mx-auto justify-content-center">
@@ -158,7 +158,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <form id="formModificarUsuario" action="http://localhost:3000/api/usuarios/1" method="POST" enctype="multipart/form-data">
+                                                <form id="formModificarUsuario" action="https://requeproyectoweb-production.up.railway.app/api/usuarios/1" method="POST" enctype="multipart/form-data">
                                                     <div class="row g-3">
                                                         <div class="col-md-6">
                                                             <label for="correo" class="form-label">Correo electrónico</label>
@@ -210,6 +210,6 @@
     
 
     <script src="../scriptMenuAdmin.js"></script>
-    <script src="./scriptPerfilAdmin.js"></script>
+    <script src="/viewAdminProfile/scriptPerfilAdmin.js"></script>
 </body>
 </html>

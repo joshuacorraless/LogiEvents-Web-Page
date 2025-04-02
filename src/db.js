@@ -5,7 +5,7 @@ export const pool = createPool({
   user: 'root',        // Database user
   password: '123456',        // Database password
   port: 3306,         // Database port
-  database: 'reque'   // Database name
+  database: 'chatbot_db'   // Database name
 
   })
 

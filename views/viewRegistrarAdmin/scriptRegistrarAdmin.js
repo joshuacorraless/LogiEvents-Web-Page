@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Enviar datos al servidor
-        fetch('http://localhost:3000/api/usuarios', {
+        fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 form.reset();
-                window.location.href = 'http://localhost:3000/api/VerAdmins';
+                window.location.href = 'https://requeproyectoweb-production.up.railway.app/api/VerAdmins';
             }
         });
     });

@@ -16,7 +16,7 @@ window.onload = function() {
       event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
       
       // Redirigir al usuario a la nueva URL
-      window.location.href = 'http://localhost:3000/MiPerfil';
+      window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/MiPerfil';
   });
 
   // Añadir un event listener a los enlaces de los botones
@@ -24,7 +24,7 @@ window.onload = function() {
     event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
     
     // Redirigir al usuario a la nueva URL
-    window.location.href = 'http://localhost:3000/VerEventos';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/VerEventos';
   });
 
     // Añadir un event listener a los enlaces de los botones
@@ -32,7 +32,7 @@ window.onload = function() {
       event.preventDefault();  // Evitar el comportamiento predeterminado (que es navegar a "#")
       sessionStorage.clear(); //limpia la session en la que se ha guardado el id del usuario anterior
       // Redirigir al usuario a la nueva URL
-      window.location.href = 'http://localhost:3000/Login';
+      window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login';
     });
 
     notiLink.addEventListener('click', function(event) {
