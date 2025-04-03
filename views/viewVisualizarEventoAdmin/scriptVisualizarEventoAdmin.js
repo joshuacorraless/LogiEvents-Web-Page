@@ -542,7 +542,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("Botón de agregar evento presionado");
 
             // Redirige a la página de agregar evento
-            window.location.href = "https://requeproyectoweb-production.up.railway.app/AgregarAdmin"; // Cambia la URL de acuerdo a tu ruta
+            window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/AgregarAdmin"; 
         });
     }
 });
