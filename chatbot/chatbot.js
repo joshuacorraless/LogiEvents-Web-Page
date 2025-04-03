@@ -86,8 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await dfResponse.json();
       
       console.log("Dialogflow response:", data);
-      console.log("Intent:", data.queryResult.intent.displayName);
-      console.log("Fulfillment Text:", data.queryResult.fulfillmentText);
 
       const reply = data.queryResult.fulfillmentText || "🤖 No entendí tu pregunta.";
 
