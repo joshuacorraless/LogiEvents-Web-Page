@@ -33,16 +33,26 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const cors = require("cors");
+const express = require("express");
 
+import cors from "cors";
 
-// Habilitar CORS para permitir peticiones desde el frontend
-app.use(cors({
-  origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite este origen
-  methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
-  allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
-  credentials: true // Permite el envío de cookies o autenticación
-}));
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
+
+app.get("/", (req, res) => {
+  res.send("Servidor funcionando 🚀");
+});
+
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
+
+app.get("/", (req, res) => {
+  res.send("Servidor funcionando en Railway 🚀");
+});
+
+// Inicia el servidor en el puerto asignado por Railway
+app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
 
 // Configuración de Multer (almacenamiento en memoria)
 const storage = multer.memoryStorage();
