@@ -155,10 +155,21 @@ function enviarEvento() {
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
 
-    const fechaCompleta = document.getElementById("regevento_fecha");
-    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
-    const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
-    const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
+    const fechaInput = document.getElementById("regevento_fecha");
+    console.log(fechaInput);
+
+    const fechaCompleta = fechaInput ? fechaInput.value : null;
+    
+    if (!fechaCompleta) {
+        console.error("El campo de fecha está vacío.");
+    } else {
+        const fechaObjeto = new Date(fechaCompleta);
+        const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
+        const hora = fechaObjeto.toTimeString().slice(0, 5);
+    
+        console.log("Fecha formateada:", fechaFormateada);
+        console.log("Hora:", hora);
+    }
 
     console.log(fechaCompleta, hora, fechaFormateada);
     // Agregar los datos del formulario al FormData
