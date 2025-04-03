@@ -63,7 +63,7 @@ export const getEventById = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
+  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagenUrl } = req.body;
   
   try {
     // Validaciones básicas
@@ -76,7 +76,7 @@ export const createEventos = async (req, res) => {
       `INSERT INTO Evento 
        (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado]
+      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
     );
 
     res.status(201).json({ 
