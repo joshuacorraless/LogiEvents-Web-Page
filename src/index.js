@@ -34,8 +34,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-const PORT = process.env.PORT || 3000;
-
 // Configurar CORS correctamente
 app.use(cors({
   origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite solicitudes desde tu frontend
@@ -44,10 +42,6 @@ app.use(cors({
   credentials: true
 }));
 
-
-
-// Inicia el servidor en el puerto asignado por Railway
-app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
 
 // Configuración de Multer (almacenamiento en memoria)
 const storage = multer.memoryStorage();
