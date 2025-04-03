@@ -45,10 +45,6 @@ app.use(cors({
 }));
 
 
-// Ruta de prueba
-app.get("/", (req, res) => {
-  res.send("Servidor funcionando con CORS habilitado 🚀");
-});
 
 // Inicia el servidor en el puerto asignado por Railway
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
