@@ -277,6 +277,6 @@ app.use((req, res) => {
   res.status(404).send('No se encontro la pagina')
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
