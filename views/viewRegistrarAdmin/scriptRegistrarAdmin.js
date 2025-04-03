@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Función para registrar administrador
-    function registrarAdministrador(event) {
+    
         function registrarAdministrador() {
             // Obtener el formulario
             const form = document.getElementById("formRegister");
@@ -163,8 +163,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         
             return false; // Previene el envío tradicional del formulario
-        }
-    };
+        };
 
     // Botón cancelar
     document.querySelector('.btn-secondary').addEventListener('click', function() {
@@ -184,4 +183,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar el evento del formulario
+    const form = document.getElementById('formRegister');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Primero validar el formulario
+            if (validarFormulario()) {
+                // Si la validación pasa, registrar el administrador
+                registrarAdministrador();
+            }
+        });
+    }
 });
