@@ -151,8 +151,6 @@ registerButton.addEventListener('click', function() {
 });
 
 function enviarEvento() {
-    
-    
 
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
@@ -162,6 +160,7 @@ function enviarEvento() {
     const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
     const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
 
+    console.log(fechaCompleta, hora, fechaFormateada);
     // Agregar los datos del formulario al FormData
     formData.append('nombre_evento', document.getElementById('regevento_nombre').value);
     formData.append('descripcion', document.getElementById('regevento_descripcion').value);
