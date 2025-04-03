@@ -19,20 +19,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`/api/eventos/${id}`);
-            if (!response.ok) throw new Error('Error al cargar evento');
-            
-            const evento = await response.json();
+            const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
+            const evento = eventos.find(e => e.id_evento == id);
+    
+            if (evento) {
+                console.log("Evento encontrado:", evento);
+            } else {
+                console.log("Evento no encontrado.");
+            }
             
             // Llenar formulario
             document.getElementById('precio').value = evento.precio || '';
             document.getElementById('ubicacion').value = evento.ubicacion || '';
             document.getElementById('capacidad').value = evento.capacidad || '';
             
-            // Mostrar imagen si existe
+           /* // Mostrar imagen si existe
             if (evento.imagenUrl) {
                 showImagePreview(evento.imagenUrl);
-            }
+            }*/
         } catch (error) {
             console.error('Error:', error);
             Swal.fire('Error', 'No se pudo cargar el evento', 'error');
@@ -75,43 +79,69 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    async function handleFormSubmit(e) {
-        e.preventDefault();
-        
+
+    // Obtener el botón con el id 'closeButton'
+    const updateButton = document.getElementById('submitBtn');
+    // Agregar el evento click al botón
+    updateButton.addEventListener('click', function() {
+        updateEvento();
+    });
+
+    function updateEvento() {
+
         if (!validateForm()) return;
 
-        try {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Guardando...
-            `;
+        const eventoData = {
+            ubicacion: document.getElementById('ubicacion').value,
+            capacidad: document.getElementById('capacidad').value,
+            precio: document.getElementById('precio').value
+        };
+    
+        /*// Verificar si se ha seleccionado una imagen
+        const imagenInput = document.getElementById('regevento_imagen');
+        if (imagenInput.files.length > 0) {
+            formData.append('regevento_imagen', imagenInput.files[0]);
+        } else {
+            // Manejar el error si la imagen no ha sido seleccionada
+            document.getElementById('imagenError').style.display = 'block';
+            return;
+        }*/
 
-            const formData = new FormData(form);
-            formData.append('id_evento', idEvento);
-
-            const response = await fetch(`/api/eventos/${idEvento}`, {
-                method: 'PUT',
-                body: formData
-            });
-
+        fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'  // Asegúrarse de especificar que es JSON
+            },
+            body: JSON.stringify(eventoData)
+        })
+        .then(response => {
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Error al guardar');
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
             }
-
-            await Swal.fire('Éxito', 'Evento actualizado', 'success');
-            setTimeout(() => {
-                window.location.href = '/EventosAdmin';
-            }, 1500);
-
-        } catch (error) {
-            console.error('Error:', error);
-            Swal.fire('Error', error.message || 'Error al guardar cambios', 'error');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Guardar Cambios';
-        }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Evento Actualizado:", data);
+            Swal.fire({
+                icon: 'success',
+                title: '¡Evento actualizado correctamente!',
+                text: 'Los cambios se guardaron con éxito.',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: '¡Ups!',
+                text: error.message,
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+        });
     }
 
     function validateForm() {
@@ -163,4 +193,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+        // Función para obtener los eventos desde la API
+        async function obtenerEventos() {
+            try {
+                const respuesta = await fetch("https://requeproyectoweb-production.up.railway.app/api/eventos");
+                if (!respuesta.ok) {
+                    throw new Error("Error al obtener los eventos");
+                }
+                return await respuesta.json();
+            } catch (error) {
+                console.error("Error al cargar los eventos:", error);
+                return [];
+            }
+        }
 });

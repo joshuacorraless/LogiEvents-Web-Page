@@ -157,7 +157,7 @@ function enviarEvento() {
     var fechaFormateada = "";
     var hora = "";
     const fechaInput = document.getElementById("regevento_fecha");
-    console.log(fechaInput);
+    
 
     const fechaCompleta = fechaInput ? fechaInput.value : null;
     
@@ -168,8 +168,6 @@ function enviarEvento() {
         fechaFormateada = fechaObjeto.toISOString().split("T")[0];
         hora = fechaObjeto.toTimeString().slice(0, 5);
     
-        console.log("Fecha formateada:", fechaFormateada);
-        console.log("Hora:", hora);
     }
 
     console.log(fechaCompleta, hora, fechaFormateada);
@@ -185,7 +183,6 @@ function enviarEvento() {
         estado: document.getElementById('regevento_estado').value
     };
 
-    console.log(eventoData);
     // Verificar si se ha seleccionado una imagen
     const imagenInput = document.getElementById('regevento_imagen');
     if (imagenInput.files.length > 0) {
