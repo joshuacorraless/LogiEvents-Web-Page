@@ -210,7 +210,7 @@ async function enviarEvento() {
         categoria: document.getElementById('regevento_categoria').value,
         precio: document.getElementById('regevento_precio').value,
         estado: document.getElementById('regevento_estado').value,
-        imagen: imagenUrl,
+        imagenUrl: imagenUrl,
     };
 
     console.log(eventoData);
