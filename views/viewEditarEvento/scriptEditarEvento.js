@@ -7,11 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.querySelector('.upload-area');
     const submitButton = document.querySelector('.btn-primary');
     const cancelButton = document.querySelector('.btn-secondary');
-    const imageInput = document.createElement('image');
+    const imageInput = document.createElement('input');
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
     imageInput.style.display = 'none';
-    imageInput.name = 'imagen'; // Importante para el FormData
+    imageInput.name = 'imagen';
+    imageInput.id = 'imageInput'; // Agregar ID para asociar con label
+    document.getElementById('formEditarEvento').appendChild(imageInput);
     document.body.appendChild(imageInput);
     const idEvento = sessionStorage.getItem('idEventoEditar');
     let currentImageUrl = null;
@@ -30,7 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 
     function setupEventListeners() {
-        uploadArea.addEventListener('click', handleUploadClick);
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                imageInput.click();
+            };
+        });
         imageInput.addEventListener('change', handleImageSelection);
         setupDragAndDrop();
         submitButton.addEventListener('click', handleFormSubmit);
@@ -298,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.textContent = 'Guardar Cambios';
         }
     }
-    
+
     function validateForm() {
         // Validar precio
         if (!priceInput.value || isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
