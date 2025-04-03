@@ -190,12 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Primero validar el formulario
-            if (validarFormulario()) {
-                // Si la validación pasa, registrar el administrador
                 registrarAdministrador();
-            }
         });
     }
 });
