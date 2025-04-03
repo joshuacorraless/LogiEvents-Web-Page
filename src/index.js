@@ -4,13 +4,19 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
-
+import cors from 'cors';
 
 // Routes
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import eventosRoutes from './routes/eventos.routes.js';
 import reservationsRoutes from './routes/reservations.routes.js';
+
+
+const app = express();
+// Configuración básica que permite cualquier origen
+app.use(cors());
+
 
 // Configurar variables de entorno
 dotenv.config();
@@ -25,8 +31,6 @@ cloudinary.config({
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const app = express();
 
 
 
