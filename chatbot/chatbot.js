@@ -53,7 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function enviarPregunta() {
     const pregunta = userInput.value.trim();
-    if (!pregunta) return;
+    console.log("Pregunta:", pregunta);
+    if (!pregunta) console.log("❌ No se ha ingresado una pregunta.");
 
     messagesContainer.innerHTML += `<div class="message user-message">${pregunta}</div>`;
     userInput.value = "";
