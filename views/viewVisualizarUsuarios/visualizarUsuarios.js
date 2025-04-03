@@ -25,7 +25,7 @@ $(document).ready(function() {
                             <span class="badge ${admin.tipo_usuario === 'administrador' ? 'bg-success' : 'bg-secondary'}">
                                 ${admin.tipo_usuario}
                             </span>
-                            <button class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> Editar</button>
+    
                             <button class="btn btn-danger btn-sm btn-eliminar" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#confirmDeleteModal"
