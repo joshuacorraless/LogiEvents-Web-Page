@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const data = await dfResponse.json();
-      const reply = data.squeryResult.fulfillmentText || "🤖 No entendí tu pregunta.";
+      const reply = data.queryResult.fulfillmentText || "🤖 No entendí tu pregunta.";
 
       messagesContainer.innerHTML += `<div class="message bot-message">${reply}</div>`;
     } catch (error) {
