@@ -157,8 +157,8 @@ function enviarEvento() {
 
     const fechaCompleta = formData.get("regevento_fecha");
     const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
-    const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
-    const hora = fechaObjeto.toTimeString().slice(0, 5);
+    const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
+    const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
 
     // Crear nuevo FormData con todos los campos
     const requestData = new FormData();
