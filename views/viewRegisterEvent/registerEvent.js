@@ -153,7 +153,11 @@ registerButton.addEventListener('click', function() {
 function enviarEvento() {
     const form = document.getElementById("formRegistrar");
     const formData = new FormData(form);
-
+    
+    // Mostrar todos los datos del formulario en consola
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
     const fechaCompleta = formData.get("regevento_fecha");
     const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
     const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
@@ -177,15 +181,6 @@ function enviarEvento() {
         requestData.append("imagen", imagenInput.files[0]);
     }
 
-    console.log(form);
-
-    for (let pair of requestData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
 
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
