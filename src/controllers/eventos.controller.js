@@ -45,7 +45,7 @@ export const createEventos = async (req, res) => {
   try {
     // Validaciones básicas
     if (!nombre_evento || !fecha || !ubicacion) {
-      return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios' });
+      return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios'+fecha+nombre_evento+ubicacion });
     }
 
     let imagenUrl = null;
