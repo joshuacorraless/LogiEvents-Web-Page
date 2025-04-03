@@ -88,7 +88,6 @@ export const createEventos = async (req, res) => {
 export const updateEventos = async (req, res) => {
   const { id_evento } = req.params;
   const { capacidad, ubicacion, precio } = req.body;
-
   try {
     // Verificar que el evento exista
     const [eventRows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [id_evento]);

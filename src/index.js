@@ -28,9 +28,14 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+
+
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+
 
 // Configuración de Multer (almacenamiento en memoria)
 const storage = multer.memoryStorage();
