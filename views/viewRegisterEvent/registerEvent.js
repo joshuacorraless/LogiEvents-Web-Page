@@ -149,15 +149,41 @@ registerButton.addEventListener('click', function() {
     }
 
 });
+async function subirImagenACloudinary(imagenFile) {
+    const formData = new FormData();
+    formData.append('file', imagenFile);
+    formData.append('upload_preset', 'imagenesEvento'); 
 
-function enviarEvento() {
+    try {
+        const response = await fetch('https://api.cloudinary.com/v1_1/dv9r6shcn/image/upload', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await response.json();
+        return data.secure_url; // Devuelve la URL pública de la imagen
+    } catch (error) {
+        console.error('Error al subir la imagen:', error);
+        throw error;
+    }
+}
 
+async function enviarEvento() {
+    // Verificar si se ha seleccionado una imagen
+    const imagenInput = document.getElementById('regevento_imagen');
+    if (imagenInput.files.length > 0) {
+        formData.append('regevento_imagen', imagenInput.files[0]);
+    } else {
+        // Manejar el error si la imagen no ha sido seleccionada
+        document.getElementById('imagenError').style.display = 'block';
+        return;
+    }
+    const imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
     var fechaFormateada = "";
     var hora = "";
     const fechaInput = document.getElementById("regevento_fecha");
-    
+    console.log(fechaInput);
 
     const fechaCompleta = fechaInput ? fechaInput.value : null;
     
@@ -168,9 +194,12 @@ function enviarEvento() {
         fechaFormateada = fechaObjeto.toISOString().split("T")[0];
         hora = fechaObjeto.toTimeString().slice(0, 5);
     
+        console.log("Fecha formateada:", fechaFormateada);
+        console.log("Hora:", hora);
     }
 
     console.log(fechaCompleta, hora, fechaFormateada);
+    console.log(imagenUrl);
     const eventoData = {
         nombre_evento: document.getElementById('regevento_nombre').value,
         descripcion: document.getElementById('regevento_descripcion').value,
@@ -180,18 +209,12 @@ function enviarEvento() {
         capacidad: document.getElementById('regevento_capacidad').value,
         categoria: document.getElementById('regevento_categoria').value,
         precio: document.getElementById('regevento_precio').value,
-        estado: document.getElementById('regevento_estado').value
+        estado: document.getElementById('regevento_estado').value,
+        imagen: imagenUrl,
     };
 
-    // Verificar si se ha seleccionado una imagen
-    const imagenInput = document.getElementById('regevento_imagen');
-    if (imagenInput.files.length > 0) {
-        formData.append('regevento_imagen', imagenInput.files[0]);
-    } else {
-        // Manejar el error si la imagen no ha sido seleccionada
-        document.getElementById('imagenError').style.display = 'block';
-        return;
-    }
+    console.log(eventoData);
+    
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
         headers: {
