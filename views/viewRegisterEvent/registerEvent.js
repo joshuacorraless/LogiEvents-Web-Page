@@ -155,7 +155,7 @@ function enviarEvento() {
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
 
-    const fechaCompleta = formData.get("regevento_fecha");
+    const fechaCompleta = document.getElementById("regevento_fecha");
     const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
     const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
     const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
