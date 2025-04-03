@@ -154,7 +154,8 @@ function enviarEvento() {
 
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
-
+    var fechaFormateada = "";
+    var hora = "";
     const fechaInput = document.getElementById("regevento_fecha");
     console.log(fechaInput);
 
@@ -164,8 +165,8 @@ function enviarEvento() {
         console.error("El campo de fecha está vacío.");
     } else {
         const fechaObjeto = new Date(fechaCompleta);
-        const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
-        const hora = fechaObjeto.toTimeString().slice(0, 5);
+        fechaFormateada = fechaObjeto.toISOString().split("T")[0];
+        hora = fechaObjeto.toTimeString().slice(0, 5);
     
         console.log("Fecha formateada:", fechaFormateada);
         console.log("Hora:", hora);
