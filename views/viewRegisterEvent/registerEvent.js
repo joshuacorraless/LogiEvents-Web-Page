@@ -94,7 +94,6 @@ document.getElementById('regevento_precio').addEventListener('input', function()
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener el botón de cerrar dentro del modal
     const closeButton = document.getElementById('cerrarbtn');
-    console.log(closeButton);
     // Verificar que el botón existe antes de agregar el event listener
     if (closeButton) {
         closeButton.addEventListener('click', function() {
@@ -178,7 +177,11 @@ function enviarEvento() {
         requestData.append("imagen", imagenInput.files[0]);
     }
 
-    console.log(formData);
+    console.log(form);
+
+    for (let pair of requestData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
 
     for (let pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
