@@ -28,7 +28,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-const cors = require("cors");
+//const cors = require("cors");
 
 
 // Habilitar CORS para permitir peticiones desde el frontend
