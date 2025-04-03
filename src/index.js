@@ -36,7 +36,13 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Configurar CORS correctamente
+app.use(cors({
+  origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite solicitudes desde tu frontend
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
 
 // Inicia el servidor en el puerto asignado por Railway
