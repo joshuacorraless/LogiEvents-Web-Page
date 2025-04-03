@@ -15,8 +15,12 @@ import reservationsRoutes from './routes/reservations.routes.js';
 
 const app = express();
 // Configuración básica que permite cualquier origen
-app.use(cors());
-
+app.use(cors({
+  origin: 'https://requeproyectoweb-production-3d39.up.railway.app', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
+  credentials: true
+}))
 
 // Configurar variables de entorno
 dotenv.config();
