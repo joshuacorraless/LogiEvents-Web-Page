@@ -102,3 +102,28 @@ $(document).ready(function() {
         $('#confirmCheckbox').prop('checked', false);
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const agregarEventoButton = document.getElementById("agregarAdmin");
+
+    if (agregarEventoButton) {
+        agregarEventoButton.addEventListener("click", function() {
+            // Lógica a ejecutar cuando se presiona el botón
+            console.log("Botón de agregar evento presionado");
+
+            // Redirige a la página de agregar evento
+            window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/AgregarAdmin"; 
+        });
+    }
+});
+
+function editarAdministrador(button){
+    
+    const eventId = button.getAttribute('data-id');
+
+    sessionStorage.setItem('eventoId', eventId);
+    
+    // Redirigir a otra página
+    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin'; 
+
+}
