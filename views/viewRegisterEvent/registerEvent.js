@@ -178,7 +178,11 @@ function enviarEvento() {
         requestData.append("imagen", imagenInput.files[0]);
     }
 
-    console.log(requestData);
+    console.log(formData);
+
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
 
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
