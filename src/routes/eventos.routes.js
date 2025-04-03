@@ -17,8 +17,37 @@ import {
 
 
 const router = Router();
-router.post('/eventos', upload.single('imagen'), createEventos);
-router.put('/eventos/:id_evento', upload.single('imagen'), updateEventos);
+router.post(
+    '/',
+    upload.single('imagen'),
+    (err, req, res, next) => {
+      if (err) {
+        return res.status(400).json({ 
+          message: err instanceof multer.MulterError 
+            ? `Error al subir archivo: ${err.message}` 
+            : err.message 
+        });
+      }
+      next();
+    },
+    createEventos
+  );
+  
+  router.put(
+    '/:id_evento',
+    upload.single('imagen'),
+    (err, req, res, next) => {
+      if (err) {
+        return res.status(400).json({ 
+          message: err instanceof multer.MulterError 
+            ? `Error al subir archivo: ${err.message}` 
+            : err.message 
+        });
+      }
+      next();
+    },
+    updateEventos
+  );
 router.get('/eventos', getEventos);
 
 

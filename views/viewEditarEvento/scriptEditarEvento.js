@@ -208,66 +208,63 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validación más robusta
+        // Validación mejorada con feedback específico
         if (!validateForm()) {
-            mostrarError('Por favor complete todos los campos requeridos correctamente');
-            return;
+            return; // validateForm ya muestra los errores
         }
     
         try {
-            // Deshabilitar botón y mostrar spinner
+            // Estado de carga
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 Guardando cambios...
             `;
     
-            // Crear objeto con los datos en lugar de FormData
-            const datosActualizacion = {
-                precio: priceInput.value,
-                ubicacion: locationInput.value,
-                capacidad: capacityInput.value
-            };
-    
-            // Opciones para fetch
-            const opcionesFetch = {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(datosActualizacion)
-            };
-    
-            // Si hay imagen, usar FormData especial
-            let formDataConImagen;
+            // Preparar los datos de forma consistente
+            const formData = new FormData();
+            
+            // Agregar campos de texto siempre
+            formData.append('precio', priceInput.value);
+            formData.append('ubicacion', locationInput.value);
+            formData.append('capacidad', capacityInput.value);
+            
+            // Agregar imagen solo si existe una nueva
             if (imageInput.files.length > 0) {
-                formDataConImagen = new FormData();
-                formDataConImagen.append('imagen', imageInput.files[0]);
-                formDataConImagen.append('datos', JSON.stringify(datosActualizacion));
-                
-                // Cambiar opciones para FormData
-                opcionesFetch.headers = {}; // Eliminar Content-Type para que el navegador lo establezca con boundary
-                opcionesFetch.body = formDataConImagen;
+                formData.append('imagen', imageInput.files[0]);
+            } else if (currentImageUrl) {
+                // Si no hay imagen nueva pero hay una existente
+                formData.append('imagenUrl', currentImageUrl);
+                if (cloudinaryPublicId) {
+                    formData.append('imagenPublicId', cloudinaryPublicId);
+                }
             }
     
+            // Configuración de la petición
             const response = await fetch(
                 `https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`,
-                opcionesFetch
+                {
+                    method: 'PUT',
+                    body: formData
+                    // No incluir headers 'Content-Type' para FormData
+                }
             );
     
-            const data = await response.json();
-    
+            // Manejo de respuestas
             if (!response.ok) {
-                throw new Error(data.message || 'Error al actualizar el evento');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.message || 
+                    `Error ${response.status}: ${response.statusText}`
+                );
             }
     
-            // Notificación de éxito mejorada
+            // Feedback al usuario
             await Swal.fire({
                 icon: 'success',
-                title: 'Actualización exitosa',
-                text: 'Los cambios se han guardado correctamente',
-                showConfirmButton: true,
-                confirmButtonText: 'Continuar',
+                title: '¡Actualizado!',
+                text: 'Los cambios se guardaron correctamente',
+                confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#3085d6',
                 timer: 3000
             });
@@ -280,20 +277,24 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Error en handleFormSubmit:', error);
             
-            // Mostrar error específico si está disponible
-            const mensajeError = error.message.includes('No se proporcionaron datos')
-                ? 'Complete al menos un campo para actualizar'
-                : error.message || 'Error al conectar con el servidor';
+            // Mensajes de error específicos
+            let mensajeError;
+            if (error.message.includes('No se proporcionaron datos')) {
+                mensajeError = 'Debe modificar al menos un campo';
+            } else if (error.message.includes('Failed to fetch')) {
+                mensajeError = 'Error de conexión con el servidor';
+            } else {
+                mensajeError = error.message || 'Error al guardar los cambios';
+            }
             
             mostrarError(mensajeError);
             
         } finally {
-            // Restaurar botón
+            // Restaurar estado normal del botón
             submitButton.disabled = false;
-            submitButton.innerHTML = 'Guardar Cambios';
+            submitButton.textContent = 'Guardar Cambios';
         }
     }
-
     function validateForm() {
         // Validar precio
         if (!priceInput.value || isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {

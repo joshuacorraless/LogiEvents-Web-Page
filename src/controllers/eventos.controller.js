@@ -44,14 +44,23 @@ export const createEventos = async (req, res) => {
   const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
   
   try {
+    // Validaciones básicas
+    if (!nombre_evento || !fecha || !ubicacion) {
+      return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios' });
+    }
+
     let imagenUrl = null;
     let imagenPublicId = null;
     
-    // Subir imagen a Cloudinary si existe
     if (req.file) {
-      const result = await uploadStreamToCloudinary(req.file.buffer);
-      imagenUrl = result.secure_url;
-      imagenPublicId = result.public_id;
+      try {
+        const result = await uploadStreamToCloudinary(req.file.buffer);
+        imagenUrl = result.secure_url;
+        imagenPublicId = result.public_id;
+      } catch (uploadError) {
+        console.error('Error subiendo imagen:', uploadError);
+        return res.status(500).json({ message: 'Error al subir la imagen al servidor' });
+      }
     }
 
     // Insertar en la base de datos
@@ -78,76 +87,68 @@ export const createEventos = async (req, res) => {
 };
 
 
-
 // * Actualizar un evento existente
 export const updateEventos = async (req, res) => {
-    const { id_evento } = req.params; // *ID del evento que se va a actualizar
-    const { capacidad, ubicacion, precio } = req.body;
-    const imagen = req.file ? req.file.filename : null;  // *Si se sube una nueva imagen
+  const { id_evento } = req.params;
+  const { capacidad, ubicacion, precio } = req.body;
 
-    // *Validación de los datos proporcionados
-    if (capacidad && isNaN(capacidad)) {
-        return res.status(400).json({ message: 'La capacidad debe ser un número.' });
-    }
-    if (precio && isNaN(precio)) {
-        return res.status(400).json({ message: 'El precio debe ser un número.' });
+  try {
+    // Verificar que el evento exista
+    const [eventRows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [id_evento]);
+    if (eventRows.length === 0) {
+      return res.status(404).json({ message: 'Evento no encontrado.' });
     }
 
-    //*Preparamos la consulta para actualizar los datos del evento
-    try {
-        const fieldsToUpdate = [];
-        const values = [];
+    const fieldsToUpdate = [];
+    const values = [];
 
-        // Añadir campos a la consulta solo si tienen un valor
-        if (capacidad) {
-            fieldsToUpdate.push('capacidad = ?');
-            values.push(capacidad);
-        }
-        if (ubicacion) {
-            fieldsToUpdate.push('ubicacion = ?');
-            values.push(ubicacion);
-        }
-        if (precio) {
-            fieldsToUpdate.push('precio = ?');
-            values.push(precio);
-        }
-        if (imagen) {
-            const result = await new Promise((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream(
-                    { folder: "eventos" },
-                    (error, result) => {
-                        if (error) reject(error);
-                        else resolve(result);
-                    }
-                );
-                uploadStream.end(imagen.buffer);
-            });
-
-            fieldsToUpdate.push('imagen = ?');
-            values.push(result.secure_url); // Guarda la URL de Cloudinary
-        }
-
-        // Si no hay campos para actualizar, devolver error
-        if (fieldsToUpdate.length === 0) {
-            return res.status(400).json({ message: 'No se proporcionaron datos para actualizar.' });
-        }
-
-        // Añadir el ID del evento a los valores
-        values.push(id_evento);
-
-        // Ejecutamos la consulta de actualización
-        const query = `UPDATE Evento SET ${fieldsToUpdate.join(', ')} WHERE id_evento = ?`;
-        const [result] = await pool.query(query, values);
-
-        if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Evento actualizado correctamente.' });
-        } else {
-            return res.status(404).json({ message: 'Evento no encontrado.' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al actualizar el evento.' });
+    // Manejo de imagen
+    if (req.file) {
+      try {
+        const result = await uploadStreamToCloudinary(req.file.buffer);
+        fieldsToUpdate.push('imagen = ?');
+        values.push(result.secure_url);
+      } catch (uploadError) {
+        console.error('Error subiendo imagen:', uploadError);
+        return res.status(500).json({ message: 'Error al actualizar la imagen' });
+      }
     }
+
+    // Validar y agregar otros campos
+    if (capacidad) {
+      if (isNaN(capacidad)) return res.status(400).json({ message: 'La capacidad debe ser un número.' });
+      fieldsToUpdate.push('capacidad = ?');
+      values.push(capacidad);
+    }
+    
+    if (ubicacion) {
+      fieldsToUpdate.push('ubicacion = ?');
+      values.push(ubicacion);
+    }
+    
+    if (precio) {
+      if (isNaN(precio)) return res.status(400).json({ message: 'El precio debe ser un número.' });
+      fieldsToUpdate.push('precio = ?');
+      values.push(precio);
+    }
+
+    if (fieldsToUpdate.length === 0) {
+      return res.status(400).json({ message: 'No se proporcionaron datos para actualizar.' });
+    }
+
+    values.push(id_evento);
+    const query = `UPDATE Evento SET ${fieldsToUpdate.join(', ')} WHERE id_evento = ?`;
+    const [result] = await pool.query(query, values);
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Evento actualizado correctamente.' });
+    } else {
+      return res.status(404).json({ message: 'No se pudo actualizar el evento.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar el evento.' });
+  }
 };
 
 
