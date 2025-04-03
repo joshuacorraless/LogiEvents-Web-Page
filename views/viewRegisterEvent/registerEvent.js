@@ -151,34 +151,34 @@ registerButton.addEventListener('click', function() {
 });
 
 function enviarEvento() {
-    const form = document.getElementById("formRegistrar");
-    const formData = new FormData(form);
     
-    // Mostrar todos los datos del formulario en consola
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
     const fechaCompleta = formData.get("regevento_fecha");
     const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
     const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
     const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
 
-    // Crear nuevo FormData con todos los campos
-    const requestData = new FormData();
-    requestData.append("nombre_evento", formData.get("regevento_nombre"));
-    requestData.append("descripcion", formData.get("regevento_descripcion"));
-    requestData.append("fecha", fechaFormateada);
-    requestData.append("hora", hora);
-    requestData.append("precio", formData.get("regevento_precio"));
-    requestData.append("capacidad", formData.get("regevento_capacidad"));
-    requestData.append("ubicacion", formData.get("regevento_ubicacion"));
-    requestData.append("estado", formData.get("regevento_estado"));
-    requestData.append("categoria", formData.get("regevento_categoria"));
-    
-    // Añadir la imagen si existe
+    const form = document.getElementById('formRegistrar');
+    const formData = new FormData(form);
+
+    // Agregar los datos del formulario al FormData
+    formData.append('nombre_evento', document.getElementById('regevento_nombre').value);
+    formData.append('descripcion', document.getElementById('regevento_descripcion').value);
+    formData.append('fecha', fechaFormateada);
+    formData.append('hora', hora);
+    formData.append('ubicacion', document.getElementById('regevento_ubicacion').value);
+    formData.append('capacidad', document.getElementById('regevento_capacidad').value);
+    formData.append('categoria', document.getElementById('regevento_categoria').value);
+    formData.append('precio', document.getElementById('regevento_precio').value);
+    formData.append('estado', document.getElementById('regevento_estado').value);
+
+    // Verificar si se ha seleccionado una imagen
     const imagenInput = document.getElementById('regevento_imagen');
     if (imagenInput.files.length > 0) {
-        requestData.append("imagen", imagenInput.files[0]);
+        formData.append('regevento_imagen', imagenInput.files[0]);
+    } else {
+        // Manejar el error si la imagen no ha sido seleccionada
+        document.getElementById('imagenError').style.display = 'block';
+        return;
     }
 
 
