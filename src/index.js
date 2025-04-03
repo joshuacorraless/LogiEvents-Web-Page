@@ -32,13 +32,16 @@ cloudinary.config({
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
+});
 
 
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-
 
 
 // Configuración de Multer (almacenamiento en memoria)
