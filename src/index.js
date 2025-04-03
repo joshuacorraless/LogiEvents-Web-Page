@@ -28,21 +28,21 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-
-// Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-const cors = require("cors");
+//const cors = require("cors");
 
 
 // Habilitar CORS para permitir peticiones desde el frontend
-app.use(cors({
+/*app.use(cors({
   origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite este origen
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
   allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
   credentials: true // Permite el envío de cookies o autenticación
-}));
+}));*/
+
+
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Configuración de Multer (almacenamiento en memoria)
 const storage = multer.memoryStorage();
@@ -70,6 +70,8 @@ const uploadToCloudinary = (fileBuffer, folder, publicId) => {
         stream.end(fileBuffer);
     });
 };
+
+
 
 
 app.get('/favicon.ico', (req, res) => res.status(204));
