@@ -172,12 +172,14 @@ function enviarEvento() {
     requestData.append("estado", formData.get("regevento_estado"));
     requestData.append("categoria", formData.get("regevento_categoria"));
     
-    /*// Añadir la imagen si existe
+    // Añadir la imagen si existe
     const imagenInput = document.getElementById('regevento_imagen');
     if (imagenInput.files.length > 0) {
         requestData.append("imagen", imagenInput.files[0]);
     }
-*/
+
+    console.log(requestData);
+
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
         body: requestData
