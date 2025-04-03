@@ -533,12 +533,11 @@ function confirmarEliminarAgotado(idEvento){
 }
 
 document.getElementById('agregarEvento').addEventListener('click', function() {
-    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin';
+    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/AgregarAdmin';
 });
 
 function editarAdministrador(button){
-
-
+    
     const eventId = button.getAttribute('data-id');
 
     sessionStorage.setItem('eventoId', eventId);
