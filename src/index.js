@@ -34,9 +34,6 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
 
 
 // Middlewares
@@ -280,6 +277,6 @@ app.use((req, res) => {
   res.status(404).send('No se encontro la pagina')
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
