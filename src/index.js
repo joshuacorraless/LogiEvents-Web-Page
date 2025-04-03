@@ -26,7 +26,10 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 565a2ad (cors)
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -61,6 +64,10 @@ const uploadToCloudinary = (fileBuffer, folder, publicId) => {
     });
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 565a2ad (cors)
 
 app.get('/favicon.ico', (req, res) => res.status(204));
 //Api
