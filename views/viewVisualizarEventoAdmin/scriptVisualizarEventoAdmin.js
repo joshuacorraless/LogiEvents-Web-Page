@@ -532,13 +532,14 @@ function confirmarEliminarAgotado(idEvento){
     });
 }
 
-document.getElementById('agregarEvento').addEventListener('click', function() {
-    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin';
+document.getElementById("agregarEvento").addEventListener("click", function() {
+    // Aquí pones la lógica que quieres ejecutar al hacer clic
+    console.log("Botón de agregar evento presionado");
+    window.location.href = "/agregar-evento"; // Redirige a la página de agregar evento
 });
 
 function editarAdministrador(button){
-
-
+    
     const eventId = button.getAttribute('data-id');
 
     sessionStorage.setItem('eventoId', eventId);
