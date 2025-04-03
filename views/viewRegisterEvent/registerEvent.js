@@ -170,13 +170,6 @@ async function subirImagenACloudinary(imagenFile) {
 async function enviarEvento() {
     // Verificar si se ha seleccionado una imagen
     const imagenInput = document.getElementById('regevento_imagen');
-    if (imagenInput.files.length > 0) {
-        formData.append('regevento_imagen', imagenInput.files[0]);
-    } else {
-        // Manejar el error si la imagen no ha sido seleccionada
-        document.getElementById('imagenError').style.display = 'block';
-        return;
-    }
     const imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
     const form = document.getElementById('formRegistrar');
     const formData = new FormData(form);
@@ -186,6 +179,13 @@ async function enviarEvento() {
     console.log(fechaInput);
 
     const fechaCompleta = fechaInput ? fechaInput.value : null;
+    if (imagenInput.files.length > 0) {
+        formData.append('regevento_imagen', imagenInput.files[0]);
+    } else {
+        // Manejar el error si la imagen no ha sido seleccionada
+        document.getElementById('imagenError').style.display = 'block';
+        return;
+    }
     
     if (!fechaCompleta) {
         console.error("El campo de fecha está vacío.");
