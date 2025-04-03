@@ -10,15 +10,19 @@ import {
     verifySmsWord,
     sendEmailCode,
     verifyEmailCode,
-    confirmDeleteAgotado  } from '../controllers/eventos.controller.js';
+    confirmDeleteAgotado, getEventById  } from '../controllers/eventos.controller.js';
   
 
 
 const router = Router();
 
+
 router.get('/eventos', getEventos);
 router.post('/eventos', createEventos);
 router.put('/eventos/:id_evento', updateEventos);
+
+//* NUEVA ruta para obtener un evento por ID
+router.get('/events/:id', getEventById);
 
 
 // NUEVAS rutas para el proceso de eliminación con verificación

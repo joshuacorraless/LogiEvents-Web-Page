@@ -38,6 +38,36 @@ export const getEventos = async (req, res) => {
     }
 };
 
+
+// *Función para obtener un evento por su ID
+export const getEventById = async (req, res) => {
+  try {
+    const eventId = parseInt(req.params.id);
+
+    // 1. Consulta el evento por su ID
+    const [rows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [eventId]);
+
+    // 2. Validar si existe
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Evento no encontrado' });
+    }
+
+    // 3. Retornar el primer registro (debería ser uno solo)
+    return res.json(rows[0]);
+  } catch (error) {
+    console.error('Error obteniendo el evento por ID:', error);
+    return res.status(500).json({ message: 'Error obteniendo el evento', error });
+  }
+};
+
+
+
+
+
+
+
+
+
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
   const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
