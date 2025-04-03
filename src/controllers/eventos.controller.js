@@ -2,6 +2,7 @@ import { pool } from "../db.js";
 import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
+import { upload, uploadToCloudinary } from '../config/multer.config.js'
 
 // Configuración de dotenv (asegúrate de que esté al inicio del proceso)
 dotenv.config();
@@ -39,85 +40,113 @@ export const getEventos = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-    const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
-    
+  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
   
-    try {
-      const [result] = await pool.query(
-        'INSERT INTO Evento (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado]
-      );
-      res.status(201).json({ message: 'Evento creado correctamente', evento: result });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error al crear el evento.' });
+  try {
+    // Validaciones básicas
+    if (!nombre_evento || !fecha || !ubicacion) {
+      return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios' });
     }
+
+    let imagenUrl = null;
+    let imagenPublicId = null;
+    
+    if (req.file) {
+      try {
+        const result = await uploadStreamToCloudinary(req.file.buffer);
+        imagenUrl = result.secure_url;
+        imagenPublicId = result.public_id;
+      } catch (uploadError) {
+        console.error('Error subiendo imagen:', uploadError);
+        return res.status(500).json({ message: 'Error al subir la imagen al servidor' });
+      }
+    }
+
+    // Insertar en la base de datos
+    const [dbResult] = await pool.query(
+      `INSERT INTO Evento 
+       (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
+    );
+
+    res.status(201).json({ 
+      message: 'Evento creado exitosamente',
+      id: dbResult.insertId,
+      imagen: imagenUrl
+    });
+
+  } catch (error) {
+    console.error('Error al crear evento:', error);
+    res.status(500).json({ 
+      message: 'Error al crear evento',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
 };
-
-
-
-// * Actualizar un evento existente
+//Actualizar eventos
 export const updateEventos = async (req, res) => {
-    const { id_evento } = req.params; // *ID del evento que se va a actualizar
-    const { capacidad, ubicacion, precio } = req.body;
-    const imagen = req.file ? req.file.filename : null;  // *Si se sube una nueva imagen
+  const { id_evento } = req.params;
+  const { capacidad, ubicacion, precio } = req.body;
 
-    // *Validación de los datos proporcionados
-    if (capacidad && isNaN(capacidad)) {
-        return res.status(400).json({ message: 'La capacidad debe ser un número.' });
-    }
-    if (precio && isNaN(precio)) {
-        return res.status(400).json({ message: 'El precio debe ser un número.' });
+  try {
+    // Verificar que el evento exista
+    const [eventRows] = await pool.query('SELECT * FROM Evento WHERE id_evento = ?', [id_evento]);
+    if (eventRows.length === 0) {
+      return res.status(404).json({ message: 'Evento no encontrado.' });
     }
 
-    //*Preparamos la consulta para actualizar los datos del evento
-    try {
-        const fieldsToUpdate = [];
-        const values = [];
+    const fieldsToUpdate = [];
+    const values = [];
 
-        // Añadir campos a la consulta solo si tienen un valor
-        if (capacidad) {
-            fieldsToUpdate.push('capacidad = ?');
-            values.push(capacidad);
-        }
-        if (ubicacion) {
-            fieldsToUpdate.push('ubicacion = ?');
-            values.push(ubicacion);
-        }
-        if (precio) {
-            fieldsToUpdate.push('precio = ?');
-            values.push(precio);
-        }
-        if (imagen) {
-            fieldsToUpdate.push('imagen = ?');
-            values.push('uploads/eventos/' + imagen); // Ruta relativa de la imagen
-        }
-
-        // Si no hay campos para actualizar, devolver error
-        if (fieldsToUpdate.length === 0) {
-            return res.status(400).json({ message: 'No se proporcionaron datos para actualizar.' });
-        }
-
-        // Añadir el ID del evento a los valores
-        values.push(id_evento);
-
-        // Ejecutamos la consulta de actualización
-        const query = `UPDATE Evento SET ${fieldsToUpdate.join(', ')} WHERE id_evento = ?`;
-        const [result] = await pool.query(query, values);
-
-        if (result.affectedRows > 0) {
-            return res.status(200).json({ message: 'Evento actualizado correctamente.' });
-        } else {
-            return res.status(404).json({ message: 'Evento no encontrado.' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al actualizar el evento.' });
+    // Manejo de imagen
+    if (req.file) {
+      try {
+        const result = await uploadStreamToCloudinary(req.file.buffer);
+        fieldsToUpdate.push('imagen = ?');
+        values.push(result.secure_url);
+      } catch (uploadError) {
+        console.error('Error subiendo imagen:', uploadError);
+        return res.status(500).json({ message: 'Error al actualizar la imagen' });
+      }
     }
+
+    // Validar y agregar otros campos
+    if (capacidad) {
+      if (isNaN(capacidad)) return res.status(400).json({ message: 'La capacidad debe ser un número.' });
+      fieldsToUpdate.push('capacidad = ?');
+      values.push(capacidad);
+    }
+    
+    if (ubicacion) {
+      fieldsToUpdate.push('ubicacion = ?');
+      values.push(ubicacion);
+    }
+    
+    if (precio) {
+      if (isNaN(precio)) return res.status(400).json({ message: 'El precio debe ser un número.' });
+      fieldsToUpdate.push('precio = ?');
+      values.push(precio);
+    }
+
+    if (fieldsToUpdate.length === 0) {
+      return res.status(400).json({ message: 'No se proporcionaron datos para actualizar.' });
+    }
+
+    values.push(id_evento);
+    const query = `UPDATE Evento SET ${fieldsToUpdate.join(', ')} WHERE id_evento = ?`;
+    const [result] = await pool.query(query, values);
+
+    if (result.affectedRows > 0) {
+      return res.status(200).json({ message: 'Evento actualizado correctamente.' });
+    } else {
+      return res.status(404).json({ message: 'No se pudo actualizar el evento.' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al actualizar el evento.' });
+  }
 };
-
-
-
 //* Objeto en memoria para almacenar los códigos de verificación de eliminación
 // *(en producción podrías guardarlos en una tabla de la DB)
 const deletionCodes = {};

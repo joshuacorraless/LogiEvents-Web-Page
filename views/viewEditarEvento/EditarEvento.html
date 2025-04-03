@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <form id="formRegistrar" enctype="multipart/form-data"></form>
     <title>Registrar Administradores</title>
 
         <!--ALERTAS-->
@@ -70,7 +71,7 @@
                     </ul>
 
                     <div class="sidebar-footer">
-                        <a href="https://requeproyectoweb-production-3d39.up.railway.app/" class="sidebar-link">
+                        <a href="https://requeproyectoweb-production-3d39.up.railway.app/" class="sidebar-link" id="loginLink">
                             <img src="../ICONOS/USUARIO/SALIS.svg" alt="Icono">
                             <span>Logout</span>
                         </a>
@@ -121,9 +122,9 @@
                                             <p class="text-muted mb-3">Arrastra tu imagen aquí o haz clic para seleccionar</p>
                                             <button class="btn btn-outline-secondary">Subir imagen</button>
                                         </div>
+                                        <input type="file" id="imageInput" name="imagen" accept="image/*" style="display: none;">
                                     </div>
-                                    
-                                   
+                                
                                 </div>
                             </div>
                             

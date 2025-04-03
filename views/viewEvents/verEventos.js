@@ -22,12 +22,12 @@ fetch('https://requeproyectoweb-production.up.railway.app/api/eventos')
 		data.map((product) => {
 			const { id_evento, nombre_evento, precio, imagen, estado,fecha } = product;
 			mostPopProducts.innerHTML += `
-        <div class="product-card" data-product-id="${id_evento}">
-					<div class="product-card__container">
-						<div class="product-card__img">
-							<img src="/uploads/eventos/${imagen}" alt="${nombre_evento}" />
-						</div>
-					</div>
+       <div class="product-card" data-product-id="${id_evento}">
+        <div class="product-card__container">
+            <div class="product-card__img">
+                <img src="${imagen}" alt="${nombre_evento}" />
+            </div>
+        </div>
 					<div class="product-card__description">
 						<div class="product-card__text fw-bold fs-4">${nombre_evento}</div>
 						<div class="product-card__price">${estado}</div>

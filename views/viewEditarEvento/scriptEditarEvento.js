@@ -11,9 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
     imageInput.style.display = 'none';
+    imageInput.name = 'imagen'; // Importante para el FormData
     document.body.appendChild(imageInput);
+    
     const idEvento = sessionStorage.getItem('idEventoEditar');
     let currentImageUrl = null;
+    let cloudinaryPublicId = null; // Para almacenar el public_id de la imagen en Cloudinary
 
     if (!idEvento) {
         mostrarError('No se encontró el ID del evento', 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin');
@@ -26,9 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarDatosEvento(idEvento);
     setupEventListeners();
 
-    
     function setupEventListeners() {
-
         uploadArea.addEventListener('click', handleUploadClick);
         imageInput.addEventListener('change', handleImageSelection);
         setupDragAndDrop();
@@ -40,19 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function cargarDatosEvento(id) {
         try {
-            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${id}`);
-            
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
+            const eventoSeleccionado = eventos.find(e => e.id_evento == id);
+    
+            if (eventoSeleccionado) {
+                console.log("Evento encontrado:", eventoSeleccionado);
+                updateUIWithEventData(eventoSeleccionado);
+            } else {
+                console.log("Evento no encontrado.");
             }
-            
-            const evento = await response.json();
-            //actualizar datos
-            updateUIWithEventData(evento);
-            
         } catch (error) {
-            console.error('Error al cargar el evento:', error);
-            mostrarError('No se pudo cargar la información del evento', '/EventosAdmin');
+            console.error("Error al cargar el evento:", error);
         }
     }
 
@@ -66,6 +65,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mostrar imagen si existe
         if (evento.imagenUrl) {
             currentImageUrl = evento.imagenUrl;
+            
+            // Extraer el public_id de la URL de Cloudinary
+            // Si el evento ya tiene un public_id guardado, usarlo
+            if (evento.imagenPublicId) {
+                cloudinaryPublicId = evento.imagenPublicId;
+            } else {
+                // Intentar extraer el public_id de la URL
+                try {
+                    // Las URLs de Cloudinary suelen seguir este patrón:
+                    // https://res.cloudinary.com/cloud_name/image/upload/v1234567890/folder/filename.ext
+                    const urlRegex = /\/v\d+\/(.+)\.\w+$/;
+                    const match = evento.imagenUrl.match(urlRegex);
+                    
+                    if (match && match[1]) {
+                        cloudinaryPublicId = match[1]; // folder/filename
+                    }
+                } catch (error) {
+                    console.warn('No se pudo extraer el public_id de la URL:', error);
+                    // Continuamos sin el public_id, lo que significa que no podremos eliminar
+                    // la imagen antigua si el usuario sube una nueva
+                }
+            }
+            
             showImagePreview(evento.imagenUrl);
         }
     }
@@ -101,8 +123,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            currentImageUrl = null; // Reseteamos la URL si suben nueva imagen
+            // Mostrar vista previa localmente
             showImagePreview(URL.createObjectURL(file));
+            
+            // Cambiar estado para indicar que hay una nueva imagen
+            currentImageUrl = null;
+            cloudinaryPublicId = null;
         }
     }
 
@@ -165,6 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             currentImageUrl = null;
+            cloudinaryPublicId = null;
             showImagePreview(URL.createObjectURL(file));
             imageInput.files = dt.files; // Asignar el archivo al input
         }
@@ -173,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showImagePreview(imageSrc) {
         uploadArea.innerHTML = `
             <img src="${imageSrc}" class="img-thumbnail mb-2" style="max-height: 200px;">
-            <button class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
             <p class="small text-muted mt-1">Tamaño máximo: 5MB</p>
         `;
     }
@@ -181,86 +208,93 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validar formulario
-        if (!validateForm()) return;
-        
+        // Validación mejorada con feedback específico
+        if (!validateForm()) {
+            return; // validateForm ya muestra los errores
+        }
+    
         try {
-            // Mostrar loading en el botón
+            // Estado de carga
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                Guardando...
+                Guardando cambios...
             `;
-            
-            // Preparar datos para enviar
+    
+            // Preparar los datos de forma consistente
             const formData = new FormData();
+            
+            // Agregar campos de texto siempre
             formData.append('precio', priceInput.value);
             formData.append('ubicacion', locationInput.value);
             formData.append('capacidad', capacityInput.value);
             
-            // Manejo de imágenes
+            // Agregar imagen solo si existe una nueva
             if (imageInput.files.length > 0) {
-                // Subir nueva imagen primero
-                const uploadResponse = await fetch('https://requeproyectoweb-production-3d39.up.railway.app/upload', {
-                    method: 'POST',
-                    body: (() => {
-                        const fd = new FormData();
-                        fd.append('imagen', imageInput.files[0]);
-                        return fd;
-                    })()
-                });
-                
-                if (!uploadResponse.ok) {
-                    throw new Error('Error al subir la nueva imagen');
-                }
-                
-                const uploadResult = await uploadResponse.json();
-                formData.append('imagenUrl', uploadResult.url);
+                formData.append('imagen', imageInput.files[0]);
             } else if (currentImageUrl) {
-                // Mantener la imagen existente
+                // Si no hay imagen nueva pero hay una existente
                 formData.append('imagenUrl', currentImageUrl);
-            } else {
-                // No hay imagen seleccionada ni existente
-                throw new Error('Debes seleccionar una imagen para el evento');
+                if (cloudinaryPublicId) {
+                    formData.append('imagenPublicId', cloudinaryPublicId);
+                }
             }
-            
-            // Enviar datos al servidor
-            const response = await fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
-                method: 'PUT',
-                headers: {
-                    'Accept': 'application/json',
-                },
-                body: formData
-            });
-            
+    
+            // Configuración de la petición
+            const response = await fetch(
+                `https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`,
+                {
+                    method: 'PUT',
+                    body: formData
+                    // No incluir headers 'Content-Type' para FormData
+                }
+            );
+    
+            // Manejo de respuestas
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.message || 
+                    `Error ${response.status}: ${response.statusText}`
+                );
             }
-            
-            const result = await response.json();
-            
-            // Mostrar mensaje de éxito
+    
+            // Feedback al usuario
             await Swal.fire({
                 icon: 'success',
-                title: '¡Éxito!',
-                text: 'Evento actualizado correctamente',
-                confirmButtonText: 'Aceptar'
+                title: '¡Actualizado!',
+                text: 'Los cambios se guardaron correctamente',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6',
+                timer: 3000
             });
-            
-            // Redirigir a la lista de eventos
-            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
-            
+    
+            // Redirección con retraso para mejor UX
+            setTimeout(() => {
+                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
+            }, 500);
+    
         } catch (error) {
-            console.error('Error al actualizar el evento:', error);
-            mostrarError(error.message || 'Ocurrió un error al actualizar el evento');
+            console.error('Error en handleFormSubmit:', error);
+            
+            // Mensajes de error específicos
+            let mensajeError;
+            if (error.message.includes('No se proporcionaron datos')) {
+                mensajeError = 'Debe modificar al menos un campo';
+            } else if (error.message.includes('Failed to fetch')) {
+                mensajeError = 'Error de conexión con el servidor';
+            } else {
+                mensajeError = error.message || 'Error al guardar los cambios';
+            }
+            
+            mostrarError(mensajeError);
+            
         } finally {
-            // Restaurar botón
+            // Restaurar estado normal del botón
             submitButton.disabled = false;
             submitButton.textContent = 'Guardar Cambios';
         }
     }
-
     function validateForm() {
         // Validar precio
         if (!priceInput.value || isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
@@ -315,5 +349,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = redirectUrl;
             }
         });
+    }
+
+    // Función para obtener los eventos desde la API
+    async function obtenerEventos() {
+        try {
+            const respuesta = await fetch("https://requeproyectoweb-production.up.railway.app/api/eventos");
+            if (!respuesta.ok) {
+                throw new Error("Error al obtener los eventos");
+            }
+            return await respuesta.json();
+        } catch (error) {
+            console.error("Error al cargar los eventos:", error);
+            return [];
+        }
     }
 });

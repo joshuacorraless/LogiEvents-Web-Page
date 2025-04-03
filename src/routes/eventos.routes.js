@@ -1,4 +1,6 @@
 import { Router } from "express";
+import {upload} from "../config/multer.config.js";
+
 import {
     getEventos,
     createEventos,
@@ -15,10 +17,39 @@ import {
 
 
 const router = Router();
+router.post(
+    '/',
+    upload.single('imagen'),
+    (err, req, res, next) => {
+      if (err) {
+        return res.status(400).json({ 
+          message: err.message.includes('Tipo de archivo') 
+            ? 'Solo se permiten imágenes JPEG, PNG o WEBP' 
+            : 'El archivo es demasiado grande (máx. 5MB)' 
+        });
+      }
+      next();
+    },
+    createEventos
+  );
+  
+  router.put(
+    '/:id_evento',
+    upload.single('imagen'),
+    (err, req, res, next) => {
+      if (err) {
+        return res.status(400).json({ 
+          message: err.message.includes('Tipo de archivo') 
+            ? 'Solo se permiten imágenes JPEG, PNG o WEBP' 
+            : 'El archivo es demasiado grande (máx. 5MB)' 
+        });
+      }
+      next();
+    },
+    updateEventos
+  );
+  
 
-router.get('/eventos', getEventos);
-router.post('/eventos', createEventos);
-router.put('/eventos/:id_evento', updateEventos);
 
 
 // NUEVAS rutas para el proceso de eliminación con verificación

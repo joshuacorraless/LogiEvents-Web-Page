@@ -151,93 +151,64 @@ registerButton.addEventListener('click', function() {
 
 });
 
-function enviarEvento(){
-
+function enviarEvento() {
     const form = document.getElementById("formRegistrar");
-    //recoleccion de datos
     const formData = new FormData(form);
 
-    const fechaCompleta = formData.get("regevento_fecha"); // Obtiene el valor en formato YYYY-MM-DDTHH:MM
-    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null; // Convierte a objeto Date
+    const fechaCompleta = formData.get("regevento_fecha");
+    const fechaObjeto = fechaCompleta ? new Date(fechaCompleta) : null;
+    const fechaFormateada = fechaObjeto ? fechaObjeto.toISOString().split("T")[0] : '';
+    const hora = fechaObjeto ? fechaObjeto.toTimeString().slice(0, 5) : '';
 
-    // Formato YYYY-MM-DD
-    const fechaFormateada = fechaObjeto.toISOString().split("T")[0];
+    // Crear nuevo FormData con todos los campos
+    const requestData = new FormData();
+    requestData.append("nombre_evento", formData.get("regevento_nombre"));
+    requestData.append("descripcion", formData.get("regevento_descripcion"));
+    requestData.append("fecha", fechaFormateada);
+    requestData.append("hora", hora);
+    requestData.append("precio", formData.get("regevento_precio"));
+    requestData.append("capacidad", formData.get("regevento_capacidad"));
+    requestData.append("ubicacion", formData.get("regevento_ubicacion"));
+    requestData.append("estado", formData.get("regevento_estado"));
+    requestData.append("categoria", formData.get("regevento_categoria"));
+    
+    // Añadir la imagen si existe
+    const imagenInput = document.getElementById('regevento_imagen');
+    if (imagenInput.files.length > 0) {
+        requestData.append("imagen", imagenInput.files[0]);
+    }
 
-    // Formato HH:MM
-    const hora = fechaObjeto.toTimeString().slice(0, 5);
-
-
-    const data = {
-        nombre_evento: formData.get("regevento_nombre"),
-        descripcion: formData.get("regevento_descripcion"),
-        fecha: fechaFormateada, // Fecha formateada
-        hora: hora, // Hora formateada
-        precio: formData.get("regevento_precio"),
-        capacidad: formData.get("regevento_capacidad"),
-        ubicacion: formData.get("regevento_ubicacion"),
-        estado: formData.get("regevento_estado"),
-        categoria: formData.get("regevento_categoria"),
-        imagen: formData.get("regevento_imagen").name // Esto devuelve el archivo si hay uno
-    };
-
-    console.log(data); // Para verificar los datos antes de enviarlos
-
-
-    fetch(`https://requeproyectoweb-production.up.railway.app/api/Eventos`, {
-        method: "POST", // Enviar como POST
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
+        method: "POST",
+        body: requestData
     })
     .then(response => {
         if (!response.ok) {
-            // Si la respuesta no es ok, lanza un error con el mensaje recibido del servidor
             return response.json().then(errorData => {
-                throw new Error(errorData.message); // Lanza el error con el mensaje del servidor
+                throw new Error(errorData.message);
             });
         }
-        return response.json(); // Si la respuesta es ok, continua
+        return response.json();
     })
     .then(data => {
         console.log("Evento Registrado:", data);
-        subirImagen();
-        // Muestra una alerta de éxito
         Swal.fire({
             icon: 'success',
             title: '¡Evento registrado correctamente!',
             text: 'Los cambios se guardaron con éxito.',
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#b99725',
-        }).then(() => {
-            window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin';
         });
-        
-        
-    
     })
     .catch(error => {
-        // Muestra una alerta de error
+        console.error("Error:", error);
         Swal.fire({
-            icon: 'error',  // Icono de error
+            icon: 'error',
             title: '¡Ups!',
-            text: error.message,  // Muestra el mensaje de error
+            text: error.message,
             confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#b99725',  // Color del botón
+            confirmButtonColor: '#b99725',
         });
     });
-
 }
 
-function subirImagen() {
-    const inputFile = document.getElementById("regevento_imagen");
-    const formData = new FormData();
-    formData.append("imagen", inputFile.files[0]);
-    console.log(inputFile.files[0]),
-    fetch("https://requeproyectoweb-production-3d39.up.railway.app/upload", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => console.log(res))
-    .catch(error => console.error("Error:", error));
-}

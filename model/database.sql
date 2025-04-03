@@ -22,7 +22,7 @@ CREATE TABLE Evento (
     categoria VARCHAR(50),
     precio DECIMAL(10,2) NOT NULL,
     imagen VARCHAR(255),
-    estado ENUM('Agotado','Activo','Próximamente') NOT NULL
+    estado ENUM('Agotado','Activo','Proximamente') NOT NULL
 );
 
 CREATE TABLE Reservacion (

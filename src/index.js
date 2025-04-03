@@ -2,43 +2,67 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
-dotenv.config();
 
 
-
+// Routes
 import usuariosRoutes from './routes/usuarios.routes.js';
 import indexRoutes from './routes/index.routes.js';
 import eventosRoutes from './routes/eventos.routes.js';
 import reservationsRoutes from './routes/reservations.routes.js';
 
+// Configurar variables de entorno
+dotenv.config();
+
+// Configuración de Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+    secure: true // Forzar HTTPS
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 const app = express();
 
-
-// Configurar Multer para guardar con el nombre original en 'uploads/eventos/'
-const storage = multer.diskStorage({
-  destination: "uploads/eventos/",
-  filename: (req, file, cb) => {
-      cb(null, file.originalname); // Agrega timestamp para evitar duplicados
-  },
-});
-
-const upload = multer({ storage });
-
-app.post("/upload", upload.single("imagen"), (req, res) => {
-  if (!req.file) {
-      return res.status(400).send("No se envió ninguna imagen.");
-  }
-  res.send("Imagen guardada en: " + req.file.path);
-});
-
+// Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Configuración de Multer (almacenamiento en memoria)
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: multer.memoryStorage(), // Usa memoria en lugar de disco
+  limits: { fileSize: 10 * 1024 * 1024 } // Límite de 10MB
+});
 
 
+// Función para subir imágenes a Cloudinary
+const uploadToCloudinary = (fileBuffer, folder, publicId) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: folder,
+                public_id: publicId,
+                overwrite: true,
+                resource_type: 'auto'
+            },
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            }
+        );
+        stream.end(fileBuffer);
+    });
+};
+
+
+
+app.get('/favicon.ico', (req, res) => res.status(204));
+//Api
 app.use('/api', eventosRoutes)
 app.use('/api',usuariosRoutes)
 app.use('/api',indexRoutes)
