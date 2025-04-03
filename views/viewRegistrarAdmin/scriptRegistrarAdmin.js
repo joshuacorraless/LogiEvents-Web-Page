@@ -91,27 +91,41 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Función para registrar administrador
-    function registrarAdministrador() {
+    function registrarAdministrador(event) {
+        event.preventDefault(); // Previene el envío tradicional del formulario
+        
         const form = document.getElementById("formRegister");
-
-    if (!form) {
-        console.error("Formulario no encontrado");
-        return;
-    }
-    const formData = new FormData(form);
-    console.log(form);
+        
+        if (!form) {
+            console.error("Formulario no encontrado");
+            return;
+        }
+    
+        console.log(form);
         const adminData = {
-            nombre_completo: formData.getElementById('reg_nombre').value,
-            identificacion: formData.getElementById('reg_identificacion').value,
-            correo: formData.getElementById('reg_email').value,
-            telefono: formData.getElementById('reg_numTelefono').value,
-            rol: formData.getElementById('rol').value,
-            id_usuario: formData.getElementById('id').value,
-            username: formData.getElementById('reg_usuario').value,
-            password: formData.getElementById('password').value,
+            nombre_completo: document.getElementById('reg_nombre').value,
+            identificacion: document.getElementById('reg_identificacion').value,
+            correo: document.getElementById('reg_email').value,
+            telefono: document.getElementById('reg_numTelefono').value,
+            rol: document.getElementById('rol').value,
+            id_usuario: document.getElementById('id').value,
+            username: document.getElementById('reg_usuario').value,
+            password: document.getElementById('password').value,
             tipo_usuario: 'Administrador'
         };
-
+    
+        // Validación básica de campos requeridos
+        if (!adminData.nombre_completo || !adminData.identificacion || !adminData.correo || 
+            !adminData.telefono || !adminData.rol || !adminData.id_usuario || 
+            !adminData.username || !adminData.password) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Todos los campos son obligatorios',
+                icon: 'error'
+            });
+            return;
+        }
+    
         // Mostrar loading
         Swal.fire({
             title: 'Registrando administrador',
@@ -121,8 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.showLoading();
             }
         });
-        console.log(adminData);
-
+    
         // Enviar datos al servidor
         fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios', {
             method: 'POST',
@@ -133,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
+                return response.json().then(err => { throw new Error(err.message || 'Error en el servidor'); });
             }
             return response.json();
         })
@@ -143,9 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 text: 'Administrador registrado correctamente',
                 icon: 'success'
             }).then(() => {
-                // Limpiar formulario después de registro exitoso
                 form.reset();
-                // Redirigir o hacer otra acción
+                // Redirigir si es necesario
                 // window.location.href = 'visualizarAdministradores.html';
             });
         })
@@ -153,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'No se pudo registrar el administrador: ' + error.message,
+                text: 'No se pudo registrar el administrador: ' + (error.message || 'Error desconocido'),
                 icon: 'error'
             });
         });
