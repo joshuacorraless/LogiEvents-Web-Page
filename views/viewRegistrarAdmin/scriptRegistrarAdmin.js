@@ -92,84 +92,79 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para registrar administrador
     function registrarAdministrador(event) {
-        event.preventDefault(); // Previene el envío tradicional del formulario
-        
-        const form = document.getElementById("formRegister");
-        
-        if (!form) {
-            console.error("Formulario no encontrado");
-            return;
-        }
-    
-        console.log(form);
-        const adminData = {
-            nombre_completo: document.getElementById('reg_nombre').value,
-            identificacion: document.getElementById('reg_identificacion').value,
-            correo: document.getElementById('reg_email').value,
-            telefono: document.getElementById('reg_numTelefono').value,
-            rol: document.getElementById('rol').value,
-            id_usuario: document.getElementById('id').value,
-            username: document.getElementById('reg_usuario').value,
-            password: document.getElementById('password').value,
-            tipo_usuario: 'Administrador'
-        };
-    
-        // Validación básica de campos requeridos
-        if (!adminData.nombre_completo || !adminData.identificacion || !adminData.correo || 
-            !adminData.telefono || !adminData.rol || !adminData.id_usuario || 
-            !adminData.username || !adminData.password) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Todos los campos son obligatorios',
-                icon: 'error'
-            });
-            return;
-        }
-    
-        // Mostrar loading
-        Swal.fire({
-            title: 'Registrando administrador',
-            html: 'Por favor espere...',
-            allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
+        function registrarAdministrador() {
+            // Obtener el formulario
+            const form = document.getElementById("formRegister");
+            
+            if (!form) {
+                console.error("Formulario no encontrado");
+                return false; // Importante para prevenir envío si hay error
             }
-        });
-    
-        // Enviar datos al servidor
-        fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(adminData)
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message || 'Error en el servidor'); });
-            }
-            return response.json();
-        })
-        .then(data => {
+        
+            // Crear objeto con los datos del formulario
+            const adminData = {
+                nombre_completo: document.getElementById('reg_nombre').value.trim(),
+                identificacion: document.getElementById('reg_identificacion').value.trim(),
+                correo: document.getElementById('reg_email').value.trim(),
+                telefono: document.getElementById('reg_numTelefono').value.trim(),
+                rol: document.getElementById('rol').value.trim(),
+                id_usuario: document.getElementById('id').value.trim(),
+                username: document.getElementById('reg_usuario').value.trim(),
+                password: document.getElementById('password').value,
+                tipo_usuario: 'Administrador'
+            };
+        
+            // Mostrar loading
             Swal.fire({
-                title: '¡Éxito!',
-                text: 'Administrador registrado correctamente',
-                icon: 'success'
-            }).then(() => {
-                form.reset();
-                // Redirigir si es necesario
-                // window.location.href = 'visualizarAdministradores.html';
+                title: 'Registrando administrador',
+                html: 'Por favor espere...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-                title: 'Error',
-                text: 'No se pudo registrar el administrador: ' + (error.message || 'Error desconocido'),
-                icon: 'error'
+        
+            // Enviar datos al servidor
+            fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(adminData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { 
+                        throw new Error(err.message || 'Error en la respuesta del servidor'); 
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Administrador registrado correctamente',
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6'
+                }).then(() => {
+                    form.reset();
+                    // Redirigir si es necesario
+                    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/VerAdmins';
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo registrar el administrador: ' + (error.message || 'Error desconocido'),
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
             });
-        });
-    }
+        
+            return false; // Previene el envío tradicional del formulario
+        }
+    };
 
     // Botón cancelar
     document.querySelector('.btn-secondary').addEventListener('click', function() {
