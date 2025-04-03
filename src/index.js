@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
-
+import cors from "cors";
 
 // Routes
 import usuariosRoutes from './routes/usuarios.routes.js';
@@ -33,19 +33,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const express = require("express");
-const cors = require("cors");
 
-const PORT = process.env.PORT || 3000; // Railway asigna un puerto dinámico
+const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-  origin: "https://requeproyectoweb-production-3d39.up.railway.app",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-}));
-
-app.use(express.json()); // Asegura que puedes recibir JSON
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Servidor funcionando en Railway 🚀");
