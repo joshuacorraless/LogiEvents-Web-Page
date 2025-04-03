@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }*/
 
         fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
-            method: "POST",
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json'  // Asegúrarse de especificar que es JSON
             },
