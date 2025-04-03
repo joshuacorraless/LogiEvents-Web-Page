@@ -200,7 +200,7 @@ function enviarEvento() {
         headers: {
             'Content-Type': 'application/json'  // Asegúrarse de especificar que es JSON
         },
-        body: eventoData
+        body: JSON.stringify(eventoData)
     })
     .then(response => {
         if (!response.ok) {
