@@ -23,9 +23,9 @@ router.post(
     (err, req, res, next) => {
       if (err) {
         return res.status(400).json({ 
-          message: err instanceof multer.MulterError 
-            ? `Error al subir archivo: ${err.message}` 
-            : err.message 
+          message: err.message.includes('Tipo de archivo') 
+            ? 'Solo se permiten imágenes JPEG, PNG o WEBP' 
+            : 'El archivo es demasiado grande (máx. 5MB)' 
         });
       }
       next();
@@ -39,16 +39,16 @@ router.post(
     (err, req, res, next) => {
       if (err) {
         return res.status(400).json({ 
-          message: err instanceof multer.MulterError 
-            ? `Error al subir archivo: ${err.message}` 
-            : err.message 
+          message: err.message.includes('Tipo de archivo') 
+            ? 'Solo se permiten imágenes JPEG, PNG o WEBP' 
+            : 'El archivo es demasiado grande (máx. 5MB)' 
         });
       }
       next();
     },
     updateEventos
   );
-router.get('/eventos', getEventos);
+  
 
 
 

@@ -1,9 +1,8 @@
 import { pool } from "../db.js";
-import { uploadStreamToCloudinary } from '../config/multer.config.js';
 import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
-
+import { upload, uploadToCloudinary } from '../config/multer.config.js'
 
 // Configuración de dotenv (asegúrate de que esté al inicio del proceso)
 dotenv.config();
@@ -85,9 +84,7 @@ export const createEventos = async (req, res) => {
     });
   }
 };
-
-
-// * Actualizar un evento existente
+//Actualizar eventos
 export const updateEventos = async (req, res) => {
   const { id_evento } = req.params;
   const { capacidad, ubicacion, precio } = req.body;
@@ -150,9 +147,6 @@ export const updateEventos = async (req, res) => {
     res.status(500).json({ message: 'Error al actualizar el evento.' });
   }
 };
-
-
-
 //* Objeto en memoria para almacenar los códigos de verificación de eliminación
 // *(en producción podrías guardarlos en una tabla de la DB)
 const deletionCodes = {};
