@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('.card-body');
+    const form = document.getElementById('formEditarEvento');
     const titleElement = document.querySelector('.title');
     const priceInput = document.getElementById('precio');
     const locationInput = document.getElementById('ubicacion');
@@ -7,16 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const uploadArea = document.querySelector('.upload-area');
     const submitButton = document.querySelector('.btn-primary');
     const cancelButton = document.querySelector('.btn-secondary');
-    const imageInput = document.createElement('input');
+    const imageInput = document.createElement('image');
     imageInput.type = 'file';
     imageInput.accept = 'image/*';
     imageInput.style.display = 'none';
     imageInput.name = 'imagen'; // Importante para el FormData
     document.body.appendChild(imageInput);
-    
     const idEvento = sessionStorage.getItem('idEventoEditar');
     let currentImageUrl = null;
     let cloudinaryPublicId = null; // Para almacenar el public_id de la imagen en Cloudinary
+    
 
     if (!idEvento) {
         mostrarError('No se encontró el ID del evento', 'https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin');
@@ -199,18 +199,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showImagePreview(imageSrc) {
         uploadArea.innerHTML = `
-            <img src="${imageSrc}" class="img-thumbnail mb-2" style="max-height: 200px;">
-            <button type="button" class="btn btn-outline-secondary btn-sm">Cambiar imagen</button>
-            <p class="small text-muted mt-1">Tamaño máximo: 5MB</p>
+            <img src="${imageSrc}" class="img-thumbnail mb-2 preview-image">
+            <button type="button" class="btn btn-outline-secondary btn-sm change-image">
+                Cambiar imagen
+            </button>
         `;
+        
+        // Agrega event listener al nuevo botón
+        document.querySelector('.change-image').addEventListener('click', () => {
+            imageInput.click();
+        });
     }
 
     async function handleFormSubmit(e) {
         e.preventDefault();
         
-        // Validación mejorada con feedback específico
+        // Validación del formulario
         if (!validateForm()) {
-            return; // validateForm ya muestra los errores
+            return;
         }
     
         try {
@@ -221,19 +227,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 Guardando cambios...
             `;
     
-            // Preparar los datos de forma consistente
-            const formData = new FormData();
+            // Preparar FormData usando el formulario real y agregando campos adicionales
+            const formData = new FormData(document.getElementById('formEditarEvento'));
             
-            // Agregar campos de texto siempre
-            formData.append('precio', priceInput.value);
-            formData.append('ubicacion', locationInput.value);
-            formData.append('capacidad', capacityInput.value);
+            // Agregar campos adicionales que no están en el formulario
+            formData.append('id_evento', idEvento);
             
-            // Agregar imagen solo si existe una nueva
+            // Manejo especial de la imagen
             if (imageInput.files.length > 0) {
                 formData.append('imagen', imageInput.files[0]);
             } else if (currentImageUrl) {
-                // Si no hay imagen nueva pero hay una existente
                 formData.append('imagenUrl', currentImageUrl);
                 if (cloudinaryPublicId) {
                     formData.append('imagenPublicId', cloudinaryPublicId);
@@ -295,6 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.textContent = 'Guardar Cambios';
         }
     }
+    
     function validateForm() {
         // Validar precio
         if (!priceInput.value || isNaN(priceInput.value) || parseFloat(priceInput.value) <= 0) {
