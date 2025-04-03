@@ -2,14 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('formEditarEvento');
     const uploadArea = document.getElementById('uploadArea');
     const imageInput = document.getElementById('imageInput');
-    const submitBtn = document.getElementById('submitBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     const idEvento = sessionStorage.getItem('idEventoEditar');
 
     // Configurar eventos
     uploadArea.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageSelection);
-    form.addEventListener('submit', handleFormSubmit);
     cancelBtn.addEventListener('click', confirmCancel);
 
     // Cargar datos del evento si existe ID
