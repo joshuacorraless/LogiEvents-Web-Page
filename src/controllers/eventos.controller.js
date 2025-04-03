@@ -40,7 +40,7 @@ export const getEventos = async (req, res) => {
 
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
+  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagen } = req.body;
   
   try {
     // Validaciones básicas
@@ -48,26 +48,12 @@ export const createEventos = async (req, res) => {
       return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios' });
     }
 
-    let imagenUrl = null;
-    let imagenPublicId = null;
-    
-    if (req.file) {
-      try {
-        const result = await uploadStreamToCloudinary(req.file.buffer);
-        imagenUrl = result.secure_url;
-        imagenPublicId = result.public_id;
-      } catch (uploadError) {
-        console.error('Error subiendo imagen:', uploadError);
-        return res.status(500).json({ message: 'Error al subir la imagen al servidor' });
-      }
-    }
-
     // Insertar en la base de datos
     const [dbResult] = await pool.query(
       `INSERT INTO Evento 
        (nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagenUrl, estado]
+      [nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, imagen, estado]
     );
 
     res.status(201).json({ 
