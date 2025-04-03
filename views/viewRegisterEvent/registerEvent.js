@@ -183,10 +183,14 @@ function enviarEvento() {
         return;
     }
 
+    // Mostrar los datos del FormData
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+    }
 
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
-        body: requestData
+        body: formData
     })
     .then(response => {
         if (!response.ok) {
