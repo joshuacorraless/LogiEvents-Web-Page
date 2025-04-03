@@ -129,6 +129,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: '#b99725',
             });
+            .then(() => {
+                // Redirigir a otra vista después de que el usuario haga clic en "Aceptar"
+                window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/EventosAdmin";  
+            });
         })
         .catch(error => {
             console.error("Error:", error);
