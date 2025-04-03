@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput.value = "";
 
     try {
-      const tokenResponse = await fetch("http://localhost:4000/token");
+      const tokenResponse = await fetch("https://requeproyectoweb-production-2f69.up.railway.app/token");
       const tokenData = await tokenResponse.json();
       const token = tokenData.token;
 
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       const data = await dfResponse.json();
-      const reply = data.squeryResult.fulfillmentText || "🤖 No entendí tu pregunta.";
+      const reply = data.queryResult.fulfillmentText || "🤖 No entendí tu pregunta.";
 
       messagesContainer.innerHTML += `<div class="message bot-message">${reply}</div>`;
     } catch (error) {
