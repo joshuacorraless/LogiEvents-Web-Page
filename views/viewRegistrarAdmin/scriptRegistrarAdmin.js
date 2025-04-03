@@ -92,16 +92,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Función para registrar administrador
     function registrarAdministrador() {
+        const form = document.getElementById("formRegister");
+
+    if (!form) {
+        console.error("Formulario no encontrado");
+        return;
+    }
+    const formData = new FormData(form);
+    console.log(form);
         const adminData = {
-            nombre_completo: document.getElementById('reg_nombre').value,
-            identificacion: document.getElementById('reg_identificacion').value,
-            correo: document.getElementById('reg_email').value,
-            telefono: document.getElementById('reg_numTelefono').value,
-            rol: document.getElementById('rol').value,
-            id_usuario: document.getElementById('id').value,
-            username: document.getElementById('reg_usuario').value,
-            password: passwordInput.value,
-            tipo_usuario: 'administrador'
+            nombre_completo: formData.getElementById('reg_nombre').value,
+            identificacion: formData.getElementById('reg_identificacion').value,
+            correo: formData.getElementById('reg_email').value,
+            telefono: formData.getElementById('reg_numTelefono').value,
+            rol: formData.getElementById('rol').value,
+            id_usuario: formData.getElementById('id').value,
+            username: formData.getElementById('reg_usuario').value,
+            password: formData.getElementById('password').value,
+            tipo_usuario: 'Administrador'
         };
 
         // Mostrar loading
@@ -113,6 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 Swal.showLoading();
             }
         });
+        console.log(adminData);
 
         // Enviar datos al servidor
         fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios', {
@@ -164,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 form.reset();
-                window.location.href = 'https://requeproyectoweb-production.up.railway.app/api/VerAdmins';
+                window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/VerAdmins';
             }
         });
     });
