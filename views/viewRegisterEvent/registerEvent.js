@@ -180,9 +180,6 @@ function enviarEvento() {
 
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",  // Indicar que los datos enviados son JSON
-        },
         body: requestData
     })
     .then(response => {
