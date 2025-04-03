@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Validar identificación (formato: 0-0000-0000)
         const identificacion = document.getElementById('reg_identificacion');
-        const idRegex = /^\d-\d{4}-\d{4}$/;
+        const idRegex = /^\d{9}$/;
         if (!idRegex.test(identificacion.value)) {
             document.getElementById('identificacionError').style.display = 'block';
             valido = false;
