@@ -185,6 +185,7 @@ function enviarEvento() {
         estado: document.getElementById('regevento_estado').value
     };
 
+    console.log(eventoData);
     // Verificar si se ha seleccionado una imagen
     const imagenInput = document.getElementById('regevento_imagen');
     if (imagenInput.files.length > 0) {
