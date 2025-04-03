@@ -15,12 +15,8 @@ import reservationsRoutes from './routes/reservations.routes.js';
 
 const app = express();
 // Configuración básica que permite cualquier origen
-app.use(cors({
-  origin: 'https://requeproyectoweb-production-3d39.up.railway.app', 
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
-  credentials: true
-}))
+app.use(cors());
+
 
 // Configurar variables de entorno
 dotenv.config();
@@ -279,8 +275,6 @@ app.use((req, res) => {
   res.status(404).send('No se encontro la pagina')
 });
 
-const port = process.env.PORT || 3000;
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
 });
