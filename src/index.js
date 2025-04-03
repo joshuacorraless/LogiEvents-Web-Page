@@ -32,12 +32,12 @@ const cors = require("cors");
 
 
 // Habilitar CORS para permitir peticiones desde el frontend
-/*app.use(cors({
+app.use(cors({
   origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite este origen
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
   allowedHeaders: ["Content-Type", "Authorization"], // Encabezados permitidos
   credentials: true // Permite el envío de cookies o autenticación
-}));*/
+}));
 
 
 // Middlewares
