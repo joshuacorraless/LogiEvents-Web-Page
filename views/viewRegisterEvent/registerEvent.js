@@ -173,16 +173,17 @@ function enviarEvento() {
     }
 
     console.log(fechaCompleta, hora, fechaFormateada);
-    // Agregar los datos del formulario al FormData
-    formData.append('nombre_evento', document.getElementById('regevento_nombre').value);
-    formData.append('descripcion', document.getElementById('regevento_descripcion').value);
-    formData.append('fecha', fechaFormateada);
-    formData.append('hora', hora);
-    formData.append('ubicacion', document.getElementById('regevento_ubicacion').value);
-    formData.append('capacidad', document.getElementById('regevento_capacidad').value);
-    formData.append('categoria', document.getElementById('regevento_categoria').value);
-    formData.append('precio', document.getElementById('regevento_precio').value);
-    formData.append('estado', document.getElementById('regevento_estado').value);
+    const eventoData = {
+        nombre_evento: document.getElementById('regevento_nombre').value,
+        descripcion: document.getElementById('regevento_descripcion').value,
+        fecha: fechaFormateada,
+        hora: hora,
+        ubicacion: document.getElementById('regevento_ubicacion').value,
+        capacidad: document.getElementById('regevento_capacidad').value,
+        categoria: document.getElementById('regevento_categoria').value,
+        precio: document.getElementById('regevento_precio').value,
+        estado: document.getElementById('regevento_estado').value
+    };
 
     // Verificar si se ha seleccionado una imagen
     const imagenInput = document.getElementById('regevento_imagen');
@@ -193,15 +194,9 @@ function enviarEvento() {
         document.getElementById('imagenError').style.display = 'block';
         return;
     }
-
-    // Mostrar los datos del FormData
-    for (let [key, value] of formData.entries()) {
-        console.log(`${key}:`, value);
-    }
-
     fetch("https://requeproyectoweb-production.up.railway.app/api/eventos", {
         method: "POST",
-        body: formData
+        body: eventoData
     })
     .then(response => {
         if (!response.ok) {
