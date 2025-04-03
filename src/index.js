@@ -28,9 +28,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-const cors = require("cors");
-
-
 // Habilitar CORS para permitir peticiones desde el frontend
 app.use(cors({
   origin: "https://requeproyectoweb-production-3d39.up.railway.app", // Permite este origen
@@ -71,6 +68,7 @@ const uploadToCloudinary = (fileBuffer, folder, publicId) => {
     });
 };
 
+const cors = require("cors");
 
 
 
