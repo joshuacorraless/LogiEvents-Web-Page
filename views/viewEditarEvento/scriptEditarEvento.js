@@ -14,7 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
     if (idEvento) {
         cargarDatosEvento(idEvento);
     }
-
+    async function subirImagenACloudinary(imagenFile) {
+        const formData = new FormData();
+        formData.append('file', imagenFile);
+        formData.append('upload_preset', 'imagenesEvento'); 
+    
+        try {
+            const response = await fetch('https://api.cloudinary.com/v1_1/dv9r6shcn/image/upload', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            return data.secure_url; // Devuelve la URL pública de la imagen
+        } catch (error) {
+            console.error('Error al subir la imagen:', error);
+            throw error;
+        }
+    }
+    
     async function cargarDatosEvento(id) {
         try {
             const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
@@ -31,10 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('ubicacion').value = evento.ubicacion || '';
             document.getElementById('capacidad').value = evento.capacidad || '';
             
-           /* // Mostrar imagen si existe
+            // Mostrar imagen si existe
             if (evento.imagenUrl) {
                 showImagePreview(evento.imagenUrl);
-            }*/
+            }
         } catch (error) {
             console.error('Error:', error);
             Swal.fire('Error', 'No se pudo cargar el evento', 'error');
@@ -85,25 +102,29 @@ document.addEventListener('DOMContentLoaded', function() {
         updateEvento();
     });
 
-    function updateEvento() {
+    async function updateEvento() {
 
-        if (!validateForm()) return;
+    const imagenInput = document.getElementById('regevento_imagen');
+    const imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
+    const form = document.getElementById('formRegistrar');
+    const formData = new FormData(form);
+    if (imagenInput.files.length > 0) {
+        formData.append('regevento_imagen', imagenInput.files[0]);
+    } else {
+        // Manejar el error si la imagen no ha sido seleccionada
+        document.getElementById('imagenError').style.display = 'block';
+        return;
+    }
+    console.log(imagenUrl);
+    const eventoData = {
+        ubicacion: document.getElementById('regevento_ubicacion').value,
+        capacidad: document.getElementById('regevento_capacidad').value,
+        precio: document.getElementById('regevento_precio').value,
+        imagenUrl: imagenUrl,
+    };
 
-        const eventoData = {
-            ubicacion: document.getElementById('ubicacion').value,
-            capacidad: document.getElementById('capacidad').value,
-            precio: document.getElementById('precio').value
-        };
+    console.log(eventoData);
     
-        /*// Verificar si se ha seleccionado una imagen
-        const imagenInput = document.getElementById('regevento_imagen');
-        if (imagenInput.files.length > 0) {
-            formData.append('regevento_imagen', imagenInput.files[0]);
-        } else {
-            // Manejar el error si la imagen no ha sido seleccionada
-            document.getElementById('imagenError').style.display = 'block';
-            return;
-        }*/
 
         fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
             method: "PUT",
