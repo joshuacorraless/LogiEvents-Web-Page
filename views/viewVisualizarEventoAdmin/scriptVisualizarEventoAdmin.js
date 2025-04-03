@@ -85,7 +85,7 @@ function cargarEventos() {
                         </span>
                     </td>
                     <td>
-                        <button class="btn btn-primary btn-sm btn-editar" data-id="${evento.id_evento}" onclick= editarAdministrador(this)>
+                        <button class="btn btn-primary btn-sm btn-editar" data-id="${evento.id_evento}">
                             <i class="bi bi-pencil"></i> Editar
                         </button>
                         <button class="btn btn-danger btn-sm btn-eliminar" data-id="${evento.id_evento}" data-status="${evento.estado}">
@@ -530,30 +530,4 @@ function confirmarEliminarAgotado(idEvento){
             icon: 'error'
         });
     });
-}
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    const agregarEventoButton = document.getElementById("agregarEvento");
-
-    if (agregarEventoButton) {
-        agregarEventoButton.addEventListener("click", function() {
-            // Lógica a ejecutar cuando se presiona el botón
-            console.log("Botón de agregar evento presionado");
-
-            // Redirige a la página de agregar evento
-            window.location.href = "https://requeproyectoweb-production-3d39.up.railway.app/AgregarAdmin"; 
-        });
-    }
-});
-
-function editarAdministrador(button){
-    
-    const eventId = button.getAttribute('data-id');
-
-    sessionStorage.setItem('eventoId', eventId);
-    
-    // Redirigir a otra página
-    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin'; 
-
 }
