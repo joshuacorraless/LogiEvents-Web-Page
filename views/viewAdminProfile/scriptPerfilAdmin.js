@@ -4,7 +4,7 @@
 var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
-if (!idUser || !tipoUsuario || (tipoUsuario !== "usuario" && tipoUsuario !== "administrador")) {
+if (!idUser || !tipoUsuario || tipoUsuario !== "administrador") {
     window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login'; 
 }
 
@@ -151,13 +151,3 @@ function traerUsuario() {
         console.error('Error al obtener los datos:', error);
     });
 }
-
-function generarNotificacion() {
-    // Usar template literals para interpolar el valor de nombreEvento
-    const notification = [
-      { title: 'Acabas de realizar una modificacion en tus datos!', description: `Si no fuiste tu, contactanos!` }
-    ];
-    console.log(222);
-    // Guardar la notificación en sessionStorage
-    sessionStorage.setItem('notifications', JSON.stringify(notification));
-  }
