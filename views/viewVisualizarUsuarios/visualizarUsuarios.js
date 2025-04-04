@@ -70,7 +70,6 @@
         if ($('#confirmCheckbox').is(':checked')) {
             const userId = $(this).data('userId');
             
-            // Usar la misma URL base que en tus solicitudes PUT
             fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
                 method: "DELETE",
                 headers: {
@@ -92,7 +91,7 @@
                     icon: 'success'
                 }).then(() => {
                     $('#confirmDeleteModal').modal('hide');
-                    traerAdministradores();  // Asegúrate que esta función existe
+                    traerAdministradores();
                 });
             })
             .catch(error => {
