@@ -103,129 +103,7 @@ $(document).ready(function() {
             });
         }
     });
-    // Configurar eventos para los botones de editar
-function configurarBotonesEditar() {
-    document.querySelectorAll('.btn-editar').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const userId = this.getAttribute('data-id');
-            const correo = this.getAttribute('data-correo');
-            const telefono = this.getAttribute('data-telefono');
-            
-            // Guardar ID en sessionStorage
-            sessionStorage.setItem('adminIdEditar', userId);
-            
-            // Establecer valores en el modal
-            const correoInput = document.getElementById('correo');
-            const telefonoInput = document.getElementById('telefono');
-            
-            // Limpiar cualquier valor previo
-            correoInput.value = '';
-            telefonoInput.value = '';
-            
-            // Asignar nuevos valores
-            setTimeout(() => {
-                correoInput.value = correo;
-                telefonoInput.value = telefono;
-                
-                // Asegurarnos de que los campos sean editables
-                correoInput.removeAttribute('readonly');
-                telefonoInput.removeAttribute('readonly');
-                
-                // Enfocar el campo de correo para iniciar edición
-                correoInput.focus();
-            }, 300); // Pequeño retraso para asegurar que el modal esté completamente visible
-            
-            // Asegurar que el botón guarde cambios use el ID correcto
-            document.getElementById('btnGuardarUsuarioM').setAttribute('data-user-id', userId);
-        });
-    });
-}
 
-// Código para inicializar el modal y asegurar que sea interactivo
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('modificarUsuarioModal');
-    
-    if (modal) {
-        // Asegurar que el modal sea interactivo al abrirse
-        modal.addEventListener('shown.bs.modal', function() {
-            const correoInput = document.getElementById('correo');
-            const telefonoInput = document.getElementById('telefono');
-            
-            // Asegurarnos que los campos sean editables
-            correoInput.removeAttribute('readonly');
-            telefonoInput.removeAttribute('readonly');
-            
-            // Hacer focus en el campo de correo
-            correoInput.focus();
-        });
-    }
-    
-    // Inicializar evento para el botón de guardar
-    const btnGuardar = document.getElementById('btnGuardarUsuarioM');
-    if (btnGuardar) {
-        btnGuardar.addEventListener('click', function() {
-            const userId = this.getAttribute('data-user-id') || sessionStorage.getItem('adminIdEditar');
-            const correo = document.getElementById('correo').value;
-            const telefono = document.getElementById('telefono').value;
-            
-            if (!correo || !telefono) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Todos los campos son obligatorios',
-                    confirmButtonText: 'Entendido'
-                });
-                return;
-            }
-            
-            const data = {
-                correo: correo,
-                telefono: telefono
-            };
-            
-            fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message || 'Error al actualizar el usuario');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Usuario actualizado correctamente!',
-                    text: 'Los cambios se guardaron con éxito.',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#b99725',
-                });
-                
-                // Cerrar el modal usando Bootstrap
-                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('modificarUsuarioModal'));
-                if (modalInstance) {
-                    modalInstance.hide();
-                }
-                traerAdministradores();
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: '¡Ups!',
-                    text: error.message,
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#b99725',
-                });
-            });
-        });
-    }
-});
     // Pasar el ID del usuario al modal cuando se hace clic en eliminar
     $(document).on('click', '.btn-eliminar', function() {
         const userId = $(this).data('id');
@@ -233,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#confirmCheckbox').prop('checked', false);
     });
 });
-
 
 document.addEventListener("DOMContentLoaded", function() {
     const agregarEventoButton = document.getElementById("agregarAdmin");
@@ -248,7 +125,83 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+function modalload() {
+    const form = document.getElementById("formModificarUsuario");
+    const btnGuardar = document.getElementById("btnGuardarUsuarioM");
 
+    btnGuardar.addEventListener("click", function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(form);
+        const userId = sessionStorage.getItem('adminIdEditar');
+
+        const data = {
+            correo: formData.get("correo"),
+            telefono: formData.get("telefono")
+        };
+
+        fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Usuario actualizado correctamente!',
+                text: 'Los cambios se guardaron con éxito.',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+            
+            $('#modificarUsuarioModal').modal('hide');
+            traerAdministradores();
+            generarNotificacion();
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Ups!',
+                text: error.message,
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+        });
+    });
+}
+// Configuración del botón modificar
+function btnModificar() {
+    document.querySelectorAll('.btn-editar').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const correo = this.getAttribute('data-correo');
+            const telefono = this.getAttribute('data-telefono');
+            const userId = this.getAttribute('data-id');
+            
+            sessionStorage.setItem('adminIdEditar', userId);
+            document.getElementById('correo').value = correo;
+            document.getElementById('telefono').value = telefono;
+
+            const modal = document.getElementById('modificarUsuarioModal');
+            modal.addEventListener('shown.bs.modal', function() {
+                modal.removeAttribute('inert');
+            });
+            
+            modal.addEventListener('hidden.bs.modal', function() {
+                modal.setAttribute('inert', 'true');
+            });
+        });
+    });
+}
 function editarAdministrador(button){
     
     const eventId = button.getAttribute('data-id');
@@ -256,5 +209,12 @@ function editarAdministrador(button){
     sessionStorage.setItem('eventoId', eventId);
     
     // Redirigir a otra página
-    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin';
+    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin'; 
+
 }
+window.onload = function() {
+    traerAdministradores();
+    modalload();
+    btnModificar();
+    configurarEliminacion();
+};

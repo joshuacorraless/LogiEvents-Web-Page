@@ -140,13 +140,13 @@
             </div>
         </div>
     </div>
-    <!--modal para modificar usuarios-->
-    <div class="modal fade" id="modificarUsuarioModal" tabindex="-1" aria-labelledby="modificarUsuarioModalLabel" >
+    <!-- Modal para modificar usuarios -->
+    <div class="modal fade" id="modificarUsuarioModal" tabindex="-1" aria-hidden="true" inert>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-light">
-                    <h5 class="modal-title fw-bold" id="modificarUsuarioModalLabel">
-                        <i class="bi bi-person-gear me-2"></i>Modificar Datos personales
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi bi-person-gear me-2"></i>Modificar Administrador
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -154,24 +154,24 @@
                     <div class="alert alert-info mb-4">
                         <div class="d-flex align-items-center">
                             <i class="bi bi-info-circle-fill me-2"></i>
-                            <h6 class="mb-0">Cambio de Credenciales</h6>
+                            <h6 class="mb-0">Actualización de datos</h6>
                         </div>
                     </div>
                     
-                    <form id="formModificarUsuario" method="POST" enctype="multipart/form-data">
+                    <form id="formModificarUsuario">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="correo" class="form-label">Correo electrónico</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" class="form-control" id="correo" placeholder="usuario@ejemplo.com" name="correo">
+                                    <input type="email" class="form-control" id="correo" name="correo" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label for="telefono" class="form-label">Teléfono</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                    <input type="tel" class="form-control" id="telefono" placeholder="+1234567890" name="telefono">
+                                    <input type="tel" class="form-control" id="telefono" name="telefono" required>
                                 </div>
                             </div>
                         </div>

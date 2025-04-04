@@ -209,20 +209,26 @@ body {
     margin-right: 10px;
 }
 
-/* Estilos para el modal de editar usuario */
+/* Estilos para el modal de modificar usuario */
 #modificarUsuarioModal .modal-header {
-    border-bottom-color: #f0f0f0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+#modificarUsuarioModal .modal-title {
+    color: #343a40;
+    font-weight: 600;
 }
 
 #modificarUsuarioModal .modal-footer {
     justify-content: space-between;
-    padding: 1rem 1.5rem;
 }
 
 #btnGuardarUsuarioM {
     background-color: #b99725;
     color: white;
     border: none;
+    padding: 8px 20px;
 }
 
 #btnGuardarUsuarioM:hover {
@@ -231,7 +237,53 @@ body {
     border: 2px solid #80c235 !important;
 }
 
-/* Espaciado entre botones en la tabla */
-.btn-editar {
-    margin-right: 5px;
+.btn-outline-secondary.rounded-pill {
+    padding: 8px 20px;
+}
+
+.confirm-modal .modal-content {
+    border-radius: 10px;
+}
+
+.confirm-modal .modal-header {
+    background-color: #000d49;
+    color: white;
+}
+
+.confirm-modal .btn-close {
+    background-color: white;
+}
+
+.confirm-modal .btn-cancel {
+    background-color: #a39800;
+    color: white;
+}
+
+.confirm-modal .btn-confirm {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Modal de modificación (igual al PerfilAdmin) */
+#modificarUsuarioModal .modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+#modificarUsuarioModal .alert-info {
+    background-color: #e7f5ff;
+    border-color: #d0ebff;
+    color: #055160;
+}
+
+#btnGuardarUsuarioM {
+    background-color: #b99725;
+    color: white;
+    border: none;
+    transition: all 0.3s;
+}
+
+#btnGuardarUsuarioM:hover {
+    background-color: white !important;
+    color: #80c235 !important;
+    border: 2px solid #80c235 !important;
 }
