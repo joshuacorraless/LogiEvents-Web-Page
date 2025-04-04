@@ -29,8 +29,6 @@ $(document).ready(function() {
                                     data-bs-toggle="modal" 
                                     data-bs-target="#modificarUsuarioModal"
                                     data-id="${admin.id_usuario}"
-                                    data-correo="${admin.correo || ''}"
-                                    data-telefono="${admin.telefono || ''}">
                                 <i class="bi bi-pencil"></i> Editar
                             </button>
     
@@ -128,112 +126,83 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Variable para almacenar temporalmente el ID del usuario a editar
-let usuarioEditandoId = null;
+$(document).on('click', '.btn-editar', function() {
+    const userId = $(this).data('id');
+    const correo = $(this).data('correo');
+    const telefono = $(this).data('telefono');
+    
+    // Almacenar el ID temporalmente (alternativa a sessionStorage)
+    $('#btnGuardarUsuarioM').data('userId', userId);
+    
+    // Llenar los campos del modal
+    $('#correo').val(correo);
+    $('#telefono').val(telefono);
+    
+    // Mostrar el modal
+    $('#modificarUsuarioModal').modal('show');
+});
 
-function modalload() {
-    const form = document.getElementById("formModificarUsuario");
-    const btnGuardar = document.getElementById("btnGuardarUsuarioM");
-
-    btnGuardar.addEventListener("click", function(event) {
-        event.preventDefault();
-        
-        if (!usuarioEditandoId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'No se ha seleccionado un usuario para editar',
-                confirmButtonText: 'Aceptar'
+// Configurar el botón de guardar cambios
+$('#btnGuardarUsuarioM').click(function() {
+    const userId = $(this).data('userId');
+    const correo = $('#correo').val();
+    const telefono = $('#telefono').val();
+    
+    if (!correo || !telefono) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Todos los campos son obligatorios',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+    
+    const data = {
+        correo: correo,
+        telefono: telefono
+    };
+    
+    fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || 'Error al actualizar el usuario');
             });
-            return;
         }
-
-        const formData = new FormData(form);
-        const data = {
-            correo: formData.get("correo"),
-            telefono: formData.get("telefono")
-        };
-
-        fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${usuarioEditandoId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw new Error(errorData.message);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Usuario actualizado correctamente!',
-                text: 'Los cambios se guardaron con éxito.',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#b99725',
-            });
-            
-            // Cerrar el modal usando Bootstrap
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modificarUsuarioModal'));
-            if (modal) {
-                modal.hide();
-            }
-            
-            traerAdministradores();
-            generarNotificacion();
-            
-            // Limpiar el ID después de guardar
-            usuarioEditandoId = null;
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: '¡Ups!',
-                text: error.message,
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: '#b99725',
-            });
+        return response.json();
+    })
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Usuario actualizado correctamente!',
+            text: 'Los cambios se guardaron con éxito.',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',
+        });
+        
+        // Cerrar el modal
+        $('#modificarUsuarioModal').modal('hide');
+        
+        // Actualizar la tabla
+        traerAdministradores();
+    })
+    .catch(error => {
+        Swal.fire({
+            icon: 'error',
+            title: '¡Ups!',
+            text: error.message,
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#b99725',
         });
     });
-}
-
-// Configuración del botón modificar
-function btnModificar() {
-    document.querySelectorAll('.btn-editar').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const correo = this.getAttribute('data-correo');
-            const telefono = this.getAttribute('data-telefono');
-            const userId = this.getAttribute('data-id');
-            
-            // Guardar el ID en la variable temporal
-            usuarioEditandoId = userId;
-            
-            // Llenar los campos del modal
-            document.getElementById('correo').value = correo || '';
-            document.getElementById('telefono').value = telefono || '';
-            
-            // Mostrar el modal usando Bootstrap 5
-            const modal = new bootstrap.Modal(document.getElementById('modificarUsuarioModal'));
-            modal.show();
-            
-            // Configurar eventos para el modal
-            const modalElement = document.getElementById('modificarUsuarioModal');
-            modalElement.addEventListener('shown.bs.modal', function() {
-                modalElement.removeAttribute('inert');
-                document.getElementById('correo').focus();
-            });
-            
-            modalElement.addEventListener('hidden.bs.modal', function() {
-                modalElement.setAttribute('inert', 'true');
-                usuarioEditandoId = null; // Limpiar al cerrar
-            });
-        });
-    });
-}
+});
 function editarAdministrador(button){
     
     const eventId = button.getAttribute('data-id');
