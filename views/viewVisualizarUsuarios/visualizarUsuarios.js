@@ -74,7 +74,9 @@
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                }
+                },
+                body: JSON.stringify(data),
+                
             })
             .then(response => {
                 if (!response.ok) {
@@ -133,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// Variable para almacenar temporalmente el ID del usuario a editar
+
 $(document).on('click', '.btn-editar', function() {
     const userId = $(this).data('id');
     const correo = $(this).data('correo');
