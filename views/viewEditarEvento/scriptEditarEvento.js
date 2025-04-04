@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('capacidad').value = evento.capacidad || '';
             
             // Mostrar imagen si existe
-            if (evento.imagenUrl) {
-                showImagePreview(evento.imagenUrl);
+            if (evento.imagen) {
+                showImagePreview(evento.imagen);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -104,23 +104,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function updateEvento() {
 
-    const imagenInput = document.getElementById('regevento_imagen');
-    const imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
-    const form = document.getElementById('formRegistrar');
-    const formData = new FormData(form);
-    if (imagenInput.files.length > 0) {
-        formData.append('regevento_imagen', imagenInput.files[0]);
-    } else {
-        // Manejar el error si la imagen no ha sido seleccionada
-        document.getElementById('imagenError').style.display = 'block';
-        return;
-    }
+    const imagenInput = document.getElementById('imageInput');
+    let imagenUrl = ""; // Declarar la variable fuera del if
+
+    if (imagenInput.files[0]) { 
+        try {
+            imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
+        } catch (error) {
+            console.error("Error al subir la imagen:", error);
+            document.getElementById('imagenError').style.display = 'block';
+            return;
+        }
+        
+    } 
+
     console.log(imagenUrl);
+
     const eventoData = {
-        ubicacion: document.getElementById('regevento_ubicacion').value,
-        capacidad: document.getElementById('regevento_capacidad').value,
-        precio: document.getElementById('regevento_precio').value,
-        imagenUrl: imagenUrl,
+        ubicacion: document.getElementById('ubicacion').value,
+        capacidad: document.getElementById('capacidad').value,
+        precio: document.getElementById('precio').value,
+        ...(imagenUrl && { imagenUrl: imagenUrl })
     };
 
     console.log(eventoData);
