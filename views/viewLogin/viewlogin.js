@@ -91,7 +91,7 @@ function validarLogin(){
         Swal.fire({
         icon: 'info',  // Icono de error
         title: '¡Ups!',
-        text: error.message,  // Muestra el mensaje de error
+        text: "Credenciales incorrectas",  // Muestra el mensaje de error
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#D4AF37',  // Color del botón
         });
