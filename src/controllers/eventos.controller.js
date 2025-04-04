@@ -126,6 +126,10 @@ export const updateEventos = async (req, res) => {
       fieldsToUpdate.push('precio = ?');
       values.push(precio);
     }
+    if(imagenUrl){
+      fieldsToUpdate.push('imagen=?')
+      values.push(imagenUrl)
+    }
 
     if (fieldsToUpdate.length === 0) {
       return res.status(400).json({ message: 'No se proporcionaron datos para actualizar.' });
