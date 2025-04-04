@@ -70,27 +70,37 @@
         if ($('#confirmCheckbox').is(':checked')) {
             const userId = $(this).data('userId');
             
-            $.ajax({
-                url: '/usuarios',
-                type: 'DELETE',
-                data: { id: userId },
-                success: function(response) {
-                    Swal.fire({
-                        title: '¡Eliminado!',
-                        text: 'El administrador ha sido eliminado correctamente',
-                        icon: 'success'
-                    }).then(() => {
-                        $('#confirmDeleteModal').modal('hide');
-                        cargarTablaAdministradores();
-                    });
-                },
-                error: function(xhr) {
-                    Swal.fire({
-                        title: 'Error',
-                        text: xhr.responseJSON?.message || 'Error al eliminar',
-                        icon: 'error'
+            // Usar la misma URL base que en tus solicitudes PUT
+            fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Error al eliminar el usuario');
                     });
                 }
+                return response.json();
+            })
+            .then(data => {
+                Swal.fire({
+                    title: '¡Eliminado!',
+                    text: 'El administrador ha sido eliminado correctamente',
+                    icon: 'success'
+                }).then(() => {
+                    $('#confirmDeleteModal').modal('hide');
+                    traerAdministradores();  // Asegúrate que esta función existe
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: error.message || 'Error al eliminar',
+                    icon: 'error'
+                });
             });
         } else {
             Swal.fire({
