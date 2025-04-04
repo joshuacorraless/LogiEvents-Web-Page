@@ -25,6 +25,14 @@ $(document).ready(function() {
                             <span class="badge ${admin.tipo_usuario === 'administrador' ? 'bg-success' : 'bg-secondary'}">
                                 ${admin.tipo_usuario}
                             </span>
+                            <button class="btn btn-primary btn-sm btn-editar" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modificarUsuarioModal"
+                                    data-id="${admin.id_usuario}"
+                                    data-correo="${admin.correo || ''}"
+                                    data-telefono="${admin.telefono || ''}">
+                                <i class="bi bi-pencil"></i> Editar
+                            </button>
     
                             <button class="btn btn-danger btn-sm btn-eliminar" 
                                     data-bs-toggle="modal" 
@@ -32,6 +40,7 @@ $(document).ready(function() {
                                     data-id="${admin.id_usuario}">
                                 <i class="bi bi-trash"></i> Eliminar
                             </button>
+                            <button class>
                         </td>
                     `;
                     
@@ -94,6 +103,87 @@ $(document).ready(function() {
             });
         }
     });
+     // Configurar eventos para los botones de editar
+     function configurarBotonesEditar() {
+        document.querySelectorAll('.btn-editar').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const correo = this.getAttribute('data-correo');
+                const telefono = this.getAttribute('data-telefono');
+                
+                // Guardar ID en sessionStorage
+                sessionStorage.setItem('adminIdEditar', userId);
+                
+                // Establecer valores en el modal
+                document.getElementById('correo').value = correo;
+                document.getElementById('telefono').value = telefono;
+                
+                // Asegurar que el botón guarde cambios use el ID correcto
+                document.getElementById('btnGuardarUsuarioM').setAttribute('data-user-id', userId);
+            });
+        });
+    }
+
+    // Manejar el evento de guardado de cambios
+    document.getElementById('btnGuardarUsuarioM').addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id') || sessionStorage.getItem('adminIdEditar');
+        const correo = document.getElementById('correo').value;
+        const telefono = document.getElementById('telefono').value;
+        
+        if (!correo || !telefono) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Todos los campos son obligatorios',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+        
+        const data = {
+            correo: correo,
+            telefono: telefono
+        };
+        
+        fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Usuario actualizado correctamente!',
+                text: 'Los cambios se guardaron con éxito.',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+            
+            // Cerrar el modal y refrescar la tabla
+            $('#modificarUsuarioModal').modal('hide');
+            traerAdministradores();
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Ups!',
+                text: error.message,
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#b99725',
+            });
+        });
+    });
+
 
     // Pasar el ID del usuario al modal cuando se hace clic en eliminar
     $(document).on('click', '.btn-eliminar', function() {
@@ -102,6 +192,7 @@ $(document).ready(function() {
         $('#confirmCheckbox').prop('checked', false);
     });
 });
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const agregarEventoButton = document.getElementById("agregarAdmin");
@@ -124,6 +215,5 @@ function editarAdministrador(button){
     sessionStorage.setItem('eventoId', eventId);
     
     // Redirigir a otra página
-    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin'; 
-
+    window.location.href = 'https://requeproyectoweb-production.up.railway.app/AgregarAdmin';
 }

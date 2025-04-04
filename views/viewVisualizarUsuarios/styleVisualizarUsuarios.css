@@ -208,3 +208,30 @@ body {
 .confirm-checkbox .form-check-input {
     margin-right: 10px;
 }
+
+/* Estilos para el modal de editar usuario */
+#modificarUsuarioModal .modal-header {
+    border-bottom-color: #f0f0f0;
+}
+
+#modificarUsuarioModal .modal-footer {
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+}
+
+#btnGuardarUsuarioM {
+    background-color: #b99725;
+    color: white;
+    border: none;
+}
+
+#btnGuardarUsuarioM:hover {
+    background-color: #ffffff !important;
+    color: #80c235 !important;
+    border: 2px solid #80c235 !important;
+}
+
+/* Espaciado entre botones en la tabla */
+.btn-editar {
+    margin-right: 5px;
+}
