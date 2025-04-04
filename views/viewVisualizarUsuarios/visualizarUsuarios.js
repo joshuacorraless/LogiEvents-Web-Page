@@ -125,6 +125,11 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+
+// Variable para almacenar temporalmente el ID del usuario a editar
+let usuarioEditandoId = null;
+
 function modalload() {
     const form = document.getElementById("formModificarUsuario");
     const btnGuardar = document.getElementById("btnGuardarUsuarioM");
@@ -132,15 +137,23 @@ function modalload() {
     btnGuardar.addEventListener("click", function(event) {
         event.preventDefault();
         
-        const formData = new FormData(form);
-        const userId = sessionStorage.getItem('adminIdEditar');
+        if (!usuarioEditandoId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se ha seleccionado un usuario para editar',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
 
+        const formData = new FormData(form);
         const data = {
             correo: formData.get("correo"),
             telefono: formData.get("telefono")
         };
 
-        fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${userId}`, {
+        fetch(`https://requeproyectoweb-production.up.railway.app/api/usuarios/${usuarioEditandoId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -164,9 +177,17 @@ function modalload() {
                 confirmButtonColor: '#b99725',
             });
             
-            $('#modificarUsuarioModal').modal('hide');
+            // Cerrar el modal usando Bootstrap
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modificarUsuarioModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
             traerAdministradores();
             generarNotificacion();
+            
+            // Limpiar el ID después de guardar
+            usuarioEditandoId = null;
         })
         .catch(error => {
             Swal.fire({
@@ -179,6 +200,7 @@ function modalload() {
         });
     });
 }
+
 // Configuración del botón modificar
 function btnModificar() {
     document.querySelectorAll('.btn-editar').forEach(btn => {
@@ -187,17 +209,27 @@ function btnModificar() {
             const telefono = this.getAttribute('data-telefono');
             const userId = this.getAttribute('data-id');
             
-            sessionStorage.setItem('adminIdEditar', userId);
-            document.getElementById('correo').value = correo;
-            document.getElementById('telefono').value = telefono;
-
-            const modal = document.getElementById('modificarUsuarioModal');
-            modal.addEventListener('shown.bs.modal', function() {
-                modal.removeAttribute('inert');
+            // Guardar el ID en la variable temporal
+            usuarioEditandoId = userId;
+            
+            // Llenar los campos del modal
+            document.getElementById('correo').value = correo || '';
+            document.getElementById('telefono').value = telefono || '';
+            
+            // Mostrar el modal usando Bootstrap 5
+            const modal = new bootstrap.Modal(document.getElementById('modificarUsuarioModal'));
+            modal.show();
+            
+            // Configurar eventos para el modal
+            const modalElement = document.getElementById('modificarUsuarioModal');
+            modalElement.addEventListener('shown.bs.modal', function() {
+                modalElement.removeAttribute('inert');
+                document.getElementById('correo').focus();
             });
             
-            modal.addEventListener('hidden.bs.modal', function() {
-                modal.setAttribute('inert', 'true');
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                modalElement.setAttribute('inert', 'true');
+                usuarioEditandoId = null; // Limpiar al cerrar
             });
         });
     });
