@@ -32,12 +32,7 @@
                                 <i class="bi bi-pencil"></i> Editar
                             </button>
     
-                            <button class="btn btn-danger btn-sm btn-eliminar" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#confirmDeleteModal"
-                                    data-id="${admin.id_usuario}">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </button>
+                            
                         </td>
                     `;
                     
@@ -65,7 +60,7 @@
     // Llamar a la función cuando se cargue la página
     document.addEventListener('DOMContentLoaded', traerAdministradores());
 
-    // Manejar el evento de eliminación
+   /* // Manejar el evento de eliminación
     $('#confirmDeleteBtn').click(function() {
         if ($('#confirmCheckbox').is(':checked')) {
             const userId = $(this).data('userId');
@@ -118,6 +113,7 @@
         $('#confirmDeleteBtn').data('userId', userId);
         $('#confirmCheckbox').prop('checked', false);
     });
+    */
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -236,5 +232,5 @@ window.onload = function() {
     traerAdministradores();
     modalload();
     btnModificar();
-    configurarEliminacion();
+    //configurarEliminacion();
 };
