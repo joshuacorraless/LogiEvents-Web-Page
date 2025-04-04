@@ -265,7 +265,7 @@ function solicitarMensajeActivo(idEvento){
 
     Swal.fire({
         icon: 'info',  // Icono de error
-        title: '¡Ya casi terminas tu reserva!',
+        title: '¡Ya casi eliminar el evento!',
         input: 'text', // Tipo de campo de entrada
         text: 'Hemos enviado una palabra al correo ' + correo + ", ingresa la palabra.",  // Muestra el mensaje de error
         inputPlaceholder: 'Ingresa la palabra',
