@@ -61,35 +61,14 @@ export const getEventById = async (req, res) => {
 };
 
 
-
-
-
-
-
-
-
 // *Crear un nuevo evento
 export const createEventos = async (req, res) => {
-  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado } = req.body;
+  const { nombre_evento, descripcion, fecha, hora, ubicacion, capacidad, categoria, precio, estado, imagenUrl } = req.body;
   
   try {
     // Validaciones básicas
     if (!nombre_evento || !fecha || !ubicacion) {
       return res.status(400).json({ message: 'Nombre, fecha y ubicación son obligatorios' });
-    }
-
-    let imagenUrl = null;
-    let imagenPublicId = null;
-    
-    if (req.file) {
-      try {
-        const result = await uploadStreamToCloudinary(req.file.buffer);
-        imagenUrl = result.secure_url;
-        imagenPublicId = result.public_id;
-      } catch (uploadError) {
-        console.error('Error subiendo imagen:', uploadError);
-        return res.status(500).json({ message: 'Error al subir la imagen al servidor' });
-      }
     }
 
     // Insertar en la base de datos
@@ -117,7 +96,7 @@ export const createEventos = async (req, res) => {
 //Actualizar eventos
 export const updateEventos = async (req, res) => {
   const { id_evento } = req.params;
-  const { capacidad, ubicacion, precio } = req.body;
+  const { capacidad, ubicacion, precio, imagenUrl } = req.body;
 
   try {
     // Verificar que el evento exista
@@ -129,18 +108,7 @@ export const updateEventos = async (req, res) => {
     const fieldsToUpdate = [];
     const values = [];
 
-    // Manejo de imagen
-    if (req.file) {
-      try {
-        const result = await uploadStreamToCloudinary(req.file.buffer);
-        fieldsToUpdate.push('imagen = ?');
-        values.push(result.secure_url);
-      } catch (uploadError) {
-        console.error('Error subiendo imagen:', uploadError);
-        return res.status(500).json({ message: 'Error al actualizar la imagen' });
-      }
-    }
-
+  
     // Validar y agregar otros campos
     if (capacidad) {
       if (isNaN(capacidad)) return res.status(400).json({ message: 'La capacidad debe ser un número.' });
@@ -157,6 +125,10 @@ export const updateEventos = async (req, res) => {
       if (isNaN(precio)) return res.status(400).json({ message: 'El precio debe ser un número.' });
       fieldsToUpdate.push('precio = ?');
       values.push(precio);
+    }
+    if(imagenUrl){
+      fieldsToUpdate.push('imagen=?')
+      values.push(imagenUrl)
     }
 
     if (fieldsToUpdate.length === 0) {
