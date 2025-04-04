@@ -104,30 +104,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function updateEvento() {
 
-    const imagenInput = document.getElementById('imageInput');
-    let imagenUrl = ""; // Declarar la variable fuera del if
+        const imagenInput = document.getElementById('imageInput');
+        let imagenUrl = ""; // Declarar la variable fuera del if
 
-    if (imagenInput.files[0]) { 
-        try {
-            imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
-        } catch (error) {
-            console.error("Error al subir la imagen:", error);
-            document.getElementById('imagenError').style.display = 'block';
-            return;
+        if (imagenInput.files[0]) { 
+            try {
+                imagenUrl = await subirImagenACloudinary(imagenInput.files[0]);
+            } catch (error) {
+                console.error("Error al subir la imagen:", error);
+                document.getElementById('imagenError').style.display = 'block';
+                return;
+            }
+            
+        } 
+
+        if (imagenUrl === "") {
+            imagenUrl = evento.imagen;
         }
-        
-    } 
 
-    console.log(imagenUrl);
+        const eventoData = {
+            ubicacion: document.getElementById('ubicacion').value,
+            capacidad: document.getElementById('capacidad').value,
+            precio: document.getElementById('precio').value,
+            imagenUrl: imagenUrl
+        };
 
-    const eventoData = {
-        ubicacion: document.getElementById('ubicacion').value,
-        capacidad: document.getElementById('capacidad').value,
-        precio: document.getElementById('precio').value,
-        ...(imagenUrl && { imagenUrl: imagenUrl })
-    };
-
-    console.log(eventoData);
+        console.log(eventoData);
     
 
         fetch(`https://requeproyectoweb-production.up.railway.app/api/eventos/${idEvento}`, {
