@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelBtn = document.getElementById('cancelBtn');
     const idEvento = sessionStorage.getItem('idEventoEditar');
 
+    let eventoUrl="";
     // Configurar eventos
     uploadArea.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', handleImageSelection);
@@ -37,17 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const eventos = await obtenerEventos(); // Cargar eventos desde la API correctamente
             const evento = eventos.find(e => e.id_evento == id);
     
-            if (evento) {
-                console.log("Evento encontrado:", evento);
-            } else {
-                console.log("Evento no encontrado.");
-            }
             
             // Llenar formulario
             document.getElementById('precio').value = evento.precio || '';
             document.getElementById('ubicacion').value = evento.ubicacion || '';
             document.getElementById('capacidad').value = evento.capacidad || '';
-            
+            eventoUrl=evento.imagen;
             // Mostrar imagen si existe
             if (evento.imagen) {
                 showImagePreview(evento.imagen);
@@ -119,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
 
         if (imagenUrl === "") {
-            imagenUrl = evento.imagen;
+            imagenUrl = eventoUrl;
         }
 
         const eventoData = {
