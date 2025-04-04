@@ -4,9 +4,7 @@
 var idUser=sessionStorage.getItem("userID");
 var tipoUsuario=sessionStorage.getItem("tipoUsuario");
 
-if (!idUser || !tipoUsuario || tipoUsuario !== "administrador") {
-    window.location.href = 'https://requeproyectoweb-production-3d39.up.railway.app/Login'; 
-}
+
 
 
 window.onload = function() {

@@ -136,7 +136,16 @@ $(document).on('click', '.btn-editar', function() {
     // Llenar los campos del modal
     $('#correo').val(correo);
     $('#telefono').val(telefono);
+    const modal = document.getElementById('modificarUsuarioModal');
+
+    modal.addEventListener('shown.bs.modal', function () {
+        modal.removeAttribute('inert');  // El modal ahora es interactivo
+    });
     
+    modal.addEventListener('hidden.bs.modal', function () {
+        modal.setAttribute('inert', 'true');  // El modal se vuelve inactivo cuando se cierra
+    });
+
     // Mostrar el modal
     $('#modificarUsuarioModal').modal('show');
 });
