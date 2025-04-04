@@ -38,7 +38,6 @@ $(document).ready(function() {
                                     data-id="${admin.id_usuario}">
                                 <i class="bi bi-trash"></i> Eliminar
                             </button>
-                            <button class>
                         </td>
                     `;
                     
