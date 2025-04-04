@@ -1,4 +1,4 @@
-$(document).ready(function() {
+
     function traerAdministradores() {
         fetch('https://requeproyectoweb-production.up.railway.app/api/usuarios')
         .then(response => response.json())
@@ -107,7 +107,7 @@ $(document).ready(function() {
         $('#confirmDeleteBtn').data('userId', userId);
         $('#confirmCheckbox').prop('checked', false);
     });
-});
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const agregarEventoButton = document.getElementById("agregarAdmin");
