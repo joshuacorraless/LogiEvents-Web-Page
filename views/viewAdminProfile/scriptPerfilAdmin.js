@@ -72,7 +72,7 @@ function modalload(){
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#b99725',  // Color del botón
                 });
-                generarNotificacion();
+                
                 // Cierra el modal después de actualizar
                 $('#modificarUsuarioModal').modal('hide'); 
             
